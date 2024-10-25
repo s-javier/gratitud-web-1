@@ -1,0 +1,512 @@
+import { actions } from 'astro:actions'
+import { createEffect, createRoot, createSignal, For } from 'solid-js'
+import { Portal } from 'solid-js/web'
+import {
+  Button,
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  ListItemIcon,
+  Menu,
+  MenuItem,
+  Select,
+  TextField,
+} from '@suid/material'
+import * as v from 'valibot'
+import { toast } from 'solid-sonner'
+import { Icon } from '@iconify-icon/solid'
+import { Combobox } from '@kobalte/core/combobox'
+import { useStore } from '@nanostores/solid'
+
+import { Color } from '~/enums'
+import { $loaderOverlay, $permissions, $roles } from '~/stores'
+import { validateResponse } from '~/utils'
+import handleResponse from './handleResponse'
+import Overlay from '~/components/shared/Overlay'
+import Dialog from '~/components/shared/Dialog'
+import CustomToaster from '~/components/shared/CustomToaster'
+
+export default function PermissionAdd() {
+  const [anchorEl, setAnchorEl] = createSignal<null | HTMLElement>(null)
+  const openMenu = () => Boolean(anchorEl())
+
+  const [isDialogOpen, setIsDialogOpen] = createSignal(false)
+  const [isDialogRelationOpen, setIsDialogRelationOpen] = createSignal(false)
+  const [path, setPath] = createSignal('')
+  const [pathErrMsg, setPathErrMsg] = createSignal('')
+  const [type, setType] = createSignal('')
+  const [typeErrMsg, setTypeErrMsg] = createSignal('')
+  const [roleId, setRoleId] = createSignal<any>({})
+  const [roleIdErrMsg, setRoleIdErrMsg] = createSignal('')
+  const [permissionId, setPermissionId] = createSignal<any>({})
+  const [permissionIdErrMsg, setPermissionIdErrMsg] = createSignal('')
+
+  const roles = useStore($roles)
+  const permissions = useStore($permissions)
+
+  createEffect(() => {
+    if (permissionId().id) {
+      setPermissionIdErrMsg('')
+    }
+    if (roleId().id) {
+      setRoleIdErrMsg('')
+    }
+  })
+
+  const validateRequest = () => {
+    const Schema = {
+      path: v.pipe(
+        v.string('El valor de este campo es inválido.'),
+        v.trim(),
+        v.nonEmpty('Este campo es requerido.'),
+        v.minLength(4, 'Escribe un poco más.'),
+        v.maxLength(100, 'Escribe menos.'),
+      ),
+      type: v.pipe(
+        v.string('El valor de este campo es inválido.'),
+        v.trim(),
+        v.nonEmpty('Este campo es requerido.'),
+        v.picklist(['api', 'view'], 'El valor de este campo es inválido.'),
+      ),
+    }
+    const pathErr = v.safeParse(Schema.path, path())
+    setPathErrMsg(pathErr.issues ? pathErr.issues[0].message : '')
+    const typeErr = v.safeParse(Schema.type, type())
+    setTypeErrMsg(typeErr.issues ? typeErr.issues[0].message : '')
+    const verificationResult = v.safeParse(v.object(Schema), { path: path(), type: type() })
+    if (!verificationResult.success) {
+      toast.custom(
+        (t) =>
+          createRoot(() => (
+            <CustomToaster
+              id={t}
+              type="error"
+              title="El formulario tiene algún error"
+              description="Por favor, corrige el/los error/es para poder agregar un permiso."
+            />
+          )),
+        {
+          duration: 5000,
+        },
+      )
+      return false
+    }
+    return true
+  }
+
+  const validateRequestOfRelation = () => {
+    const Schema = {
+      roleId: v.pipe(
+        v.string('El valor de este campo es inválido.'),
+        v.trim(),
+        v.nonEmpty('Este campo es requerido.'),
+        v.regex(
+          /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
+          'El valor de este campo es inválido.',
+        ),
+      ),
+      permissionId: v.pipe(
+        v.string('El valor de este campo es inválido.'),
+        v.trim(),
+        v.nonEmpty('Este campo es requerido.'),
+        v.regex(
+          /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/,
+          'El valor de este campo es inválido.',
+        ),
+      ),
+    }
+    const roleIdErr = v.safeParse(Schema.roleId, roleId().id ?? '')
+    setRoleIdErrMsg(roleIdErr.issues ? roleIdErr.issues[0].message : '')
+    const permissionIdErr = v.safeParse(Schema.permissionId, permissionId().id ?? '')
+    setPermissionIdErrMsg(permissionIdErr.issues ? permissionIdErr.issues[0].message : '')
+    const verificationResult = v.safeParse(v.object(Schema), {
+      roleId: roleId().id,
+      permissionId: permissionId().id,
+    })
+    if (!verificationResult.success) {
+      toast.custom(
+        (t) =>
+          createRoot(() => (
+            <CustomToaster
+              id={t}
+              type="error"
+              title="El formulario tiene algún error"
+              description="Por favor, corrige el/los error/es para poder agregar una relación de permiso con rol."
+            />
+          )),
+        {
+          duration: 5000,
+        },
+      )
+      return false
+    }
+    return true
+  }
+
+  return (
+    <>
+      <Button
+        variant="contained"
+        size="small"
+        sx={{
+          backgroundColor: Color.PRIMARY_BTN_BG,
+          color: Color.PRIMARY_BTN_TEXT,
+          '&:hover': {
+            backgroundColor: Color.PRIMARY_BTN_HOVER_BG,
+          },
+        }}
+        onClick={(event: any) => setAnchorEl(event.currentTarget)}
+      >
+        Agregar
+      </Button>
+      <Menu
+        anchorEl={anchorEl()}
+        open={openMenu()}
+        onClose={() => setAnchorEl(null)}
+        onClick={() => setAnchorEl(null)}
+        PaperProps={{
+          elevation: 0,
+          sx: {
+            overflow: 'visible',
+            filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
+            mt: 1.5,
+            ['& .MuiAvatar-root']: {
+              width: 32,
+              height: 32,
+              ml: -0.5,
+              mr: 1,
+            },
+            '&:before': {
+              content: '""',
+              display: 'block',
+              position: 'absolute',
+              top: 0,
+              right: 14,
+              width: 10,
+              height: 10,
+              bgcolor: 'background.paper',
+              transform: 'translateY(-50%) rotate(45deg)',
+              zIndex: 0,
+            },
+          },
+        }}
+        transformOrigin={{
+          horizontal: 'right',
+          vertical: 'top',
+        }}
+        anchorOrigin={{
+          horizontal: 'right',
+          vertical: 'bottom',
+        }}
+      >
+        <MenuItem onClick={() => setIsDialogOpen(true)}>
+          <ListItemIcon>
+            <Icon icon="mdi:lock" width="100%" class="w-5" />
+          </ListItemIcon>
+          Permiso
+        </MenuItem>
+        <MenuItem onClick={() => setIsDialogRelationOpen(true)}>
+          <ListItemIcon>
+            <Icon icon="mdi:relation-many-to-many" width="100%" class="w-5" />
+          </ListItemIcon>
+          Relación
+        </MenuItem>
+      </Menu>
+      <Portal>
+        <Overlay type="dialog" isActive={isDialogOpen()}>
+          <Dialog
+            title="Nuevo permiso"
+            close={() => setIsDialogOpen(false)}
+            footer={
+              <>
+                <Button
+                  variant="outlined"
+                  sx={{
+                    color: Color.CANCEL_BTN_TEXT,
+                    borderColor: Color.CANCEL_BTN_BORDER,
+                    '&:hover': {
+                      backgroundColor: Color.CANCEL_BTN_HOVER_BG,
+                      borderColor: Color.CANCEL_BTN_HOVER_BORDER,
+                    },
+                  }}
+                  onClick={() => setIsDialogOpen(false)}
+                >
+                  Cerrar
+                </Button>
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: Color.PRIMARY_BTN_BG,
+                    color: Color.PRIMARY_BTN_TEXT,
+                    fontWeight: 'bold',
+                    '&:hover': {
+                      backgroundColor: Color.PRIMARY_BTN_HOVER_BG,
+                    },
+                  }}
+                  onClick={async () => {
+                    if (validateRequest() === false) {
+                      return
+                    }
+                    $loaderOverlay.set(true)
+                    const { data, error }: any = await actions.permissionAdd({
+                      path: path().trim(),
+                      type: type().trim(),
+                    })
+                    if (validateResponse(error || data?.error || null) === false) {
+                      $loaderOverlay.set(false)
+                      return
+                    }
+                    handleResponse()
+                  }}
+                >
+                  Agregar
+                </Button>
+              </>
+            }
+          >
+            <div class="space-y-4">
+              <TextField
+                label="Ruta*"
+                variant="outlined"
+                class="w-full"
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    '&:hover fieldset': {
+                      borderColor: Color.TEXT_FIELD_HOVER_BORDER,
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: Color.TEXT_FIELD_FOCUS_BORDER,
+                    },
+                  },
+                  '& label.Mui-focused': {
+                    color: Color.TEXT_FIELD_FOCUS_LABEL,
+                  },
+                }}
+                value={path()}
+                onChange={(e) => {
+                  setPath(e.target.value)
+                }}
+                onFocus={() => {
+                  setPathErrMsg('')
+                }}
+                error={pathErrMsg() !== ''}
+                helperText={pathErrMsg()}
+              />
+              <FormControl
+                fullWidth
+                error={typeErrMsg() !== ''}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    '&:hover fieldset': {
+                      borderColor: Color.TEXT_FIELD_HOVER_BORDER,
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: Color.TEXT_FIELD_FOCUS_BORDER,
+                    },
+                  },
+                  '& label.Mui-focused': {
+                    color: Color.TEXT_FIELD_FOCUS_LABEL,
+                  },
+                }}
+              >
+                <InputLabel>Tipo*</InputLabel>
+                <Select
+                  label="Tipo*"
+                  value={type()}
+                  onChange={(e) => {
+                    setType(e.target.value)
+                  }}
+                  onFocus={() => {
+                    setTypeErrMsg('')
+                  }}
+                >
+                  <For
+                    each={[
+                      { label: 'API', value: 'api' },
+                      { label: 'Vista', value: 'view' },
+                    ]}
+                  >
+                    {(option) => <MenuItem value={option.value}>{option.label}</MenuItem>}
+                  </For>
+                </Select>
+                <FormHelperText>{typeErrMsg()}</FormHelperText>
+              </FormControl>
+            </div>
+          </Dialog>
+        </Overlay>
+      </Portal>
+      <Portal>
+        <Overlay type="dialog" isActive={isDialogRelationOpen()}>
+          <Dialog
+            title="Nueva relación"
+            close={() => setIsDialogRelationOpen(false)}
+            footer={
+              <>
+                <Button
+                  variant="outlined"
+                  sx={{
+                    color: Color.CANCEL_BTN_TEXT,
+                    borderColor: Color.CANCEL_BTN_BORDER,
+                    '&:hover': {
+                      backgroundColor: Color.CANCEL_BTN_HOVER_BG,
+                      borderColor: Color.CANCEL_BTN_HOVER_BORDER,
+                    },
+                  }}
+                  onClick={() => setIsDialogRelationOpen(false)}
+                >
+                  Cerrar
+                </Button>
+                <Button
+                  variant="contained"
+                  sx={{
+                    backgroundColor: Color.PRIMARY_BTN_BG,
+                    color: Color.PRIMARY_BTN_TEXT,
+                    fontWeight: 'bold',
+                    '&:hover': {
+                      backgroundColor: Color.PRIMARY_BTN_HOVER_BG,
+                    },
+                  }}
+                  onClick={async () => {
+                    if (validateRequestOfRelation() === false) {
+                      return
+                    }
+                    $loaderOverlay.set(true)
+                    const { data, error }: any = await actions.roleAddRelationPermission({
+                      roleId: roleId().id.trim(),
+                      permissionId: permissionId().id.trim(),
+                    })
+                    if (validateResponse(error || data?.error || null) === false) {
+                      $loaderOverlay.set(false)
+                      return
+                    }
+                    handleResponse()
+                  }}
+                >
+                  Agregar
+                </Button>
+              </>
+            }
+          >
+            <div class="space-y-4">
+              <div>
+                <div
+                  class={[
+                    'text-sm',
+                    permissionIdErrMsg() ? 'text-[#d32f2f]' : 'text-gray-700',
+                  ].join(' ')}
+                >
+                  Permiso
+                </div>
+                <Combobox
+                  options={permissions()}
+                  // @ts-ignore
+                  optionValue="id"
+                  // @ts-ignore
+                  optionTextValue="path" /* Sirve para filtrar */
+                  // @ts-ignore
+                  optionLabel="path"
+                  // @ts-ignore
+                  value={permissionId()}
+                  onChange={setPermissionId}
+                  // onInputChange={(value) => setPermissionId(value ?? '')}
+                  validationState={permissionIdErrMsg() ? 'invalid' : 'valid'}
+                  itemComponent={(props) => (
+                    // @ts-ignore
+                    <Combobox.Item item={props.item} class="combobox__item">
+                      {/* @ts-ignore */}
+                      <Combobox.ItemLabel>
+                        {props.item.rawValue.type} - {props.item.rawValue.path}
+                      </Combobox.ItemLabel>
+                      <Combobox.ItemIndicator class="combobox__item-indicator">
+                        <Icon icon="mdi:check" width="100%" class="w-4" />
+                      </Combobox.ItemIndicator>
+                    </Combobox.Item>
+                  )}
+                >
+                  <Combobox.Control class="combobox__control w-full border-[1px] o-combobox-control">
+                    <Combobox.Input class="combobox__input w-full" />
+                    <Combobox.Trigger class="combobox__trigger">
+                      <Combobox.Icon class="combobox__icon">
+                        <Icon
+                          icon="radix-icons:caret-sort"
+                          width="100%"
+                          class="w-6 text-gray-400"
+                        />
+                      </Combobox.Icon>
+                    </Combobox.Trigger>
+                  </Combobox.Control>
+                  <Combobox.ErrorMessage
+                    class="text-xs text-[#d32f2f] px-[14px] pt-[3px]"
+                    style="font-family: Roboto, Helvetica, Arial, sans-serif"
+                  >
+                    {permissionIdErrMsg()}
+                  </Combobox.ErrorMessage>
+                  <Combobox.Portal>
+                    <Combobox.Content class="combobox__content">
+                      <Combobox.Listbox class="combobox__listbox" />
+                    </Combobox.Content>
+                  </Combobox.Portal>
+                </Combobox>
+              </div>
+              <div>
+                <div
+                  class={['text-sm', roleIdErrMsg() ? 'text-[#d32f2f]' : 'text-gray-700'].join(' ')}
+                >
+                  Rol
+                </div>
+                <Combobox
+                  options={roles()}
+                  // @ts-ignore
+                  optionValue="id"
+                  // @ts-ignore
+                  optionTextValue="title" /* Sirve para filtrar */
+                  // @ts-ignore
+                  optionLabel="title"
+                  // @ts-ignore
+                  value={roleId()}
+                  onChange={setRoleId}
+                  // onInputChange={(value) => setRoleId(value ?? '')}
+                  validationState={roleIdErrMsg() ? 'invalid' : 'valid'}
+                  itemComponent={(props) => (
+                    // @ts-ignore
+                    <Combobox.Item item={props.item} class="combobox__item">
+                      {/* @ts-ignore */}
+                      <Combobox.ItemLabel>{props.item.rawValue.title}</Combobox.ItemLabel>
+                      <Combobox.ItemIndicator class="combobox__item-indicator">
+                        <Icon icon="mdi:check" width="100%" class="w-4" />
+                      </Combobox.ItemIndicator>
+                    </Combobox.Item>
+                  )}
+                >
+                  <Combobox.Control class="combobox__control w-full border-[1px] o-combobox-control">
+                    <Combobox.Input class="combobox__input w-full" />
+                    <Combobox.Trigger class="combobox__trigger">
+                      <Combobox.Icon class="combobox__icon">
+                        <Icon
+                          icon="radix-icons:caret-sort"
+                          width="100%"
+                          class="w-6 text-gray-400"
+                        />
+                      </Combobox.Icon>
+                    </Combobox.Trigger>
+                  </Combobox.Control>
+                  <Combobox.ErrorMessage
+                    class="text-xs text-[#d32f2f] px-[14px] pt-[3px]"
+                    style="font-family: Roboto, Helvetica, Arial, sans-serif"
+                  >
+                    {roleIdErrMsg()}
+                  </Combobox.ErrorMessage>
+                  <Combobox.Portal>
+                    <Combobox.Content class="combobox__content">
+                      <Combobox.Listbox class="combobox__listbox" />
+                    </Combobox.Content>
+                  </Combobox.Portal>
+                </Combobox>
+              </div>
+            </div>
+          </Dialog>
+        </Overlay>
+      </Portal>
+    </>
+  )
+}

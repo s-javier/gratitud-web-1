@@ -1,0 +1,198 @@
+import { relations } from 'drizzle-orm'
+import {
+  boolean,
+  integer,
+  json,
+  pgEnum,
+  pgTable,
+  primaryKey,
+  text,
+  timestamp,
+  uuid,
+  varchar,
+} from 'drizzle-orm/pg-core'
+
+export const personTable = pgTable('person', {
+  id: uuid().defaultRandom().primaryKey(),
+  name: varchar('name', { length: 100 }).notNull(),
+  // nickname: varchar('nickname', { length: 50 }).notNull().unique(),
+  email: varchar({ length: 255 }).notNull().unique(),
+  isActive: boolean('is_active').notNull().default(false),
+  deletedAt: timestamp('deleted_at', { withTimezone: true }),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+})
+
+export const personTableRelations = relations(personTable, ({ many }) => ({
+  sessions: many(sessionTable),
+  organizationPersonRole: many(organizationPersonRoleTable),
+}))
+
+export const sessionTable = pgTable('session', {
+  id: uuid().defaultRandom().primaryKey(),
+  personId: uuid('person_id')
+    .references(() => personTable.id)
+    .notNull(),
+  isActive: boolean('is_active').notNull().default(false),
+  expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+  code: varchar({ length: 50 }).notNull(),
+  codeIsActive: boolean('code_is_active').notNull().default(false),
+  codeExpiresAt: timestamp('code_expires_at', { withTimezone: true }).notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+})
+
+export const sessionTableRelations = relations(sessionTable, ({ one }) => ({
+  person: one(personTable, {
+    fields: [sessionTable.personId],
+    references: [personTable.id],
+  }),
+}))
+
+export const roleTable = pgTable('role', {
+  id: uuid().defaultRandom().primaryKey(),
+  title: varchar({ length: 50 }).notNull().unique(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+})
+
+export const roleTableRelations = relations(roleTable, ({ many }) => ({
+  rolePermission: many(rolePermissionTable),
+  organizationPersonRole: many(organizationPersonRoleTable),
+}))
+
+export const organizationTable = pgTable('organization', {
+  id: uuid().defaultRandom().primaryKey(),
+  title: varchar({ length: 100 }).notNull().unique(),
+  isActive: boolean('is_active').notNull().default(false),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+})
+
+export const organizationTableRelations = relations(organizationTable, ({ many }) => ({
+  organizationPersonRole: many(organizationPersonRoleTable),
+}))
+
+export const organizationPersonRoleTable = pgTable(
+  'organization_person_role',
+  {
+    organizationId: uuid('organization_id')
+      .references(() => organizationTable.id)
+      .notNull(),
+    personId: uuid('person_id')
+      .references(() => personTable.id)
+      .notNull(),
+    roleId: uuid('role_id')
+      .references(() => roleTable.id)
+      .notNull(),
+    isSelected: boolean('is_selected').notNull().default(false),
+    isVisible: boolean('is_visible').notNull().default(false),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true })
+      .defaultNow()
+      .$onUpdate(() => new Date()),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.organizationId, t.personId, t.roleId] }),
+  }),
+)
+
+export const organizationPersonRoleTableRelations = relations(
+  organizationPersonRoleTable,
+  ({ one }) => ({
+    organization: one(organizationTable, {
+      fields: [organizationPersonRoleTable.organizationId],
+      references: [organizationTable.id],
+    }),
+    person: one(personTable, {
+      fields: [organizationPersonRoleTable.personId],
+      references: [personTable.id],
+    }),
+    role: one(roleTable, {
+      fields: [organizationPersonRoleTable.roleId],
+      references: [roleTable.id],
+    }),
+  }),
+)
+
+export const permissionTypeEnum = pgEnum('permission_type', ['api', 'view'])
+
+export const permissionTable = pgTable('permission', {
+  id: uuid().defaultRandom().primaryKey(),
+  path: varchar({ length: 100 }).notNull(),
+  type: permissionTypeEnum(),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+})
+
+export const permissionTableRelations = relations(permissionTable, ({ one, many }) => ({
+  menuPage: one(menuPageTable),
+  rolePermission: many(rolePermissionTable),
+}))
+
+export const rolePermissionTable = pgTable(
+  'role_permission',
+  {
+    roleId: uuid('role_id')
+      .references(() => roleTable.id)
+      .notNull(),
+    permissionId: uuid('permission_id')
+      .references(() => permissionTable.id)
+      .notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+    updatedAt: timestamp('updated_at', { withTimezone: true })
+      .defaultNow()
+      .$onUpdate(() => new Date()),
+  },
+  (t) => ({
+    pk: primaryKey({ columns: [t.roleId, t.permissionId] }),
+  }),
+)
+
+export const rolePermissionTableRelations = relations(rolePermissionTable, ({ one }) => ({
+  role: one(roleTable, {
+    fields: [rolePermissionTable.roleId],
+    references: [roleTable.id],
+  }),
+  permission: one(permissionTable, {
+    fields: [rolePermissionTable.permissionId],
+    references: [permissionTable.id],
+  }),
+}))
+
+export const menuPageTable = pgTable('menu_page', {
+  id: uuid().defaultRandom().primaryKey(),
+  permissionId: uuid('permission_id')
+    .references(() => permissionTable.id)
+    .notNull(),
+  title: varchar({ length: 50 }).notNull(),
+  sort: integer().notNull().default(0),
+  icon: varchar({ length: 50 }),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+  updatedAt: timestamp('updated_at', { withTimezone: true })
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+})
+
+export const menuPageTableRelations = relations(menuPageTable, ({ one }) => ({
+  permission: one(permissionTable, {
+    fields: [menuPageTable.permissionId],
+    references: [permissionTable.id],
+  }),
+}))
+
+/**
+ *************************************************************************************
+ ************** ↑↑↑ Hasta aquí tablas básicas de admin para sistema ↑↑↑ **************
+ *************************************************************************************
+ */

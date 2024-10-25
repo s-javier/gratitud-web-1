@@ -1,0 +1,38 @@
+---
+import { Toaster } from 'solid-sonner'
+
+import LoaderOverlay from '~/components/shared/LoaderOverlay'
+import Footer from '~/components/shared/Footer.astro'
+
+import 'ag-grid-community/styles/ag-grid.css'
+import 'ag-grid-community/styles/ag-theme-alpine.css'
+import '~/assets/global.css'
+
+interface Props {
+  title: string
+}
+---
+
+<!doctype html>
+<html lang="es" class="h-full bg-gray-100">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content="Astro description" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{Astro.props.title} | Condimento</title>
+  </head>
+  <body class="h-full">
+    <div class="flex flex-col h-full">
+      <div class="grow">
+        <slot />
+      </div>
+      <div class="flex-none">
+        <Footer />
+      </div>
+    </div>
+    <Toaster client:only="solid-js" expand position="top-right" />
+    <LoaderOverlay client:load />
+  </body>
+</html>

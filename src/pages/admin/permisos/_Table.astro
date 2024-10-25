@@ -1,0 +1,77 @@
+---
+import { asc, eq } from 'drizzle-orm'
+
+import { Api, Error } from '~/enums'
+import type { CustomError } from '~/types'
+import db from '~/db'
+import { permissionTable, rolePermissionTable, roleTable } from '~/db/schema'
+import { handleErrorFromServer } from '~/utils'
+import { verifyPermission } from '~/utils/verify-permission'
+import DataTable from './_Table'
+
+let data: any = {
+  permissions: [],
+  roles: [],
+}
+let error: CustomError = null
+if (Astro.locals.userTokenError) {
+  error = handleErrorFromServer(Astro.locals.userTokenError)
+} else {
+  const permissionVerification = await verifyPermission(Astro.locals.roleId, Api.PERMISSION_ALL)
+  if (!permissionVerification.isSuccess) {
+    error = handleErrorFromServer(permissionVerification.error)
+  } else {
+    try {
+      /* ↓ Permissions */
+      data.permissions = await db
+        .select({ id: permissionTable.id, type: permissionTable.type, path: permissionTable.path })
+        .from(permissionTable)
+        .orderBy(asc(permissionTable.type), asc(permissionTable.path))
+    } catch {
+      if (import.meta.env.DEV) {
+        console.error('Error en DB. Obtención de permisos.')
+      }
+      error = handleErrorFromServer(Error.DB)
+    }
+    try {
+      /* ↓ Roles */
+      data.roles = await db
+        .select({ id: roleTable.id, title: roleTable.title })
+        .from(roleTable)
+        .orderBy(asc(roleTable.title))
+    } catch {
+      if (import.meta.env.DEV) {
+        console.error('Error en DB. Obtención de roles.')
+      }
+      error = handleErrorFromServer(Error.DB)
+    }
+    let rolePermission: any[]
+    try {
+      rolePermission = await db
+        .select({
+          roleId: roleTable.id,
+          roleTitle: roleTable.title,
+          permissionId: rolePermissionTable.permissionId,
+        })
+        .from(roleTable)
+        .innerJoin(rolePermissionTable, eq(roleTable.id, rolePermissionTable.roleId))
+        .orderBy(asc(roleTable.title))
+    } catch {
+      if (import.meta.env.DEV) {
+        console.error('Error en DB. Obtención de rolePermission.')
+      }
+      error = handleErrorFromServer(Error.DB)
+    }
+    data.permissions.forEach((permission: any) => {
+      permission.roles = rolePermission
+        .filter((item: any) => item.permissionId === permission.id)
+        .map((item: any) => ({
+          roleId: item.roleId,
+          roleTitle: item.roleTitle,
+        }))
+    })
+  }
+}
+---
+
+<DataTable client:only="solid-js" data={data} error={error} />

@@ -1,0 +1,147 @@
+---
+import { Icon } from 'astro-icon/components'
+
+import LoaderBar from '~/components/shared/LoaderBar.tsx'
+import UserMenu from './UserMenu.tsx'
+import OrganizationMenu from './OrganizationMenu.tsx'
+import AdminMenu from './AdminMenu'
+
+// console.log('***')
+// console.log(Astro.locals.menuErrorHandled)
+// console.log(Astro.locals.menu)
+---
+
+<LoaderBar client:load />
+<div class="bg-gray-800 pb-32">
+  <nav class="bg-gray-800">
+    <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+      <div class="border-b border-gray-700">
+        <div class="flex h-16 items-center justify-between px-4 sm:px-0">
+          <div class="flex items-center">
+            {
+              Astro.locals.menu?.length >= 6 && (
+                <AdminMenu
+                  client:only="solid-js"
+                  menu={Astro.locals.menu ?? []}
+                  currentPath={Astro.url.pathname}
+                  organizations={Astro.locals.organizations}
+                />
+              )
+            }
+            <a href="/admin/welcome" class="o-page ml-2">
+              <Icon name="logo" width="100%" height="100%" class="w-[160px]" />
+            </a>
+            <div class="hidden lg:block">
+              <div class="ml-10 flex items-baseline space-x-1">
+                {
+                  Astro.locals.menu?.length < 6 &&
+                    Astro.locals.menu.map((item: any) => (
+                      <a
+                        href={item.path}
+                        class:list={[
+                          'o-page',
+                          'relative rounded-md',
+                          Astro.url.pathname === item.path
+                            ? 'text-white bg-white/5'
+                            : 'text-gray-300 hover:text-white hover:bg-white/5',
+                        ]}
+                      >
+                        <div class="px-3 py-2">{item.title}</div>
+                        {Astro.url.pathname === item.path && (
+                          <div
+                            transition:name="menu-page"
+                            class:list={[
+                              'absolute left-0 top-0 w-full h-full rounded-md border-2',
+                              'border-yellow-300',
+                            ]}
+                          />
+                        )}
+                      </a>
+                    ))
+                }
+              </div>
+            </div>
+          </div>
+          <div class="hidden lg:block">
+            <div class="flex items-center">
+              {/* Notifications button */}
+              {
+                /* <button type="button" class="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                      <span class="absolute -inset-1.5"></span>
+                      <span class="sr-only">View notifications</span>
+                      <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0" />
+                      </svg>
+                    </button> */
+              }
+              {
+                Astro.locals.organizations?.length > 1 && (
+                  <OrganizationMenu
+                    client:only="solid-js"
+                    organizations={Astro.locals.organizations}
+                  />
+                )
+              }
+              <div class="relative ml-1">
+                <UserMenu
+                  client:only="solid-js"
+                  firstName={Astro.locals.user?.firstName ?? 'Usuario'}
+                />
+              </div>
+            </div>
+          </div>
+          <div class="-mr-2 flex lg:hidden">
+            {/* Mobile menu button */}
+            <div class="relative ml-1">
+              <AdminMenu
+                client:only="solid-js"
+                menu={Astro.locals.menu ?? []}
+                currentPath={Astro.url.pathname}
+                organizations={Astro.locals.organizations}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <header class="py-10">
+    <div class="mx-auto flex max-w-7xl flex-row items-center justify-between px-4 sm:px-6 lg:px-8">
+      <slot name="view-title" />
+      <div class="flex flex-row items-center gap-x-6">
+        <slot name="buttons" />
+      </div>
+    </div>
+  </header>
+</div>
+
+<data-receiver data-menu-error-handled={JSON.stringify(Astro.locals.menuErrorHandled)}
+></data-receiver>
+
+<script>
+  import { $loaderBar, $modalAlert } from '~/stores'
+
+  class DataReceiver extends HTMLElement {
+    constructor() {
+      super()
+      /* ↓ Lee el mensaje del atributo "data-". */
+      const menuErrorHandled: any = JSON.parse(this.dataset.menuErrorHandled ?? 'null')
+      if (menuErrorHandled) {
+        if (menuErrorHandled.isNotify) {
+          $modalAlert.set({
+            is: true,
+            type: 'error',
+            title: menuErrorHandled.title,
+            message: menuErrorHandled.message,
+          })
+        }
+      }
+    }
+  }
+  customElements.define('data-receiver', DataReceiver)
+
+  const pages = document.querySelectorAll('.o-page')
+  pages.forEach((page) => {
+    page.addEventListener('click', () => $loaderBar.set(true))
+  })
+</script>
