@@ -147,7 +147,7 @@ export default function CodeForm(props: {
           onClick={() => {
             props.continue(false)
           }}
-          class="cursor-pointer text-yellow-500 hover:underline font-bold"
+          class="cursor-pointer text-pink-400 hover:underline font-bold"
         >
           aquí
         </button>
@@ -166,7 +166,7 @@ const Slot = (props: { index: number }) => {
     <div
       class={[
         'flex w-10 h-12 items-center justify-center rounded-md bg-gray-200 font-mono text-lg font-bold transition-all',
-        context.activeSlots().includes(props.index) ? 'ring-yellow-500 ring-2' : '',
+        context.activeSlots().includes(props.index) ? 'ring-pink-400 ring-2' : '',
       ].join(' ')}
     >
       {char()}

@@ -1,6 +1,6 @@
 import 'dotenv/config'
 // @ts-ignore
-import { drizzle } from 'drizzle-orm/connect'
+import { drizzle } from 'drizzle-orm/node-postgres'
 
 import {
   menuPageTable,
@@ -13,30 +13,24 @@ import {
 } from './schema'
 import { Api, Page } from '../enums'
 
-async function main() {
-  const db = await drizzle('node-postgres', process.env.DB_URL!)
+const db = drizzle(process.env.DB_URL!)
 
+async function main() {
   const rootOrganizationId = '793158ce-660e-404a-a5db-9ed5b6deec13'
   const rootUserId = '7b407a72-769c-4e8b-b0e8-4611c6c65b87'
   const superadminRoleId = '88f6af71-5675-4d8e-8ec6-7523b154bb8a'
-  const administratorRoleId = 'f972309c-8c6b-48db-b83b-753d5bd2a099'
   await db.insert(organizationTable).values({
     id: rootOrganizationId,
     title: 'Admin',
     isActive: true,
-    slug: 'admin',
   })
   await db.insert(personTable).values({
     id: rootUserId,
-    firstName: 'Javier',
-    lastName: 'Salamanca',
+    name: 'Javier',
     email: 'javier.salamanca.candia@gmail.com',
     isActive: true,
   })
-  await db.insert(roleTable).values([
-    { id: superadminRoleId, title: 'Súperadmin' },
-    { id: administratorRoleId, title: 'Admin' },
-  ])
+  await db.insert(roleTable).values([{ id: superadminRoleId, title: 'Súperadmin' }])
   await db.insert(organizationPersonRoleTable).values({
     organizationId: rootOrganizationId,
     personId: rootUserId,
@@ -45,12 +39,12 @@ async function main() {
     isVisible: true,
   })
 
-  const permissionOrganizationChangeId = 'e992ec03-72ba-4b5d-89fe-86bc96473623'
   const permissionAdminOrganizationId = 'cce180eb-1b1e-4077-afd9-933a892db6a7'
   const permissionAdminRolesId = '2b0d1f01-d04e-4410-b926-d0b2b322dd27'
   const permissionAdminUsersId = '77e71a14-4abf-4229-b082-eb2d8c67762e'
   const permissionAdminPermissionsId = '75f99f87-9a29-44b3-9e2d-141a244735cf'
   const permissionAdminPagesId = '25825194-4f17-4767-96f8-bebde4305d76'
+  const permissionOrganizationChangeId = 'e992ec03-72ba-4b5d-89fe-86bc96473623'
 
   const permissions: (typeof permissionTable.$inferInsert)[] = [
     { id: permissionAdminOrganizationId, type: 'view', path: Page.ADMIN_ORGANIZATIONS },

@@ -19,7 +19,7 @@ export const login = defineAction({
       const query = await db
         .select({
           id: personTable.id,
-          firstName: personTable.firstName,
+          name: personTable.name,
           isActive: personTable.isActive,
         })
         .from(personTable)
@@ -89,7 +89,7 @@ export const login = defineAction({
               <div style="text-align:center;">
                 <img src="https://condimento.cl/images/imagotipo.png" style="width:200px;margin-bottom:30px" alt="Logo de Condimento" />
               </div>
-              <p style="margin-bottom: 16px">Hola, ${user.firstName}:</p>
+              <p style="margin-bottom: 16px">Hola, ${user.name}:</p>
               <p style="margin-bottom: 16px">Bienvenido/a a Condimento. Por favor, utiliza este código para ingresar:</p>
               <p style="margin-bottom: 30px; text-align: center;">${code}</p>
               <p>Que tengas un buen día.</p>

@@ -4,14 +4,7 @@ declare namespace App {
   interface Locals {
     IsAdminAndWithoutUserTokenAndPermissionsProblems: boolean
     menuErrorHandled: any
-    // menu: {
-    //   user: {
-    //     firstName: string
-    //   }
-    //   organizations: any[]
-    //   pages: any[]
-    // }
-    user: { firstName: string }
+    user: { name: string }
     organizations: any[]
     menu: any[]
     errorHandled: any

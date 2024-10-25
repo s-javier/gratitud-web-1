@@ -83,10 +83,7 @@ import AdminMenu from './AdminMenu'
                 )
               }
               <div class="relative ml-1">
-                <UserMenu
-                  client:only="solid-js"
-                  firstName={Astro.locals.user?.firstName ?? 'Usuario'}
-                />
+                <UserMenu client:only="solid-js" name={Astro.locals.user?.name ?? 'Usuario'} />
               </div>
             </div>
           </div>

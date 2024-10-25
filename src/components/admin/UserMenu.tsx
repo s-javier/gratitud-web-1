@@ -12,7 +12,7 @@ import { $loaderOverlay } from '~/stores'
 import CustomToaster from '~/components/shared/CustomToaster'
 import { createRoot } from 'solid-js'
 
-export default function UserMenu(props: { firstName: string }) {
+export default function UserMenu(props: { name: string }) {
   const [anchorEl, setAnchorEl] = createSignal<null | HTMLElement>(null)
   const open = () => Boolean(anchorEl())
 
@@ -84,7 +84,7 @@ export default function UserMenu(props: { firstName: string }) {
           },
         }}
       >
-        {props.firstName}
+        {props.name}
       </Button>
       <Menu
         anchorEl={anchorEl()}

@@ -13,6 +13,7 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
   },
+  output: 'server',
   prefetch: {
     prefetchAll: true,
     defaultStrategy: 'load',
