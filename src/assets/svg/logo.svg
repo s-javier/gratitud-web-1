@@ -3,14 +3,14 @@
   <rect x="10" y="10" width="280" height="80" rx="8" fill="#ffffff" stroke="#ff8ba7" stroke-width="1.5"/>
   
   <!-- Texto principal con G mayúscula -->
-  <text x="150" y="63" 
+  <!-- <text x="150" y="63" 
         font-family="Zapfino, 'Edwardian Script ITC', cursive" 
         font-size="42" 
         text-anchor="middle" 
         fill="#ff8ba7" 
         letter-spacing="2">
     Gratitud
-  </text>
+  </text> -->
   
   <!-- Marco decorativo superior -->
   <path d="M80 30 

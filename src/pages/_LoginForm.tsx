@@ -78,14 +78,14 @@ export default function LoginForm(props: {
         sx={{
           '& .MuiOutlinedInput-root': {
             '&:hover fieldset': {
-              borderColor: Color.TEXT_FIELD_HOVER_BORDER,
+              borderColor: Color.TEXT_FIELD_BORDER_HOVER,
             },
             '&.Mui-focused fieldset': {
-              borderColor: Color.TEXT_FIELD_FOCUS_BORDER,
+              borderColor: Color.TEXT_FIELD_BORDER_FOCUS,
             },
           },
           '& label.Mui-focused': {
-            color: Color.TEXT_FIELD_FOCUS_LABEL,
+            color: Color.TEXT_FIELD_LABEL_FOCUS,
           },
         }}
         value={email()}
@@ -102,11 +102,11 @@ export default function LoginForm(props: {
         variant="contained"
         class="w-full"
         sx={{
-          backgroundColor: Color.PRIMARY_BTN_BG,
-          color: Color.PRIMARY_BTN_TEXT,
+          backgroundColor: Color.BTN_PRIMARY_BG,
+          color: Color.BTN_PRIMARY_TEXT,
           fontWeight: 'bold',
           '&:hover': {
-            backgroundColor: Color.PRIMARY_BTN_HOVER_BG,
+            backgroundColor: Color.BTN_PRIMARY_BG_HOVER,
           },
         }}
         onClick={async () => {

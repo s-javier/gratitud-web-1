@@ -47,11 +47,11 @@ export default function RoleDelete(props: {
             <Button
               variant="outlined"
               sx={{
-                color: Color.CANCEL_BTN_TEXT,
-                borderColor: Color.CANCEL_BTN_BORDER,
+                color: Color.BTN_CANCEL_TEXT,
+                borderColor: Color.BTN_CANCEL_BORDER,
                 '&:hover': {
-                  backgroundColor: Color.CANCEL_BTN_HOVER_BG,
-                  borderColor: Color.CANCEL_BTN_HOVER_BORDER,
+                  backgroundColor: Color.BTN_CANCEL_BG_HOVER,
+                  borderColor: Color.BTN_CANCEL_BORDER_HOVER,
                 },
               }}
               onClick={props.close}
@@ -62,10 +62,10 @@ export default function RoleDelete(props: {
               variant="contained"
               color="error"
               sx={{
-                backgroundColor: Color.DELETE_BTN_BG,
-                color: Color.DELETE_BTN_TEXT,
+                backgroundColor: Color.BTN_DELETE_BG,
+                color: Color.BTN_DELETE_TEXT,
                 '&:hover': {
-                  backgroundColor: Color.DELETE_BTN_HOVER_BG,
+                  backgroundColor: Color.BTN_DELETE_BG_HOVER,
                 },
               }}
               onClick={async () => {

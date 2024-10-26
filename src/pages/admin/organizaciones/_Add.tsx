@@ -66,10 +66,10 @@ export default function OrganizationAdd() {
         variant="contained"
         size="small"
         sx={{
-          backgroundColor: Color.PRIMARY_BTN_BG,
-          color: Color.PRIMARY_BTN_TEXT,
+          backgroundColor: Color.BTN_PRIMARY_BG,
+          color: Color.BTN_PRIMARY_TEXT,
           '&:hover': {
-            backgroundColor: Color.PRIMARY_BTN_HOVER_BG,
+            backgroundColor: Color.BTN_PRIMARY_BG_HOVER,
           },
         }}
         onClick={() => setIsDialogOpen(true)}
@@ -86,11 +86,11 @@ export default function OrganizationAdd() {
                 <Button
                   variant="outlined"
                   sx={{
-                    color: Color.CANCEL_BTN_TEXT,
-                    borderColor: Color.CANCEL_BTN_BORDER,
+                    color: Color.BTN_CANCEL_TEXT,
+                    borderColor: Color.BTN_CANCEL_BORDER,
                     '&:hover': {
-                      backgroundColor: Color.CANCEL_BTN_HOVER_BG,
-                      borderColor: Color.CANCEL_BTN_HOVER_BORDER,
+                      backgroundColor: Color.BTN_CANCEL_BG_HOVER,
+                      borderColor: Color.BTN_CANCEL_BORDER_HOVER,
                     },
                   }}
                   onClick={() => setIsDialogOpen(false)}
@@ -100,11 +100,11 @@ export default function OrganizationAdd() {
                 <Button
                   variant="contained"
                   sx={{
-                    backgroundColor: Color.PRIMARY_BTN_BG,
-                    color: Color.PRIMARY_BTN_TEXT,
+                    backgroundColor: Color.BTN_PRIMARY_BG,
+                    color: Color.BTN_PRIMARY_TEXT,
                     fontWeight: 'bold',
                     '&:hover': {
-                      backgroundColor: Color.PRIMARY_BTN_HOVER_BG,
+                      backgroundColor: Color.BTN_PRIMARY_BG_HOVER,
                     },
                   }}
                   onClick={async () => {
@@ -136,14 +136,14 @@ export default function OrganizationAdd() {
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     '&:hover fieldset': {
-                      borderColor: Color.TEXT_FIELD_HOVER_BORDER,
+                      borderColor: Color.TEXT_FIELD_BORDER_HOVER,
                     },
                     '&.Mui-focused fieldset': {
-                      borderColor: Color.TEXT_FIELD_FOCUS_BORDER,
+                      borderColor: Color.TEXT_FIELD_BORDER_FOCUS,
                     },
                   },
                   '& label.Mui-focused': {
-                    color: Color.TEXT_FIELD_FOCUS_LABEL,
+                    color: Color.TEXT_FIELD_LABEL_FOCUS,
                   },
                 }}
                 value={title()}

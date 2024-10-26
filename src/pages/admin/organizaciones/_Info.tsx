@@ -18,11 +18,11 @@ export default function OrganizationInfo(props: {
           <Button
             variant="outlined"
             sx={{
-              color: Color.CANCEL_BTN_TEXT,
-              borderColor: Color.CANCEL_BTN_BORDER,
+              color: Color.BTN_CANCEL_TEXT,
+              borderColor: Color.BTN_CANCEL_BORDER,
               '&:hover': {
-                backgroundColor: Color.CANCEL_BTN_HOVER_BG,
-                borderColor: Color.CANCEL_BTN_HOVER_BORDER,
+                backgroundColor: Color.BTN_CANCEL_BG_HOVER,
+                borderColor: Color.BTN_CANCEL_BORDER_HOVER,
               },
             }}
             onClick={props.close}

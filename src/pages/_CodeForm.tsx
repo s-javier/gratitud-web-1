@@ -119,11 +119,11 @@ export default function CodeForm(props: {
         variant="contained"
         class="w-full !mb-8"
         sx={{
-          backgroundColor: Color.PRIMARY_BTN_BG,
-          color: Color.PRIMARY_BTN_TEXT,
+          backgroundColor: Color.BTN_PRIMARY_BG,
+          color: Color.BTN_PRIMARY_TEXT,
           fontWeight: 'bold',
           '&:hover': {
-            backgroundColor: Color.PRIMARY_BTN_HOVER_BG,
+            backgroundColor: Color.BTN_PRIMARY_BG_HOVER,
           },
         }}
         onClick={async () => {
