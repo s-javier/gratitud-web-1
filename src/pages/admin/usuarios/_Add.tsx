@@ -9,7 +9,6 @@ import { useStore } from '@nanostores/solid'
 import { Combobox } from '@kobalte/core/combobox'
 
 import type { User } from '~/types'
-import { Color } from '~/enums'
 import { $loaderOverlay, $organizations, $roles, $users } from '~/stores'
 import { validateResponse } from '~/utils'
 import handleResponse from './handleResponse'
@@ -17,6 +16,7 @@ import Overlay from '~/components/shared/Overlay'
 import Dialog from '~/components/shared/Dialog'
 import YellowSwitch from '~/components/shared/Switch'
 import CustomToaster from '~/components/shared/CustomToaster'
+import colors from 'tailwindcss/colors'
 
 export default function UserAdd() {
   const [anchorEl, setAnchorEl] = createSignal<null | HTMLElement>(null)
@@ -212,13 +212,11 @@ export default function UserAdd() {
         aria-expanded={openMenu() ? 'true' : undefined}
         variant="contained"
         size="small"
-        sx={{
-          backgroundColor: Color.BTN_PRIMARY_BG,
-          color: Color.BTN_PRIMARY_TEXT,
-          '&:hover': {
-            backgroundColor: Color.BTN_PRIMARY_BG_HOVER,
-          },
-        }}
+        class={[
+          '!text-[var(--o-btn-primary-text-color)]',
+          '!bg-[var(--o-btn-primary-bg-color)]',
+          'hover:!bg-[var(--o-btn-primary-bg-hover-color)]',
+        ].join(' ')}
       >
         Agregar
       </Button>
@@ -284,14 +282,10 @@ export default function UserAdd() {
               <>
                 <Button
                   variant="outlined"
-                  sx={{
-                    color: Color.BTN_CANCEL_TEXT,
-                    borderColor: Color.BTN_CANCEL_BORDER,
-                    '&:hover': {
-                      backgroundColor: Color.BTN_CANCEL_BG_HOVER,
-                      borderColor: Color.BTN_CANCEL_BORDER_HOVER,
-                    },
-                  }}
+                  class={[
+                    '!text-gray-700 !border-gray-300 hover:!bg-gray-50',
+                    'hover:!border-[var(--o-btn-cancel-border-hover-color)]',
+                  ].join(' ')}
                   onClick={() => setIsDialogOpen(false)}
                 >
                   Cerrar
@@ -299,11 +293,16 @@ export default function UserAdd() {
                 <Button
                   variant="contained"
                   sx={{
-                    backgroundColor: Color.BTN_PRIMARY_BG,
-                    color: Color.BTN_PRIMARY_TEXT,
-                    fontWeight: 'bold',
-                    '&:hover': {
-                      backgroundColor: Color.BTN_PRIMARY_BG_HOVER,
+                    '& .MuiOutlinedInput-root': {
+                      '&:hover fieldset': {
+                        borderColor: colors.gray[400],
+                      },
+                      '&.Mui-focused fieldset': {
+                        borderColor: colors.pink[300],
+                      },
+                    },
+                    '& label.Mui-focused': {
+                      color: colors.pink[500],
                     },
                   }}
                   onClick={async () => {
@@ -337,14 +336,14 @@ export default function UserAdd() {
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     '&:hover fieldset': {
-                      borderColor: Color.TEXT_FIELD_BORDER_HOVER,
+                      borderColor: colors.gray[400],
                     },
                     '&.Mui-focused fieldset': {
-                      borderColor: Color.TEXT_FIELD_BORDER_FOCUS,
+                      borderColor: colors.pink[300],
                     },
                   },
                   '& label.Mui-focused': {
-                    color: Color.TEXT_FIELD_LABEL_FOCUS,
+                    color: colors.pink[500],
                   },
                 }}
                 value={firstName()}
@@ -364,14 +363,14 @@ export default function UserAdd() {
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     '&:hover fieldset': {
-                      borderColor: Color.TEXT_FIELD_BORDER_HOVER,
+                      borderColor: colors.gray[400],
                     },
                     '&.Mui-focused fieldset': {
-                      borderColor: Color.TEXT_FIELD_BORDER_FOCUS,
+                      borderColor: colors.pink[300],
                     },
                   },
                   '& label.Mui-focused': {
-                    color: Color.TEXT_FIELD_LABEL_FOCUS,
+                    color: colors.pink[500],
                   },
                 }}
                 value={lastName()}
@@ -391,14 +390,14 @@ export default function UserAdd() {
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     '&:hover fieldset': {
-                      borderColor: Color.TEXT_FIELD_BORDER_HOVER,
+                      borderColor: colors.gray[400],
                     },
                     '&.Mui-focused fieldset': {
-                      borderColor: Color.TEXT_FIELD_BORDER_FOCUS,
+                      borderColor: colors.pink[300],
                     },
                   },
                   '& label.Mui-focused': {
-                    color: Color.TEXT_FIELD_LABEL_FOCUS,
+                    color: colors.pink[500],
                   },
                 }}
                 value={email()}
@@ -434,28 +433,22 @@ export default function UserAdd() {
               <>
                 <Button
                   variant="outlined"
-                  sx={{
-                    color: Color.BTN_CANCEL_TEXT,
-                    borderColor: Color.BTN_CANCEL_BORDER,
-                    '&:hover': {
-                      backgroundColor: Color.BTN_CANCEL_BG_HOVER,
-                      borderColor: Color.BTN_CANCEL_BORDER_HOVER,
-                    },
-                  }}
+                  class={[
+                    '!text-gray-700 !border-gray-300 hover:!bg-gray-50',
+                    'hover:!border-[var(--o-btn-cancel-border-hover-color)]',
+                  ].join(' ')}
                   onClick={() => setIsDialogRelationOpen(false)}
                 >
                   Cerrar
                 </Button>
                 <Button
                   variant="contained"
-                  sx={{
-                    backgroundColor: Color.BTN_PRIMARY_BG,
-                    color: Color.BTN_PRIMARY_TEXT,
-                    fontWeight: 'bold',
-                    '&:hover': {
-                      backgroundColor: Color.BTN_PRIMARY_BG_HOVER,
-                    },
-                  }}
+                  class={[
+                    '!text-[var(--o-btn-primary-text-color)]',
+                    '!bg-[var(--o-btn-primary-bg-color)]',
+                    'hover:!bg-[var(--o-btn-primary-bg-hover-color)]',
+                    '!font-bold',
+                  ].join(' ')}
                   onClick={async () => {
                     if (validateRequestOfRelation() === false) {
                       return

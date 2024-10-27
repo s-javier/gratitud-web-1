@@ -2,7 +2,6 @@ import { Button } from '@suid/material'
 
 import Overlay from '~/components/shared/Overlay'
 import Dialog from '~/components/shared/Dialog'
-import { Color } from '~/enums'
 
 export default function OrganizationInfo(props: {
   isShow: boolean
@@ -17,14 +16,10 @@ export default function OrganizationInfo(props: {
         footer={
           <Button
             variant="outlined"
-            sx={{
-              color: Color.BTN_CANCEL_TEXT,
-              borderColor: Color.BTN_CANCEL_BORDER,
-              '&:hover': {
-                backgroundColor: Color.BTN_CANCEL_BG_HOVER,
-                borderColor: Color.BTN_CANCEL_BORDER_HOVER,
-              },
-            }}
+            class={[
+              '!text-gray-700 !border-gray-300 hover:!bg-gray-50',
+              'hover:!border-[var(--o-btn-cancel-border-hover-color)]',
+            ].join(' ')}
             onClick={props.close}
           >
             Cerrar

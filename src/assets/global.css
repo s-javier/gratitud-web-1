@@ -1,3 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --o-btn-primary-text-color: white;
+  --o-btn-primary-bg-color: theme(colors.pink.500);
+  --o-btn-primary-bg-hover-color: theme(colors.pink.400);
+
+  --o-btn-cancel-border-hover-color: theme(colors.pink.400);
+
+  --o-dialog-header-bg-color: theme(colors.pink.500);
+  --o-dialog-header-btn-close-text-color: theme(colors.gray.700);
+  --o-dialog-header-btn-close-bg-color: theme(colors.pink.100);
+  --o-dialog-header-btn-close-bg-hover-color: theme(colors.pink.300);
+}
+
 .spinner_Uvk8 {
   animation: spinner_otJF 1.6s cubic-bezier(0.52, 0.6, 0.25, 0.99) infinite;
 }
@@ -57,5 +74,16 @@
   100% {
     left: 100%;
     width: 100%;
+  }
+}
+
+.o-dialog {
+  & .o-dialog-header {
+    & .o-dialog-header-close-btn {
+      &:hover,
+      &:focus {
+        background-color: #fef08a; /* bg-yellow-200 */
+      }
+    }
   }
 }

@@ -1,14 +1,14 @@
+import { actions } from 'astro:actions'
 import { createEffect, createRoot, createSignal } from 'solid-js'
 import { Portal } from 'solid-js/web'
+import colors from 'tailwindcss/colors'
 import { Button, TextField } from '@suid/material'
-import { actions } from 'astro:actions'
 import * as v from 'valibot'
 import { toast } from 'solid-sonner'
 import { Combobox } from '@kobalte/core/combobox'
 import { Icon } from '@iconify-icon/solid'
 import { useStore } from '@nanostores/solid'
 
-import { Color } from '~/enums'
 import { $loaderOverlay, $permissions } from '~/stores'
 import { validateResponse } from '~/utils'
 import handleResponse from './handleResponse'
@@ -109,13 +109,11 @@ export default function MenuPageAdd() {
       <Button
         variant="contained"
         size="small"
-        sx={{
-          backgroundColor: Color.BTN_PRIMARY_BG,
-          color: Color.BTN_PRIMARY_TEXT,
-          '&:hover': {
-            backgroundColor: Color.BTN_PRIMARY_BG_HOVER,
-          },
-        }}
+        class={[
+          '!text-[var(--o-btn-primary-text-color)]',
+          '!bg-[var(--o-btn-primary-bg-color)]',
+          'hover:!bg-[var(--o-btn-primary-bg-hover-color)]',
+        ].join(' ')}
         onClick={() => setIsOpenDialog(true)}
       >
         Agregar
@@ -129,28 +127,22 @@ export default function MenuPageAdd() {
               <>
                 <Button
                   variant="outlined"
-                  sx={{
-                    color: Color.BTN_CANCEL_TEXT,
-                    borderColor: Color.BTN_CANCEL_BORDER,
-                    '&:hover': {
-                      backgroundColor: Color.BTN_CANCEL_BG_HOVER,
-                      borderColor: Color.BTN_CANCEL_BORDER_HOVER,
-                    },
-                  }}
+                  class={[
+                    '!text-gray-700 !border-gray-300 hover:!bg-gray-50',
+                    'hover:!border-[var(--o-btn-cancel-border-hover-color)]',
+                  ].join(' ')}
                   onClick={() => setIsOpenDialog(false)}
                 >
                   Cerrar
                 </Button>
                 <Button
                   variant="contained"
-                  sx={{
-                    backgroundColor: Color.BTN_PRIMARY_BG,
-                    color: Color.BTN_PRIMARY_TEXT,
-                    fontWeight: 'bold',
-                    '&:hover': {
-                      backgroundColor: Color.BTN_PRIMARY_BG_HOVER,
-                    },
-                  }}
+                  class={[
+                    '!text-[var(--o-btn-primary-text-color)]',
+                    '!bg-[var(--o-btn-primary-bg-color)]',
+                    'hover:!bg-[var(--o-btn-primary-bg-hover-color)]',
+                    '!font-bold',
+                  ].join(' ')}
                   onClick={async () => {
                     if (validateRequest() === false) {
                       return
@@ -240,14 +232,14 @@ export default function MenuPageAdd() {
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     '&:hover fieldset': {
-                      borderColor: Color.TEXT_FIELD_BORDER_HOVER,
+                      borderColor: colors.gray[400],
                     },
                     '&.Mui-focused fieldset': {
-                      borderColor: Color.TEXT_FIELD_BORDER_FOCUS,
+                      borderColor: colors.pink[300],
                     },
                   },
                   '& label.Mui-focused': {
-                    color: Color.TEXT_FIELD_LABEL_FOCUS,
+                    color: colors.pink[500],
                   },
                 }}
                 value={title()}
@@ -268,14 +260,14 @@ export default function MenuPageAdd() {
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     '&:hover fieldset': {
-                      borderColor: Color.TEXT_FIELD_BORDER_HOVER,
+                      borderColor: colors.gray[400],
                     },
                     '&.Mui-focused fieldset': {
-                      borderColor: Color.TEXT_FIELD_BORDER_FOCUS,
+                      borderColor: colors.pink[300],
                     },
                   },
                   '& label.Mui-focused': {
-                    color: Color.TEXT_FIELD_LABEL_FOCUS,
+                    color: colors.pink[500],
                   },
                 }}
                 value={sort()}
@@ -295,14 +287,14 @@ export default function MenuPageAdd() {
                 sx={{
                   '& .MuiOutlinedInput-root': {
                     '&:hover fieldset': {
-                      borderColor: Color.TEXT_FIELD_BORDER_HOVER,
+                      borderColor: colors.gray[400],
                     },
                     '&.Mui-focused fieldset': {
-                      borderColor: Color.TEXT_FIELD_BORDER_FOCUS,
+                      borderColor: colors.pink[300],
                     },
                   },
                   '& label.Mui-focused': {
-                    color: Color.TEXT_FIELD_LABEL_FOCUS,
+                    color: colors.pink[500],
                   },
                 }}
                 value={icon()}

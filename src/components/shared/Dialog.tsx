@@ -16,7 +16,7 @@ export default function Dialog(props: {
     >
       <header
         class={[
-          'o-dialog-header',
+          'bg-[var(--o-dialog-header-bg-color)]',
           'flex items-center justify-between',
           'border-b px-4 py-3 dark:border-neutral-700',
         ].join(' ')}
@@ -28,7 +28,9 @@ export default function Dialog(props: {
           <button
             type="button"
             class={[
-              'o-dialog-header-close-btn',
+              'text-[var(--o-dialog-header-btn-close-text-color)]',
+              'bg-[var(--o-dialog-header-btn-close-bg-color)]',
+              'hover:bg-[var(--o-dialog-header-btn-close-bg-hover-color)]',
               'inline-flex size-8 items-center justify-center gap-x-2 rounded-full',
               'border border-transparent',
               'focus:outline-none',

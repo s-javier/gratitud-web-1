@@ -3,7 +3,6 @@ import { createRoot } from 'solid-js'
 import { Button } from '@suid/material'
 import { toast } from 'solid-sonner'
 
-import { Color } from '~/enums'
 import { validateResponse } from '~/utils'
 import handleResponse from './handleResponse'
 import Overlay from '~/components/shared/Overlay'
@@ -53,28 +52,17 @@ export default function UserDeleteRelation(props: {
           <>
             <Button
               variant="outlined"
-              sx={{
-                color: Color.BTN_CANCEL_TEXT,
-                borderColor: Color.BTN_CANCEL_BORDER,
-                '&:hover': {
-                  backgroundColor: Color.BTN_CANCEL_BG_HOVER,
-                  borderColor: Color.BTN_CANCEL_BORDER_HOVER,
-                },
-              }}
+              class={[
+                '!text-gray-700 !border-gray-300 hover:!bg-gray-50',
+                'hover:!border-[var(--o-btn-cancel-border-hover-color)]',
+              ].join(' ')}
               onClick={props.close}
             >
               Cerrar
             </Button>
             <Button
               variant="contained"
-              color="error"
-              sx={{
-                backgroundColor: Color.BTN_DELETE_BG,
-                color: Color.BTN_DELETE_TEXT,
-                '&:hover': {
-                  backgroundColor: Color.BTN_DELETE_BG_HOVER,
-                },
-              }}
+              class="!text-white !bg-red-500 hover:!bg-red-400 !font-bold"
               onClick={async () => {
                 if (validateRequest() === false) {
                   return

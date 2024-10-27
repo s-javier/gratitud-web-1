@@ -18,7 +18,13 @@ export default defineConfig({
     prefetchAll: true,
     defaultStrategy: 'load',
   },
-  integrations: [tailwind(), solidJs(), icon({ iconDir: 'src/assets/svg' })],
+  integrations: [
+    tailwind({
+      applyBaseStyles: false,
+    }),
+    solidJs(),
+    icon({ iconDir: 'src/assets/svg' }),
+  ],
   adapter: node({
     mode: 'standalone',
   }),
