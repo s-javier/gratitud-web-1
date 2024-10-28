@@ -1,6 +1,5 @@
 import { defineAction, type ActionAPIContext } from 'astro:actions'
 import { z } from 'astro:schema'
-import slugify from 'slugify'
 
 import { Api, Error } from '~/enums'
 import db from '~/db'
@@ -32,13 +31,10 @@ export const organizationAdd = defineAction({
       return { error: handleErrorFromServer(permissionVerification.error) }
     }
     try {
-      await db
-        .insert(organizationTable)
-        .values({
-          title: input.title,
-          isActive: input.isActive,
-          slug: slugify(input.title, { lower: true }),
-        })
+      await db.insert(organizationTable).values({
+        title: input.title,
+        isActive: input.isActive,
+      })
     } catch {
       if (import.meta.env.DEV) {
         console.error('Error en DB. Creación de organización.')

@@ -1,5 +1,6 @@
 import { actions } from 'astro:actions'
 import { createEffect, createRoot, createSignal, For } from 'solid-js'
+import colors from 'tailwindcss/colors'
 import {
   Button,
   FormControl,
@@ -12,7 +13,6 @@ import {
 import * as v from 'valibot'
 import { toast } from 'solid-sonner'
 
-import { Color } from '~/enums'
 import { validateResponse } from '~/utils'
 import { $loaderOverlay } from '~/stores'
 import handleResponse from './handleResponse'
@@ -114,14 +114,12 @@ export default function RoleEdit(props: {
             </Button>
             <Button
               variant="contained"
-              sx={{
-                backgroundColor: Color.BTN_PRIMARY_BG,
-                color: Color.BTN_PRIMARY_TEXT,
-                fontWeight: 'bold',
-                '&:hover': {
-                  backgroundColor: Color.BTN_PRIMARY_BG_HOVER,
-                },
-              }}
+              class={[
+                '!font-bold',
+                '!text-[var(--o-btn-primary-text-color)]',
+                '!bg-[var(--o-btn-primary-bg-color)]',
+                'hover:!bg-[var(--o-btn-primary-bg-hover-color)]',
+              ].join(' ')}
               onClick={async () => {
                 if (validateRequest() === false) {
                   return
@@ -152,14 +150,14 @@ export default function RoleEdit(props: {
             sx={{
               '& .MuiOutlinedInput-root': {
                 '&:hover fieldset': {
-                  borderColor: Color.TEXT_FIELD_BORDER_HOVER,
+                  borderColor: colors.gray[400],
                 },
                 '&.Mui-focused fieldset': {
-                  borderColor: Color.TEXT_FIELD_BORDER_FOCUS,
+                  borderColor: colors.pink[300],
                 },
               },
               '& label.Mui-focused': {
-                color: Color.TEXT_FIELD_LABEL_FOCUS,
+                color: colors.pink[500],
               },
             }}
             value={path()}
@@ -178,14 +176,14 @@ export default function RoleEdit(props: {
             sx={{
               '& .MuiOutlinedInput-root': {
                 '&:hover fieldset': {
-                  borderColor: Color.TEXT_FIELD_BORDER_HOVER,
+                  borderColor: colors.gray[400],
                 },
                 '&.Mui-focused fieldset': {
-                  borderColor: Color.TEXT_FIELD_BORDER_FOCUS,
+                  borderColor: colors.pink[300],
                 },
               },
               '& label.Mui-focused': {
-                color: Color.TEXT_FIELD_LABEL_FOCUS,
+                color: colors.pink[500],
               },
             }}
           >

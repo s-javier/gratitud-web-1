@@ -5,7 +5,6 @@ import { IconButton } from '@suid/material'
 import DeleteIcon from '@suid/icons-material/Delete'
 import DeleteRelationRole from './_DeleteRelationRole'
 
-import { Color } from '~/enums'
 import Overlay from '~/components/shared/Overlay'
 import TableOptions from '~/components/shared/TableOptions'
 
@@ -50,12 +49,7 @@ export default function RoleInfo(props: {
         return (
           <div class="flex flex-row justify-center items-center">
             <IconButton
-              sx={{
-                color: Color.BTN_DELETE_BG,
-                '&:hover': {
-                  color: Color.BTN_DELETE_BG_HOVER,
-                },
-              }}
+              class="!text-red-500 hover:!text-red-400"
               onClick={() => {
                 setRolePermission({
                   roleId: p.data.roleId,

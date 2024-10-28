@@ -3,7 +3,6 @@ import { createRoot } from 'solid-js'
 import { Button } from '@suid/material'
 import { toast } from 'solid-sonner'
 
-import { Color } from '~/enums'
 import { validateResponse } from '~/utils'
 import handleResponse from './handleResponse'
 import Overlay from '~/components/shared/Overlay'
@@ -62,14 +61,7 @@ export default function RoleDeleteRelationPermission(props: {
             </Button>
             <Button
               variant="contained"
-              color="error"
-              sx={{
-                backgroundColor: Color.BTN_DELETE_BG,
-                color: Color.BTN_DELETE_TEXT,
-                '&:hover': {
-                  backgroundColor: Color.BTN_DELETE_BG_HOVER,
-                },
-              }}
+              class="!text-white !bg-red-500 hover:!bg-red-400 !font-bold"
               onClick={async () => {
                 if (validateRequest() === false) {
                   return

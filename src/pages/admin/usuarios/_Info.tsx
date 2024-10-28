@@ -8,7 +8,6 @@ import VisibilityIcon from '@suid/icons-material/Visibility'
 import VisibilityOffIcon from '@suid/icons-material/VisibilityOff'
 import { toast } from 'solid-sonner'
 
-import { Color } from '~/enums'
 import { validateResponse } from '~/utils'
 import { $loaderOverlay } from '~/stores'
 import handleResponse from './handleResponse'
@@ -109,12 +108,7 @@ export default function UserInfo(props: {
         return (
           <div class="flex flex-row justify-center items-center">
             <IconButton
-              sx={{
-                color: Color.BTN_DELETE_BG,
-                '&:hover': {
-                  color: Color.BTN_DELETE_BG_HOVER,
-                },
-              }}
+              class="!text-red-500 hover:!bg-red-400"
               onClick={() => {
                 setOrganizationUserRole({
                   organizationId: p.data.organizationId,

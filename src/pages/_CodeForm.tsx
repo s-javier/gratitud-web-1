@@ -6,7 +6,6 @@ import * as v from 'valibot'
 import { toast } from 'solid-sonner'
 import OtpField from 'corvu/otp-field'
 
-import { Color } from '~/enums'
 import { Page } from '~/enums'
 import { validateResponse } from '~/utils'
 import { $loaderOverlay } from '~/stores/loader-overlay.store'
@@ -117,15 +116,12 @@ export default function CodeForm(props: {
       </div>
       <Button
         variant="contained"
-        class="w-full !mb-8"
-        sx={{
-          backgroundColor: Color.BTN_PRIMARY_BG,
-          color: Color.BTN_PRIMARY_TEXT,
-          fontWeight: 'bold',
-          '&:hover': {
-            backgroundColor: Color.BTN_PRIMARY_BG_HOVER,
-          },
-        }}
+        class={[
+          'w-full !mb-8 !font-bold',
+          '!text-[var(--o-btn-primary-text-color)]',
+          '!bg-[var(--o-btn-primary-bg-color)]',
+          'hover:!bg-[var(--o-btn-primary-bg-hover-color)]',
+        ].join(' ')}
         onClick={async () => {
           if (validateRequest() === false) {
             return

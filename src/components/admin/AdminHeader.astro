@@ -1,7 +1,6 @@
 ---
 import { Icon } from 'astro-icon/components'
 
-import { Color } from '~/enums'
 import LoaderBar from '~/components/shared/LoaderBar.tsx'
 import UserMenu from './UserMenu.tsx'
 import OrganizationMenu from './OrganizationMenu.tsx'
@@ -53,7 +52,7 @@ import AdminMenu from './AdminMenu'
                             transition:name="menu-page"
                             class:list={[
                               'absolute left-0 top-0 w-full h-full rounded-md border-2',
-                              Color.ADMIN_MENU_EXPANDED_CURRENT_BORDER_CLASS,
+                              'border-[var(--o-admin-menu-expanded-border-current-color)]',
                             ]}
                           />
                         )}

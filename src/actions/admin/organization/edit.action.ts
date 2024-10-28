@@ -1,7 +1,6 @@
 import { defineAction, type ActionAPIContext } from 'astro:actions'
 import { z } from 'astro:schema'
 import { eq } from 'drizzle-orm'
-import slugify from 'slugify'
 
 import { Api, Error } from '~/enums'
 import db from '~/db'
@@ -39,7 +38,6 @@ export const organizationEdit = defineAction({
         .set({
           title: input.title,
           isActive: input.isActive,
-          slug: slugify(input.title, { lower: true }),
         })
         .where(eq(organizationTable.id, input.id))
     } catch {
