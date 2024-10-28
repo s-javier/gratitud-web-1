@@ -11,7 +11,7 @@ import { validateResponse } from '~/utils'
 import handleResponse from './handleResponse'
 import Overlay from '~/components/shared/Overlay'
 import Dialog from '~/components/shared/Dialog'
-import YellowSwitch from '~/components/shared/Switch'
+import PinkSwitch from '~/components/shared/Switch'
 import CustomToaster from '~/components/shared/CustomToaster'
 
 export default function OrganizationAdd() {
@@ -149,7 +149,7 @@ export default function OrganizationAdd() {
                 helperText={titleErrMsg()}
               />
               <div class="flex flex-row items-center">
-                <YellowSwitch
+                <PinkSwitch
                   checked={isActive() ?? false}
                   onChange={(e, value) => setIsActive(value)}
                 />

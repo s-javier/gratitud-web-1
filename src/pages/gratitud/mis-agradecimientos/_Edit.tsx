@@ -10,7 +10,6 @@ import { $loaderOverlay } from '~/stores'
 import handleResponse from './handleResponse'
 import Overlay from '~/components/shared/Overlay'
 import Dialog from '~/components/shared/Dialog'
-import YellowSwitch from '~/components/shared/Switch'
 import CustomToaster from '~/components/shared/CustomToaster'
 
 export default function GratitudeEdit(props: {

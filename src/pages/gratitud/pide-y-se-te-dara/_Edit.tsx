@@ -10,24 +10,28 @@ import { $loaderOverlay } from '~/stores'
 import handleResponse from './handleResponse'
 import Overlay from '~/components/shared/Overlay'
 import Dialog from '~/components/shared/Dialog'
-import YellowSwitch from '~/components/shared/Switch'
+import PinkSwitch from '~/components/shared/Switch'
 import CustomToaster from '~/components/shared/CustomToaster'
 
 export default function GratitudeEdit(props: {
   isShow: boolean
   close: () => void
-  data: { id: string; title: string; description: string }
+  data: { id: string; title: string; description: string; isMaterialized: boolean }
 }) {
   const [title, setTitle] = createSignal('')
   const [titleErrMsg, setTitleErrMsg] = createSignal('')
   const [description, setDescription] = createSignal('')
   const [descriptionErrMsg, setDescriptionErrMsg] = createSignal('')
+  const [isMaterialized, setIsMaterialized] = createSignal(false)
+  const [isMaterializedErrMsg, setIsMaterializedErrMsg] = createSignal('')
 
   createEffect(() => {
     setTitle(props.data.title ?? '')
     setTitleErrMsg('')
     setDescription(props.data.description ?? '')
     setDescriptionErrMsg('')
+    setIsMaterialized(props.data.isMaterialized ?? false)
+    setIsMaterializedErrMsg('')
   })
 
   const validateRequest = () => {
@@ -198,6 +202,16 @@ export default function GratitudeEdit(props: {
             error={descriptionErrMsg() !== ''}
             helperText={descriptionErrMsg()}
           />
+          <div class="flex flex-row items-center">
+            <PinkSwitch
+              checked={isMaterialized() ?? false}
+              onChange={(e, value) => setIsMaterialized(value)}
+            />
+            <span class="ml-2">{isMaterialized() ? 'Activa' : 'Inactiva'}</span>
+            {isMaterializedErrMsg() !== '' && (
+              <span class="ml-2 text-red-500">{isMaterializedErrMsg()}</span>
+            )}
+          </div>
         </div>
       </Dialog>
     </Overlay>
