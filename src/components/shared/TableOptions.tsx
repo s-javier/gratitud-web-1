@@ -13,12 +13,7 @@ export default function TableOptions(props: {
       <Show when={props.isFilter}>
         <IconButton
           aria-label="menu"
-          sx={{
-            color: '#9ca3af', // Color del texto
-            '&:hover': {
-              color: '#eab308',
-            },
-          }}
+          class="!text-gray-400 hover:!text-[var(--o-btn-filter-text-hover-color)]"
           onClick={() => props.handleGlobalFilter(false)}
         >
           <FilterListOffIcon />
@@ -27,12 +22,7 @@ export default function TableOptions(props: {
       <Show when={props.isFilter === false}>
         <IconButton
           aria-label="menu"
-          sx={{
-            color: '#9ca3af', // Color del texto
-            '&:hover': {
-              color: '#eab308',
-            },
-          }}
+          class="!text-gray-400 hover:!text-[var(--o-btn-filter-text-hover-color)]"
           onClick={() => props.handleGlobalFilter(true)}
         >
           <FilterListIcon />

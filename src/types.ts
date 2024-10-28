@@ -48,8 +48,7 @@ export type Role = {
 
 export type User = {
   id: string
-  firstName: string
-  lastName: string
+  name: String
   email: string
   isActive: boolean
   relations: {

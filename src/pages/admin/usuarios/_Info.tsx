@@ -22,8 +22,7 @@ export default function UserInfo(props: {
   close: () => void
   data: {
     id: string
-    firstName: string
-    lastName: string
+    name: string
     email: string
     isActive: boolean
     relations: any[]
@@ -108,13 +107,13 @@ export default function UserInfo(props: {
         return (
           <div class="flex flex-row justify-center items-center">
             <IconButton
-              class="!text-red-500 hover:!bg-red-400"
+              class="!text-red-500 hover:!text-red-400"
               onClick={() => {
                 setOrganizationUserRole({
                   organizationId: p.data.organizationId,
                   organizationTitle: p.data.organizationTitle,
                   userId: props.data.id,
-                  userName: props.data.firstName + ' ' + props.data.lastName,
+                  userName: props.data.name,
                   roleId: p.data.roleId,
                   roleTitle: p.data.roleTitle,
                 })
@@ -202,11 +201,7 @@ export default function UserInfo(props: {
         >
           <div class="mb-4">
             <p class="font-bold">Nombre(s)</p>
-            <p>{props.data.firstName}</p>
-          </div>
-          <div class="mb-4">
-            <p class="font-bold">Apellido(s)</p>
-            <p>{props.data.lastName}</p>
+            <p>{props.data.name}</p>
           </div>
           <div class="mb-4">
             <p class="font-bold">Email</p>

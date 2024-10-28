@@ -10,8 +10,7 @@ import { verifyPermission } from '~/utils/verify-permission'
 export const userAdd = defineAction({
   accept: 'json',
   input: z.object({
-    firstName: z.string().min(2).max(50),
-    lastName: z.string().min(2).max(50),
+    name: z.string().min(2).max(100),
     email: z.string().email(),
     isActive: z.boolean(),
   }),
@@ -31,8 +30,7 @@ export const userAdd = defineAction({
     }
     try {
       await db.insert(personTable).values({
-        firstName: input.firstName,
-        lastName: input.lastName,
+        name: input.name,
         email: input.email,
         isActive: input.isActive,
       })

@@ -10,28 +10,24 @@ import { $loaderOverlay } from '~/stores'
 import handleResponse from './handleResponse'
 import Overlay from '~/components/shared/Overlay'
 import Dialog from '~/components/shared/Dialog'
-import YellowSwitch from '~/components/shared/Switch'
+import PinkSwitch from '~/components/shared/Switch'
 import CustomToaster from '~/components/shared/CustomToaster'
 
 export default function UserEdit(props: {
   isShow: boolean
   close: () => void
-  data: { id: string; firstName: string; lastName: string; email: string; isActive: boolean }
+  data: { id: string; name: string; lastName: string; email: string; isActive: boolean }
 }) {
-  const [firstName, setFirstName] = createSignal('')
-  const [firstNameErrMsg, setFirstNameErrMsg] = createSignal('')
-  const [lastName, setLastName] = createSignal('')
-  const [lastNameErrMsg, setLastNameErrMsg] = createSignal('')
+  const [name, setName] = createSignal('')
+  const [nameErrMsg, setNameErrMsg] = createSignal('')
   const [email, setEmail] = createSignal('')
   const [emailErrMsg, setEmailErrMsg] = createSignal('')
   const [isActive, setIsActive] = createSignal(true)
   const [isActiveErrMsg, setIsActiveErrMsg] = createSignal('')
 
   createEffect(() => {
-    setFirstName(props.data.firstName ?? '')
-    setFirstNameErrMsg('')
-    setLastName(props.data.lastName ?? '')
-    setLastNameErrMsg('')
+    setName(props.data.name ?? '')
+    setNameErrMsg('')
     setEmail(props.data.email ?? '')
     setEmailErrMsg('')
     setIsActive(props.data.isActive ?? false)
@@ -57,14 +53,7 @@ export default function UserEdit(props: {
       return false
     }
     const Schema = {
-      firstName: v.pipe(
-        v.string('El valor de este campo es inválido.'),
-        v.trim(),
-        v.nonEmpty('Este campo es requerido.'),
-        v.minLength(2, 'Escribe un poco más.'),
-        v.maxLength(50, 'Escribe menos.'),
-      ),
-      lastName: v.pipe(
+      name: v.pipe(
         v.string('El valor de este campo es inválido.'),
         v.trim(),
         v.nonEmpty('Este campo es requerido.'),
@@ -79,17 +68,14 @@ export default function UserEdit(props: {
       ),
       isActive: v.boolean('El valor de este campo es inválido.'),
     }
-    const firstNameErr = v.safeParse(Schema.firstName, firstName())
-    setFirstNameErrMsg(firstNameErr.issues ? firstNameErr.issues[0].message : '')
-    const lastNameErr = v.safeParse(Schema.firstName, lastName())
-    setLastNameErrMsg(lastNameErr.issues ? lastNameErr.issues[0].message : '')
+    const nameErr = v.safeParse(Schema.name, name())
+    setNameErrMsg(nameErr.issues ? nameErr.issues[0].message : '')
     const emailErr = v.safeParse(Schema.email, email())
     setEmailErrMsg(emailErr.issues ? emailErr.issues[0].message : '')
     const isActiveErr = v.safeParse(Schema.isActive, isActive())
     setIsActiveErrMsg(isActiveErr.issues ? isActiveErr.issues[0].message : '')
     const verificationResult = v.safeParse(v.object(Schema), {
-      firstName: firstName(),
-      lastName: lastName(),
+      name: name(),
       email: email(),
       isActive: isActive(),
     })
@@ -145,8 +131,7 @@ export default function UserEdit(props: {
                 $loaderOverlay.set(true)
                 const { data, error }: any = await actions.userEdit({
                   id: props.data.id,
-                  firstName: firstName().trim(),
-                  lastName: lastName().trim(),
+                  name: name().trim(),
                   email: email().trim(),
                   isActive: isActive(),
                 })
@@ -180,42 +165,15 @@ export default function UserEdit(props: {
                 color: colors.pink[500],
               },
             }}
-            value={firstName()}
+            value={name()}
             onChange={(e) => {
-              setFirstName(e.target.value)
+              setName(e.target.value)
             }}
             onFocus={() => {
-              setFirstNameErrMsg('')
+              setNameErrMsg('')
             }}
-            error={firstNameErrMsg() !== ''}
-            helperText={firstNameErrMsg()}
-          />
-          <TextField
-            label="Apellido(s)*"
-            variant="outlined"
-            class="w-full"
-            sx={{
-              '& .MuiOutlinedInput-root': {
-                '&:hover fieldset': {
-                  borderColor: colors.gray[400],
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: colors.pink[300],
-                },
-              },
-              '& label.Mui-focused': {
-                color: colors.pink[500],
-              },
-            }}
-            value={lastName()}
-            onChange={(e) => {
-              setLastName(e.target.value)
-            }}
-            onFocus={() => {
-              setLastNameErrMsg('')
-            }}
-            error={lastNameErrMsg() !== ''}
-            helperText={lastNameErrMsg()}
+            error={nameErrMsg() !== ''}
+            helperText={nameErrMsg()}
           />
           <TextField
             label="Email*"
@@ -245,10 +203,7 @@ export default function UserEdit(props: {
             helperText={emailErrMsg()}
           />
           <div class="flex flex-row items-center">
-            <YellowSwitch
-              checked={isActive() ?? false}
-              onChange={(e, value) => setIsActive(value)}
-            />
+            <PinkSwitch checked={isActive() ?? false} onChange={(e, value) => setIsActive(value)} />
             <span class="ml-2">{isActive() ? 'Activo' : 'Inactivo'}</span>
             {isActiveErrMsg() !== '' && <span class="ml-2 text-red-500">{isActiveErrMsg()}</span>}
           </div>

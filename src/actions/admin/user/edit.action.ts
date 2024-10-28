@@ -12,8 +12,7 @@ export const userEdit = defineAction({
   accept: 'json',
   input: z.object({
     id: z.string().regex(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/),
-    firstName: z.string().min(2).max(50),
-    lastName: z.string().min(2).max(50),
+    name: z.string().min(2).max(100),
     email: z.string().email(),
     isActive: z.boolean(),
   }),
@@ -35,8 +34,7 @@ export const userEdit = defineAction({
       await db
         .update(personTable)
         .set({
-          firstName: input.firstName,
-          lastName: input.lastName,
+          name: input.name,
           email: input.email,
           isActive: input.isActive,
         })

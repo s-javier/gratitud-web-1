@@ -29,8 +29,7 @@ export default function UserTable(props: {
   const [isEditOpen, setIsEditOpen] = createSignal(false)
   const [isDeleteOpen, setIsDeleteOpen] = createSignal(false)
   const columnDefs = [
-    { field: 'firstName', headerName: 'Nombre(s)', minWidth: 150 },
-    { field: 'lastName', headerName: 'Apellido(s)', minWidth: 150 },
+    { field: 'name', headerName: 'Nombre', minWidth: 200 },
     { field: 'email', headerName: 'Email', minWidth: 280 },
     {
       field: 'organizations',
@@ -85,12 +84,7 @@ export default function UserTable(props: {
   onMount(() => {
     if (validateResponse(props.error)) {
       $organizations.set(props.data.organizations)
-      $users.set(
-        props.data.users.map((u: User) => ({
-          ...u,
-          name: u.firstName + ' ' + u.lastName,
-        })),
-      )
+      $users.set(props.data.users)
       $roles.set(props.data.roles)
     }
   })

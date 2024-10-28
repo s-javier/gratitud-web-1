@@ -27,13 +27,12 @@ if (Astro.locals.userTokenError) {
       data.users = await db
         .select({
           id: personTable.id,
-          firstName: personTable.firstName,
-          lastName: personTable.lastName,
+          name: personTable.name,
           email: personTable.email,
           isActive: personTable.isActive,
         })
         .from(personTable)
-        .orderBy(asc(personTable.lastName))
+        .orderBy(asc(personTable.name))
     } catch {
       if (import.meta.env.DEV) {
         console.error('Error en DB. Obtención de usuarios.')

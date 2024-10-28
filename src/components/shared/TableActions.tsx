@@ -16,12 +16,7 @@ export default function TableActions(props: {
     <div class="flex flex-row justify-end">
       <IconButton
         aria-label="menu"
-        sx={{
-          color: '#9ca3af', // Color del texto
-          '&:hover': {
-            color: '#eab308',
-          },
-        }}
+        class="!text-gray-400 hover:!text-[var(--o-btn-filter-text-hover-color)]"
         onClick={(event) => setAnchorEl(event.currentTarget)}
       >
         <MoreVertIcon />
