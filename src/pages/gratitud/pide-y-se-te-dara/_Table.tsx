@@ -5,9 +5,9 @@ import type { CustomError, Organization } from '~/types'
 import { validateResponse } from '~/utils'
 import TableOptions from '~/components/shared/TableOptions'
 import TableActions from '~/components/shared/TableActions'
-// import Info from './_Info'
-// import Edit from './_Edit'
-// import Delete from './_Delete'
+import Info from './_Info'
+import Edit from './_Edit'
+import Delete from './_Delete'
 
 export default function OrganizationTable(props: { data: Organization[]; error: CustomError }) {
   const [table, setTable] = createSignal<any>(null)
@@ -25,8 +25,7 @@ export default function OrganizationTable(props: { data: Organization[]; error: 
   const [isEditOpen, setIsEditOpen] = createSignal(false)
   const [isDeleteOpen, setIsDeleteOpen] = createSignal(false)
   const columnDefs = [
-    // { field: 'id', headerName: 'ID', minWidth: 160, maxWidth: 160 },
-    { field: 'title', headerName: 'Título', minWidth: 200 },
+    { field: 'title', headerName: 'Título' },
     { field: 'description', headerName: 'Descripción', minWidth: 200 },
     {
       field: 'actions',
@@ -76,9 +75,9 @@ export default function OrganizationTable(props: { data: Organization[]; error: 
 
   return (
     <>
-      {/* <Info isShow={isInfoOpen()} close={() => setIsInfoOpen(false)} data={gratitude()} /> */}
-      {/* <Edit isShow={isEditOpen()} close={() => setIsEditOpen(false)} data={gratitude()} /> */}
-      {/* <Delete isShow={isDeleteOpen()} close={() => setIsDeleteOpen(false)} data={gratitude()} /> */}
+      <Info isShow={isInfoOpen()} close={() => setIsInfoOpen(false)} data={gratitude()} />
+      <Edit isShow={isEditOpen()} close={() => setIsEditOpen(false)} data={gratitude()} />
+      <Delete isShow={isDeleteOpen()} close={() => setIsDeleteOpen(false)} data={gratitude()} />
       <p class="mb-2 text-sm text-gray-500">
         Estas viendo {rowCount()} {rowCount() === 1 ? 'agradecimiento' : 'agradecimientos'}.
       </p>

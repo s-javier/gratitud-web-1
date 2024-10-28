@@ -25,7 +25,6 @@ export default function OrganizationTable(props: { data: Organization[]; error: 
   const [isEditOpen, setIsEditOpen] = createSignal(false)
   const [isDeleteOpen, setIsDeleteOpen] = createSignal(false)
   const columnDefs = [
-    // { field: 'id', headerName: 'ID', minWidth: 160, maxWidth: 160 },
     { field: 'title', headerName: 'Título' },
     { field: 'description', headerName: 'Descripción', minWidth: 200 },
     {

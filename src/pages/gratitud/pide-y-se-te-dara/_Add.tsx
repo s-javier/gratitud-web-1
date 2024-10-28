@@ -114,7 +114,7 @@ export default function OrganizationAdd() {
                     const { data, error }: any = await actions.gratitudeAdd({
                       title: title().trim() || undefined,
                       description: description().trim(),
-                      isMaterialized: true,
+                      isMaterialized: false,
                     })
                     if (validateResponse(error || data?.error || null) === false) {
                       $loaderOverlay.set(false)
