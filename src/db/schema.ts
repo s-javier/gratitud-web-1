@@ -2,7 +2,6 @@ import { relations } from 'drizzle-orm'
 import {
   boolean,
   integer,
-  json,
   pgEnum,
   pgTable,
   primaryKey,

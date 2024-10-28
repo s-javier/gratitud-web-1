@@ -1,4 +1,4 @@
-import { Api, Error, Page } from '~/enums'
+import { Page } from '~/enums'
 
 export type CustomError = {
   isNotify?: boolean

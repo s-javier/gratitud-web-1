@@ -8,7 +8,7 @@ import { deleteUserTokenCookie, handleErrorFromServer } from '~/utils'
 import { verifyPermission } from '~/utils/verify-permission'
 
 export const logout = defineAction({
-  handler: async (input: any, context: ActionAPIContext) => {
+  handler: async (context: ActionAPIContext) => {
     if (context.locals.userTokenError) {
       if (import.meta.env.DEV) {
         console.error('Problema con el token de usuario en el cierre de sesión.')
