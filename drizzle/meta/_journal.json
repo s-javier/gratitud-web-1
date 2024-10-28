@@ -8,6 +8,20 @@
       "when": 1729883573823,
       "tag": "0000_productive_ultimo",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1730135801865,
+      "tag": "0001_exotic_anita_blake",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1730145816614,
+      "tag": "0002_fine_black_widow",
+      "breakpoints": true
     }
   ]
 }

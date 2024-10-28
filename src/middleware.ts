@@ -15,18 +15,26 @@ import { deleteUserTokenCookie, handleErrorFromServer } from '~/utils'
 import { verifyUserToken } from './utils/verify-user-token'
 import { verifyPermission } from './utils/verify-permission'
 
+const isPrivatePage = (pathname: string) => {
+  /* El startsWith es para que se verifique solo las vista, por esto no sirve el includes */
+  if (pathname.startsWith('/admin') || pathname.startsWith('/gratitud')) {
+    return true
+  }
+  return false
+}
+
 const auth = defineMiddleware(async (context, next) => {
   if (
     context.url.pathname === Page.SIGN_IN ||
     context.url.pathname === Page.ADMIN_WELCOME ||
-    context.url.pathname.includes('/admin') ||
+    isPrivatePage(context.url.pathname) ||
     context.url.pathname.includes('_server-islands') ||
     context.url.pathname.includes('_actions')
   ) {
     if (!context.cookies.get('token')?.value) {
       if (context.url.pathname === Page.SIGN_IN) {
         return next()
-      } else if (context.url.pathname.includes('/admin')) {
+      } else if (isPrivatePage(context.url.pathname)) {
         return context.redirect(Page.SIGN_IN, 302)
       } else {
         context.locals.userTokenError = Error.NOT_USER_TOKEN
@@ -44,7 +52,7 @@ const auth = defineMiddleware(async (context, next) => {
       }
       if (context.url.pathname === Page.SIGN_IN) {
         return next()
-      } else if (context.url.pathname.includes('/admin')) {
+      } else if (isPrivatePage(context.url.pathname)) {
         return context.redirect(Page.SIGN_IN, 302)
       }
     } else {
@@ -53,9 +61,12 @@ const auth = defineMiddleware(async (context, next) => {
       }
     }
     /* ↓ Verificación de permisos para vistas */
-    if (context.url.pathname !== Page.ADMIN_WELCOME && context.url.pathname.includes('/admin')) {
+    if (context.url.pathname !== Page.ADMIN_WELCOME && isPrivatePage(context.url.pathname)) {
       const { isSuccess } = await verifyPermission(context.locals.roleId, context.url.pathname)
       if (!isSuccess) {
+        if (import.meta.env.DEV) {
+          console.error('Problema con el permiso del usuario en el middleware.')
+        }
         return context.redirect(Page.ADMIN_WELCOME, 302)
       }
     }
@@ -64,7 +75,7 @@ const auth = defineMiddleware(async (context, next) => {
 })
 
 const getMenu = defineMiddleware(async (context, next) => {
-  if (context.url.pathname.includes('/admin')) {
+  if (isPrivatePage(context.url.pathname)) {
     try {
       context.locals.menu = await db
         .select({

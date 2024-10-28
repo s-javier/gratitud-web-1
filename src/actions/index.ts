@@ -23,6 +23,10 @@ import { menuPageAdd } from './admin/menu-page/add.action'
 import { menuPageDelete } from './admin/menu-page/delete.action'
 import { menuPageEdit } from './admin/menu-page/edit.action'
 
+import { gratitudeAdd } from './gratitude/add.action'
+import { gratitudeEdit } from './gratitude/edit.action'
+import { gratitudeDelete } from './gratitude/delete.action'
+
 export const server = {
   login,
   code,
@@ -48,4 +52,8 @@ export const server = {
   menuPageAdd,
   menuPageDelete,
   menuPageEdit,
+
+  gratitudeAdd,
+  gratitudeEdit,
+  gratitudeDelete,
 }

@@ -4,35 +4,47 @@ import { eq } from 'drizzle-orm'
 
 import { Api, Error } from '~/enums'
 import db from '~/db'
-import { organizationTable } from '~/db/schema'
+import { gratitudeTable } from '~/db/schema'
 import { handleErrorFromServer } from '~/utils'
 import { verifyPermission } from '~/utils/verify-permission'
 
-export const organizationDelete = defineAction({
+export const gratitudeEdit = defineAction({
   accept: 'json',
-  input: z.string().regex(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/),
+  input: z.object({
+    id: z.string().regex(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/),
+    title: z.string().min(4).max(100).optional(),
+    description: z.string().min(4).max(400),
+    isMaterialized: z.boolean(),
+  }),
   handler: async (input: any, context: ActionAPIContext) => {
     if (context.locals.userTokenError) {
       if (import.meta.env.DEV) {
-        console.error('Problema con el token de usuario en eliminación de organización.')
+        console.error('Problema con el token de usuario en actualización de agradecimiento.')
       }
       return { error: handleErrorFromServer(context.locals.userTokenError) }
     }
     const permissionVerification = await verifyPermission(
       context.locals.roleId,
-      Api.ORGANIZATION_DELETE,
+      Api.GRATITUDE_UPDATE,
     )
     if (!permissionVerification.isSuccess) {
       if (import.meta.env.DEV) {
-        console.error('Problema con el permiso del usuario en eliminación de organización.')
+        console.error('Problema con el permiso del usuario en actualización de agradecimiento.')
       }
       return { error: handleErrorFromServer(permissionVerification.error) }
     }
     try {
-      await db.delete(organizationTable).where(eq(organizationTable.id, input))
-    } catch (error: any) {
+      await db
+        .update(gratitudeTable)
+        .set({
+          title: input.title,
+          description: input.description,
+          isMaterialized: input.isMaterialized,
+        })
+        .where(eq(gratitudeTable.id, input.id))
+    } catch {
       if (import.meta.env.DEV) {
-        console.error('Error en DB. Eliminación de organización.')
+        console.error('Error en DB. Actualización de agradecimiento.')
       }
       return { error: handleErrorFromServer(Error.DB) }
     }

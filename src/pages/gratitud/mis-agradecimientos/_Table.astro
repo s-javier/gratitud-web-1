@@ -1,0 +1,51 @@
+---
+import { and, eq } from 'drizzle-orm'
+
+import { Api, Error } from '~/enums'
+import type { CustomError } from '~/types'
+import db from '~/db'
+import { gratitudeTable } from '~/db/schema'
+import { handleErrorFromServer } from '~/utils'
+import { verifyPermission } from '~/utils/verify-permission'
+import DataTable from './_Table'
+
+let data: any[] = []
+let error: CustomError = null
+if (Astro.locals.userTokenError) {
+  if (import.meta.env.DEV) {
+    console.error('Problema con el token de usuario en obtención de agradecimeintos.')
+  }
+  error = handleErrorFromServer(Astro.locals.userTokenError)
+} else {
+  const permissionVerification = await verifyPermission(Astro.locals.roleId, Api.GRATITUDE_BY_USER)
+  if (!permissionVerification.isSuccess) {
+    if (import.meta.env.DEV) {
+      console.error('Problema con el permiso del usuario en obtención de agradecimientos.')
+    }
+    error = handleErrorFromServer(permissionVerification.error)
+  } else {
+    try {
+      data = await db
+        .select({
+          id: gratitudeTable.id,
+          title: gratitudeTable.title,
+          description: gratitudeTable.description,
+        })
+        .from(gratitudeTable)
+        .where(
+          and(
+            eq(gratitudeTable.personId, Astro.locals.userId),
+            eq(gratitudeTable.isMaterialized, true),
+          ),
+        )
+    } catch {
+      if (import.meta.env.DEV) {
+        console.error('Error en DB. Obtención de agradecimeintos.')
+      }
+      error = handleErrorFromServer(Error.DB)
+    }
+  }
+}
+---
+
+<DataTable client:only="solid-js" data={data} error={error} />

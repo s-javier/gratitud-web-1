@@ -40,21 +40,8 @@ export enum Api {
   MENU_PAGE_DELETE = '/menu-page/delete',
   MENU_PAGE_UPDATE = '/menu-page/update',
 
-  LANGUAGE_BY_ORGANIZATION = '/language/by-organization',
-  LANGUAGE_CREATE = '/language/create',
-  LANGUAGE_DELETE = '/language/delete',
-  LANGUAGE_UPDATE = '/language/update',
-
-  COMPANY_BY_ORGANIZATION = '/company/by-organization',
-  COMPANY_UPDATE = '/company/update',
-
-  BRANCH_BY_ORGANIZATION = '/branch/by-organization',
-  BRANCH_CREATE = '/branch/create',
-  BRANCH_DELETE = '/branch/delete',
-  BRANCH_UPDATE = '/branch/update',
-
-  SECTION_BY_ORGANIZATION = '/section/by-organization',
-  SECTION_CREATE = '/section/create',
-  SECTION_DELETE = '/section/delete',
-  SECTION_UPDATE = '/section/update',
+  GRATITUDE_BY_USER = '/gratitude/by-user',
+  GRATITUDE_CREATE = '/gratitude/create',
+  GRATITUDE_DELETE = '/gratitude/delete',
+  GRATITUDE_UPDATE = '/gratitude/update',
 }

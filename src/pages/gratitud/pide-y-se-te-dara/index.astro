@@ -4,21 +4,21 @@ import { Skeleton } from '@kobalte/core/skeleton'
 import AdminLayout from '~/layouts/AdminLayout.astro'
 import AdminHeader from '~/components/admin/AdminHeader.astro'
 import AdminMain from '~/components/admin/AdminMain.astro'
-import Table from './_Table.astro'
 import Add from './_Add'
+import Table from './_Table.astro'
 ---
 
-<AdminLayout title="Organizaciones">
+<AdminLayout title="Pide y se te dará">
   <AdminHeader>
     <h1 slot="view-title" class="max-w-[800px] text-3xl font-bold tracking-tight text-white">
-      Organizaciones
+      Pide y se te dará
     </h1>
     <Fragment slot="buttons">
       <Add client:only="solid-js" />
     </Fragment>
   </AdminHeader>
   <AdminMain>
-    <div class="max-w-[525px] m-auto">
+    <div class="max-w-[800px] m-auto">
       <Table server:defer>
         <Fragment slot="fallback">
           <Skeleton client:load class="skeleton mb-4" height={20} radius={5} />
