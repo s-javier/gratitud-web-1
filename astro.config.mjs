@@ -14,10 +14,10 @@ export default defineConfig({
     host: '0.0.0.0',
   },
   output: 'server',
-  prefetch: {
-    prefetchAll: true,
-    defaultStrategy: 'load',
-  },
+  // prefetch: {
+  //   prefetchAll: true,
+  //   defaultStrategy: 'hover',
+  // },
   integrations: [
     tailwind({
       applyBaseStyles: false,
