@@ -26,7 +26,7 @@ export default function MyGratitudeTable(props: { data: any[]; error: CustomErro
   const rowVirtualizer = createVirtualizer({
     count: filteredItems().length,
     getScrollElement: () => elementsRef,
-    estimateSize: () => 120,
+    estimateSize: () => 140,
     overscan: 5,
   })
   /* ↓ Calculamos la altura total de la lista */
