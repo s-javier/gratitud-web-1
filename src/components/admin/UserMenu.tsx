@@ -1,7 +1,6 @@
 import { actions } from 'astro:actions'
 import { navigate } from 'astro:transitions/client'
 import { createSignal } from 'solid-js'
-import { toast } from 'solid-sonner'
 import { Button, Menu, MenuItem, ListItemIcon } from '@suid/material'
 import PersonIcon from '@suid/icons-material/Person'
 import KeyboardArrowDownIcon from '@suid/icons-material/KeyboardArrowDown'
@@ -9,8 +8,7 @@ import LogoutIcon from '@suid/icons-material/Logout'
 
 import { Page } from '~/enums'
 import { $loaderOverlay } from '~/stores'
-import CustomToaster from '~/components/shared/CustomToaster'
-import { createRoot } from 'solid-js'
+import { validateResponse } from '~/utils'
 
 export default function UserMenu(props: { name: string }) {
   const [anchorEl, setAnchorEl] = createSignal<null | HTMLElement>(null)
@@ -22,46 +20,6 @@ export default function UserMenu(props: { name: string }) {
 
   const handleClose = () => {
     setAnchorEl(null)
-  }
-
-  const validateResponse = (response: any): boolean => {
-    if (response.error) {
-      toast.custom(
-        (t) =>
-          createRoot(() => (
-            <CustomToaster
-              id={t}
-              type="error"
-              title="Hubo un error"
-              description="Por favor, inténtalo más tarde."
-            />
-          )),
-        {
-          duration: 5000,
-        },
-      )
-      return false
-    }
-    if (response.data?.error) {
-      if (response.data.error.isNotify) {
-        toast.custom(
-          (t) =>
-            createRoot(() => (
-              <CustomToaster
-                id={t}
-                type="error"
-                title={response.data.error.title}
-                description={response.data.error.message}
-              />
-            )),
-          {
-            duration: 5000,
-          },
-        )
-      }
-      return false
-    }
-    return true
   }
 
   const handleResponse = () => {

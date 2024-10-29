@@ -128,6 +128,8 @@ export default function CodeForm(props: {
           }
           $loaderOverlay.set(true)
           const { data, error }: any = await actions.code(code())
+          console.log('***')
+          console.log(error)
           if (validateResponse(error || data?.error || null) === false) {
             $loaderOverlay.set(false)
             return

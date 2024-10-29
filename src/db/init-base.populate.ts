@@ -45,6 +45,7 @@ async function main() {
   const permissionAdminPermissionsId = '75f99f87-9a29-44b3-9e2d-141a244735cf'
   const permissionAdminPagesId = '25825194-4f17-4767-96f8-bebde4305d76'
   const permissionOrganizationChangeId = 'e992ec03-72ba-4b5d-89fe-86bc96473623'
+  const permissionAuthSignOut = 'e6828e67-405e-4bb9-bccb-eceaf0dcdb98'
 
   const permissions: (typeof permissionTable.$inferInsert)[] = [
     { id: permissionAdminOrganizationId, type: 'view', path: Page.ADMIN_ORGANIZATIONS },
@@ -52,6 +53,8 @@ async function main() {
     { id: permissionAdminUsersId, type: 'view', path: Page.ADMIN_USERS },
     { id: permissionAdminPermissionsId, type: 'view', path: Page.ADMIN_PERMISSIONS },
     { id: permissionAdminPagesId, type: 'view', path: Page.ADMIN_MENU_PAGES },
+
+    { id: permissionAuthSignOut, type: 'api', path: Api.AUTH_SIGN_OUT },
 
     { type: 'api', path: Api.ORGANIZATION_ALL },
     { type: 'api', path: Api.ORGANIZATION_CREATE },
