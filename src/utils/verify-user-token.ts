@@ -62,7 +62,7 @@ export const verifyUserToken = async (context: any): Promise<void> => {
       )
     if (query.length === 0) {
       if (import.meta.env.DEV) {
-        console.log('El usuario no está vinculado a una organización ni a un rol.')
+        console.error('El usuario no está vinculado a una organización ni a un rol.')
       }
       context.locals.userTokenError = Error.ORG_ROLE_NOT_FOUND
       return

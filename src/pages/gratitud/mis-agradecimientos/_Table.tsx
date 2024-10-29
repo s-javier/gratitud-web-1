@@ -1,73 +1,42 @@
-import { createSignal, onMount } from 'solid-js'
-import AgGridSolid from 'solid-ag-grid'
+import { createMemo, createSignal, onMount } from 'solid-js'
+import { createVirtualizer } from '@tanstack/solid-virtual'
+import { TextField } from '@suid/material'
+import colors from 'tailwindcss/colors'
 
-import type { CustomError, Organization } from '~/types'
+import type { CustomError } from '~/types'
 import { validateResponse } from '~/utils'
-import TableOptions from '~/components/shared/TableOptions'
 import TableActions from '~/components/shared/TableActions'
 import Info from './_Info'
 import Edit from './_Edit'
 import Delete from './_Delete'
+import Thank from '~/components/gratitude/Thank'
 
-export default function OrganizationTable(props: { data: Organization[]; error: CustomError }) {
-  const [table, setTable] = createSignal<any>(null)
-  const [rowCount, setRowCount] = createSignal(props.data.length)
-  const [isFilter, setIsFilter] = createSignal(false)
-  const [defaultColDef, setDefaultColDef] = createSignal({
-    flex: 1,
-    headerClass: 'text-base',
-    filter: false,
-    floatingFilter: false,
-    resizable: false,
-  })
+export default function MyGratitudeTable(props: { data: any[]; error: CustomError }) {
   const [gratitude, setGratitude] = createSignal<any>({})
   const [isInfoOpen, setIsInfoOpen] = createSignal(false)
   const [isEditOpen, setIsEditOpen] = createSignal(false)
   const [isDeleteOpen, setIsDeleteOpen] = createSignal(false)
-  const columnDefs = [
-    { field: 'title', headerName: 'Título' },
-    { field: 'description', headerName: 'Descripción', minWidth: 200 },
-    {
-      field: 'actions',
-      pinned: 'right',
-      maxWidth: 60,
-      headerComponent: () => {
-        return (
-          <TableOptions
-            isFilter={isFilter()}
-            handleGlobalFilter={(value) => {
-              setIsFilter(value)
-              setDefaultColDef({
-                ...defaultColDef(),
-                filter: value,
-                floatingFilter: value,
-              })
-            }}
-          />
-        )
-      },
-      cellRenderer: (p: any) => {
-        return (
-          <TableActions
-            infoClick={() => {
-              setGratitude(p.data)
-              setIsInfoOpen(true)
-            }}
-            editClick={() => {
-              setGratitude(p.data)
-              setIsEditOpen(true)
-            }}
-            deleteClick={() => {
-              setGratitude(p.data)
-              setIsDeleteOpen(true)
-            }}
-          />
-        )
-      },
-      filter: false,
-      sortable: false,
-    },
-  ]
+  const [searchText, setSearchText] = createSignal('')
+  const filteredItems = createMemo(() =>
+    props.data.filter((item) => {
+      return item.description.toLowerCase().includes(searchText().toLowerCase())
+    }),
+  )
+  let elementsRef!: HTMLDivElement
+  const rowVirtualizer = createVirtualizer({
+    count: filteredItems().length,
+    getScrollElement: () => elementsRef,
+    estimateSize: () => 120,
+    overscan: 5,
+  })
+  /* ↓ Calculamos la altura total de la lista */
+  const totalHeight = createMemo(() => {
+    // rowVirtualizer.getTotalSize()
+    if (filteredItems().length > 100) {
+      return 600
+    }
+    return 400
+  })
 
   onMount(() => {
     validateResponse(props.error)
@@ -78,24 +47,62 @@ export default function OrganizationTable(props: { data: Organization[]; error: 
       <Info isShow={isInfoOpen()} close={() => setIsInfoOpen(false)} data={gratitude()} />
       <Edit isShow={isEditOpen()} close={() => setIsEditOpen(false)} data={gratitude()} />
       <Delete isShow={isDeleteOpen()} close={() => setIsDeleteOpen(false)} data={gratitude()} />
-      <p class="mb-2 text-sm text-gray-500">
-        Estas viendo {rowCount()} {rowCount() === 1 ? 'agradecimiento' : 'agradecimientos'}.
+
+      <TextField
+        label="Buscar según descripción"
+        variant="outlined"
+        class="w-full !mb-10"
+        sx={{
+          '& .MuiOutlinedInput-root': {
+            '&:hover fieldset': {
+              borderColor: colors.gray[400],
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: colors.pink[300],
+            },
+          },
+          '& label.Mui-focused': {
+            color: colors.pink[500],
+          },
+        }}
+        value={searchText()}
+        onChange={(e: any) => {
+          setSearchText(e.target.value)
+        }}
+        // helperText={titleErrMsg()}
+      />
+
+      <p class="text-sm text-gray-500 text-center mb-4">
+        Estas viendo {filteredItems().length}{' '}
+        {filteredItems().length === 1 ? 'agradecimiento' : 'agradecimientos'}.
       </p>
-      <div class="ag-theme-alpine">
-        <AgGridSolid
-          onGridReady={(params) => {
-            setTable(params.api)
-          }}
-          onFilterChanged={() => {
-            setRowCount(table()?.getRenderedNodes().length ?? props.data.length)
-          }}
-          // @ts-ignore
-          columnDefs={columnDefs}
-          rowData={props.data}
-          defaultColDef={defaultColDef()}
-          rowSelection="single"
-          domLayout="autoHeight"
-        />
+      <div ref={elementsRef} class="overflow-auto">
+        <div class="relative" style={{ height: `${totalHeight()}px` }}>
+          {rowVirtualizer.getVirtualItems().map((virtualRow: any) => {
+            const item = filteredItems()[virtualRow.index]
+            if (!item) {
+              return null
+            }
+            return (
+              <Thank virtualRow={virtualRow} item={item}>
+                <TableActions
+                  infoClick={() => {
+                    setGratitude(item)
+                    setIsInfoOpen(true)
+                  }}
+                  editClick={() => {
+                    setGratitude(item)
+                    setIsEditOpen(true)
+                  }}
+                  deleteClick={() => {
+                    setGratitude(item)
+                    setIsDeleteOpen(true)
+                  }}
+                />
+              </Thank>
+            )
+          })}
+        </div>
       </div>
     </>
   )

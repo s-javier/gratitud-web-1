@@ -30,6 +30,7 @@ if (Astro.locals.userTokenError) {
           id: gratitudeTable.id,
           title: gratitudeTable.title,
           description: gratitudeTable.description,
+          createdAt: gratitudeTable.createdAt,
         })
         .from(gratitudeTable)
         .where(
