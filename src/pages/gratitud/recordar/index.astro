@@ -1,7 +1,11 @@
 ---
+import { Skeleton } from '@kobalte/core/skeleton'
+
 import AdminLayout from '~/layouts/AdminLayout.astro'
 import AdminHeader from '~/components/admin/AdminHeader.astro'
 import AdminMain from '~/components/admin/AdminMain.astro'
+// import Add from './_Add'
+import Table from './_Table.astro'
 ---
 
 <AdminLayout title="Recordar agradecimientos">
@@ -9,8 +13,19 @@ import AdminMain from '~/components/admin/AdminMain.astro'
     <h1 slot="view-title" class="max-w-[800px] text-3xl font-bold tracking-tight text-white">
       Recordar agradecimientos
     </h1>
+    <!-- <Fragment slot="buttons">
+      <Add client:only="solid-js" />
+    </Fragment> -->
   </AdminHeader>
   <AdminMain>
-    <p>Hola</p>
+    <div class="max-w-[800px] m-auto">
+      <Table server:defer>
+        <Fragment slot="fallback">
+          <Skeleton client:load class="skeleton mb-4" height={20} radius={5} />
+          <Skeleton client:load class="skeleton mb-4" height={20} radius={5} />
+          <Skeleton client:load class="skeleton" height={20} radius={5} />
+        </Fragment>
+      </Table>
+    </div>
   </AdminMain>
 </AdminLayout>

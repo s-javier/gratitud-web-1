@@ -7,7 +7,7 @@ import db from '~/db'
 import { gratitudeTable } from '~/db/schema'
 import { handleErrorFromServer } from '~/utils'
 import { verifyPermission } from '~/utils/verify-permission'
-import DataTable from './_Table'
+// import DataTable from './_Table'
 
 let data: any[] = []
 let error: CustomError = null
@@ -38,8 +38,12 @@ if (Astro.locals.userTokenError) {
           and(
             eq(gratitudeTable.personId, Astro.locals.userId),
             eq(gratitudeTable.isMaterialized, false),
+            eq(gratitudeTable.isRemind, false),
           ),
         )
+      // Hacer consulta aleatoria
+      // Obtener los 3 primeros
+      // En el botón recordar, marcar como redordados.
     } catch {
       if (import.meta.env.DEV) {
         console.error('Error en DB. Obtención de agradecimeintos.')
@@ -50,4 +54,4 @@ if (Astro.locals.userTokenError) {
 }
 ---
 
-<DataTable client:only="solid-js" data={data} error={error} />
+<!-- <DataTable client:only="solid-js" data={data} error={error} /> -->
