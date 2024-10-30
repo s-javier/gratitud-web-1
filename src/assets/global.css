@@ -59,7 +59,7 @@
   left: -50%;
   height: 4px;
   width: 40%;
-  background-color: #f472b6;
+  background-color: theme(colors.pink.400);
   -webkit-animation: lineAnim 1s linear infinite;
   -moz-animation: lineAnim 1s linear infinite;
   animation: lineAnim 1s linear infinite;
