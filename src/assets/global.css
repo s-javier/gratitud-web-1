@@ -17,6 +17,8 @@
   --o-admin-menu-expanded-border-current-color: theme(colors.pink.300);
 
   --o-btn-filter-text-hover-color: theme(colors.pink.400);
+
+  --o-otp-ring-active-color: theme(colors.pink.400);
 }
 
 .spinner_Uvk8 {

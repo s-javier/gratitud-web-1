@@ -162,7 +162,8 @@ const Slot = (props: { index: number }) => {
     <div
       class={[
         'flex w-10 h-12 items-center justify-center rounded-md bg-gray-200 font-mono text-lg font-bold transition-all',
-        context.activeSlots().includes(props.index) ? 'ring-pink-400 ring-2' : '',
+        context.activeSlots().includes(props.index) &&
+          'ring-[var(--o-otp-ring-active-color)] ring-2',
       ].join(' ')}
     >
       {char()}
