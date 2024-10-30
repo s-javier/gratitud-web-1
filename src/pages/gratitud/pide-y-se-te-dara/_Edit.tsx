@@ -132,7 +132,7 @@ export default function GratitudeEdit(props: {
                   id: props.data.id,
                   title: title().trim() || undefined,
                   description: description().trim(),
-                  isMaterialized: true,
+                  isMaterialized: isMaterialized(),
                 })
                 if (validateResponse(error || data?.error || null) === false) {
                   $loaderOverlay.set(false)
@@ -207,7 +207,7 @@ export default function GratitudeEdit(props: {
               checked={isMaterialized() ?? false}
               onChange={(e, value) => setIsMaterialized(value)}
             />
-            <span class="ml-2">{isMaterialized() ? 'Activa' : 'Inactiva'}</span>
+            <span class="ml-2">{isMaterialized() ? 'Materializado' : 'Espiritual'}</span>
             {isMaterializedErrMsg() !== '' && (
               <span class="ml-2 text-red-500">{isMaterializedErrMsg()}</span>
             )}

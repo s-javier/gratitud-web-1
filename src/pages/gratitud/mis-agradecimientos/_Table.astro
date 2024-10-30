@@ -1,5 +1,5 @@
 ---
-import { and, eq } from 'drizzle-orm'
+import { and, desc, eq } from 'drizzle-orm'
 
 import { Api, Error } from '~/enums'
 import type { CustomError } from '~/types'
@@ -39,6 +39,7 @@ if (Astro.locals.userTokenError) {
             eq(gratitudeTable.isMaterialized, true),
           ),
         )
+        .orderBy(desc(gratitudeTable.createdAt))
     } catch {
       if (import.meta.env.DEV) {
         console.error('Error en DB. Obtención de agradecimeintos.')
