@@ -10,10 +10,16 @@ import DataTable from './_Table'
 let data: Organization[] = []
 let error: CustomError = null
 if (Astro.locals.userTokenError) {
+  if (import.meta.env.DEV) {
+    console.error('Problema con el token de usuario en la obtención de organizaciones.')
+  }
   error = handleErrorFromServer(Astro.locals.userTokenError)
 } else {
   const permissionVerification = await verifyPermission(Astro.locals.roleId, Api.ORGANIZATION_ALL)
   if (!permissionVerification.isSuccess) {
+    if (import.meta.env.DEV) {
+      console.error('Problema con el permiso del usuario en la obtención de organizaciones.')
+    }
     error = handleErrorFromServer(permissionVerification.error)
   } else {
     try {
@@ -25,6 +31,9 @@ if (Astro.locals.userTokenError) {
         })
         .from(organizationTable)
     } catch {
+      if (import.meta.env.DEV) {
+        console.error('Error en DB. Obtención de organizaciones.')
+      }
       error = handleErrorFromServer(Error.DB)
     }
   }

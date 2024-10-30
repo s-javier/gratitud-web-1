@@ -12,10 +12,16 @@ import DataTable from './_Table'
 let data: { pages: any[]; permissions: any[] } = { pages: [], permissions: [] }
 let error: CustomError = null
 if (Astro.locals.userTokenError) {
+  if (import.meta.env.DEV) {
+    console.error('Problema con el token de usuario en la obtención de páginas de menú.')
+  }
   error = handleErrorFromServer(Astro.locals.userTokenError)
 } else {
   const permissionVerification = await verifyPermission(Astro.locals.roleId, Api.MENU_PAGE_ALL)
   if (!permissionVerification.isSuccess) {
+    if (import.meta.env.DEV) {
+      console.error('Problema con el permiso del usuario en la obtención de páginas de menú.')
+    }
     error = handleErrorFromServer(permissionVerification.error)
   } else {
     try {
@@ -32,6 +38,9 @@ if (Astro.locals.userTokenError) {
         .innerJoin(permissionTable, eq(menuPageTable.permissionId, permissionTable.id))
         .orderBy(asc(menuPageTable.sort))
     } catch {
+      if (import.meta.env.DEV) {
+        console.error('Error en DB. Obtención de páginas de menú.')
+      }
       error = handleErrorFromServer(Error.DB)
     }
     try {
@@ -42,6 +51,9 @@ if (Astro.locals.userTokenError) {
         })
         .from(permissionTable)
     } catch {
+      if (import.meta.env.DEV) {
+        console.error('Error en DB. Obtención de permisos.')
+      }
       error = handleErrorFromServer(Error.DB)
     }
   }

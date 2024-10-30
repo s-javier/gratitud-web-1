@@ -15,10 +15,16 @@ let data: any = {
 }
 let error: CustomError = null
 if (Astro.locals.userTokenError) {
+  if (import.meta.env.DEV) {
+    console.error('Problema con el token de usuario en la obtención de permisos.')
+  }
   error = handleErrorFromServer(Astro.locals.userTokenError)
 } else {
   const permissionVerification = await verifyPermission(Astro.locals.roleId, Api.PERMISSION_ALL)
   if (!permissionVerification.isSuccess) {
+    if (import.meta.env.DEV) {
+      console.error('Problema con el permiso del usuario en la obtención de permisos.')
+    }
     error = handleErrorFromServer(permissionVerification.error)
   } else {
     try {
