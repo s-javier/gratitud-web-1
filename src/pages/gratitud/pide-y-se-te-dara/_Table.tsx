@@ -26,7 +26,7 @@ export default function OrganizationTable(props: { data: any[]; error: CustomErr
   const rowVirtualizer = createVirtualizer({
     count: filteredItems().length,
     getScrollElement: () => elementsRef,
-    estimateSize: () => 180,
+    estimateSize: () => 230,
     overscan: 5,
   })
   /* ↓ Calculamos la altura total de la lista */
