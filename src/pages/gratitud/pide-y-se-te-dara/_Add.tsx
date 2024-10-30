@@ -128,6 +128,10 @@ export default function OrganizationAdd() {
               </>
             }
           >
+            <div class="space-y-4 mb-8">
+              <p class="">A continuación puedese agregar un agradecimiento.</p>
+              <p class="text-sm text-gray-400">(*) Campos obligatorios.</p>
+            </div>
             <div class="space-y-4">
               <TextField
                 label="Título"

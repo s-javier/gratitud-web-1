@@ -99,7 +99,7 @@ export default function GratitudeEdit(props: {
   }
 
   return (
-    <Overlay type="dialog" isActive={props.isShow}>
+    <Overlay type="dialog" width="max-w-[500px]" isActive={props.isShow}>
       <Dialog
         title="Edición de organización"
         close={props.close}
@@ -146,6 +146,10 @@ export default function GratitudeEdit(props: {
           </>
         }
       >
+        <div class="space-y-4 mb-8">
+          <p class="">A continuación puedese editar un agradecimiento.</p>
+          <p class="text-sm text-gray-400">(*) Campos obligatorios.</p>
+        </div>
         <div class="space-y-4">
           <TextField
             label="Título"

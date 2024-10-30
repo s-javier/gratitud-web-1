@@ -8,9 +8,13 @@ import { $loaderOverlay } from '~/stores'
 import handleResponse from './handleResponse'
 import type { CustomError } from '~/types'
 import { validateResponse } from '~/utils'
+import Info from './_Info'
 import Thank from '~/components/gratitude/Thank'
+import TableActions from '~/components/shared/TableActions'
 
 export default function MyGratitudeTable(props: { data: any[]; error: CustomError }) {
+  const [gratitude, setGratitude] = createSignal<any>({})
+  const [isInfoOpen, setIsInfoOpen] = createSignal(false)
   const [searchText, setSearchText] = createSignal('')
   const filteredItems = createMemo(() =>
     props.data.filter((item) => {
@@ -38,6 +42,8 @@ export default function MyGratitudeTable(props: { data: any[]; error: CustomErro
 
   return (
     <>
+      <Info isShow={isInfoOpen()} close={() => setIsInfoOpen(false)} data={gratitude()} />
+
       <TextField
         label="Buscar según descripción"
         variant="outlined"
@@ -73,7 +79,16 @@ export default function MyGratitudeTable(props: { data: any[]; error: CustomErro
             if (!item) {
               return null
             }
-            return <Thank virtualRow={virtualRow} item={item} />
+            return (
+              <Thank virtualRow={virtualRow} item={item}>
+                <TableActions
+                  infoClick={() => {
+                    setGratitude(item)
+                    setIsInfoOpen(true)
+                  }}
+                />
+              </Thank>
+            )
           })}
         </div>
       </div>
