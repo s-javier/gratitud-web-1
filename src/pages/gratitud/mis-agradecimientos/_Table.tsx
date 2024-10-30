@@ -32,10 +32,10 @@ export default function MyGratitudeTable(props: { data: any[]; error: CustomErro
   /* ↓ Calculamos la altura total de la lista */
   const totalHeight = createMemo(() => {
     // rowVirtualizer.getTotalSize()
-    if (filteredItems().length > 100) {
-      return 600
+    if (filteredItems().length > 3) {
+      return 800
     }
-    return 400
+    return 600
   })
 
   onMount(() => {

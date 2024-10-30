@@ -26,6 +26,7 @@ import { menuPageEdit } from './admin/menu-page/edit.action'
 import { gratitudeAdd } from './gratitude/add.action'
 import { gratitudeEdit } from './gratitude/edit.action'
 import { gratitudeDelete } from './gratitude/delete.action'
+import { gratitudeRemind } from './gratitude/remind.action'
 
 export const server = {
   login,
@@ -56,4 +57,5 @@ export const server = {
   gratitudeAdd,
   gratitudeEdit,
   gratitudeDelete,
+  gratitudeRemind,
 }

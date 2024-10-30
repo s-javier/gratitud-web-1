@@ -14,4 +14,5 @@ export enum Page {
 
   GRATITUDE_MY = '/gratitud/mis-agradecimientos',
   GRATITUDE_ASK_AND_YOU_SHALL_RECEIVE = '/gratitud/pide-y-se-te-dara',
+  GRATITUE_REMIND = '/gratitud/recordar',
 }

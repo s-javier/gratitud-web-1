@@ -103,9 +103,7 @@ export const organizationPersonRoleTable = pgTable(
       .defaultNow()
       .$onUpdate(() => new Date()),
   },
-  (t) => ({
-    pk: primaryKey({ columns: [t.organizationId, t.personId, t.roleId] }),
-  }),
+  (t) => [primaryKey({ columns: [t.organizationId, t.personId, t.roleId] })],
 )
 
 export const organizationPersonRoleTableRelations = relations(
@@ -157,9 +155,7 @@ export const rolePermissionTable = pgTable(
       .defaultNow()
       .$onUpdate(() => new Date()),
   },
-  (t) => ({
-    pk: primaryKey({ columns: [t.roleId, t.permissionId] }),
-  }),
+  (t) => [primaryKey({ columns: [t.roleId, t.permissionId] })],
 )
 
 export const rolePermissionTableRelations = relations(rolePermissionTable, ({ one }) => ({
@@ -258,9 +254,7 @@ export const gratitudeTagTable = pgTable(
       .defaultNow()
       .$onUpdate(() => new Date()),
   },
-  (t) => ({
-    pk: primaryKey({ columns: [t.gratitudeId, t.tagId] }),
-  }),
+  (t) => [primaryKey({ columns: [t.gratitudeId, t.tagId] })],
 )
 
 export const gratitudeTagTableRelations = relations(gratitudeTagTable, ({ one }) => ({

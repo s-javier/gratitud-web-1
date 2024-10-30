@@ -1,7 +1,7 @@
 import { twMerge } from 'tailwind-merge'
 import dayjs from 'dayjs'
 
-export default function Thank(props: { virtualRow?: any; item: any; children: any }) {
+export default function Thank(props: { virtualRow?: any; item: any; children?: any }) {
   return (
     <div
       style={{

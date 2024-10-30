@@ -7,13 +7,34 @@ import db from '~/db'
 import { gratitudeTable } from '~/db/schema'
 import { handleErrorFromServer } from '~/utils'
 import { verifyPermission } from '~/utils/verify-permission'
-// import DataTable from './_Table'
+import DataTable from './_Table'
+
+const getLast = async () => {
+  return await db
+    .select({
+      id: gratitudeTable.id,
+      title: gratitudeTable.title,
+      description: gratitudeTable.description,
+      isMaterialized: gratitudeTable.isMaterialized,
+      createdAt: gratitudeTable.createdAt,
+    })
+    .from(gratitudeTable)
+    .where(
+      and(
+        eq(gratitudeTable.personId, Astro.locals.userId),
+        eq(gratitudeTable.isMaterialized, true),
+        eq(gratitudeTable.isRemind, false),
+      ),
+    )
+    .orderBy(sql`RANDOM()`)
+    .limit(3)
+}
 
 let data: any[] = []
 let error: CustomError = null
 if (Astro.locals.userTokenError) {
   if (import.meta.env.DEV) {
-    console.error('Problema con el token de usuario en obtención de agradecimeintos.')
+    console.error('Problema con el token de usuario en obtención de agradecimientos.')
   }
   error = handleErrorFromServer(Astro.locals.userTokenError)
 } else {
@@ -25,47 +46,18 @@ if (Astro.locals.userTokenError) {
     error = handleErrorFromServer(permissionVerification.error)
   } else {
     try {
-      data = await db
-        .select({
-          id: gratitudeTable.id,
-          title: gratitudeTable.title,
-          description: gratitudeTable.description,
-          isMaterialized: gratitudeTable.isMaterialized,
-          createdAt: gratitudeTable.createdAt,
-        })
-        .from(gratitudeTable)
-        .where(
-          and(
-            eq(gratitudeTable.personId, Astro.locals.userId),
-            eq(gratitudeTable.isMaterialized, true),
-            eq(gratitudeTable.isRemind, false),
-          ),
-        )
-        .orderBy(sql`RANDOM()`)
-        .limit(3)
+      data = await getLast()
       if (data.length === 0) {
         await db
           .update(gratitudeTable)
           .set({ isRemind: false })
-          .where(eq(gratitudeTable.personId, Astro.locals.userId))
-        data = await db
-          .select({
-            id: gratitudeTable.id,
-            title: gratitudeTable.title,
-            description: gratitudeTable.description,
-            isMaterialized: gratitudeTable.isMaterialized,
-            createdAt: gratitudeTable.createdAt,
-          })
-          .from(gratitudeTable)
           .where(
             and(
               eq(gratitudeTable.personId, Astro.locals.userId),
               eq(gratitudeTable.isMaterialized, true),
-              eq(gratitudeTable.isRemind, false),
             ),
           )
-          .orderBy(sql`RANDOM()`)
-          .limit(3)
+        data = await getLast()
       }
     } catch {
       if (import.meta.env.DEV) {
@@ -77,4 +69,4 @@ if (Astro.locals.userTokenError) {
 }
 ---
 
-<!-- <DataTable client:only="solid-js" data={data} error={error} /> -->
+<DataTable client:only="solid-js" data={data} error={error} />

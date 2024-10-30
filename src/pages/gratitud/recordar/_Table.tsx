@@ -1,21 +1,16 @@
-import { createMemo, createSignal, onMount } from 'solid-js'
+import { actions } from 'astro:actions'
+import { createMemo, createSignal, onMount, Show } from 'solid-js'
 import { createVirtualizer } from '@tanstack/solid-virtual'
-import { TextField } from '@suid/material'
+import { Button, TextField } from '@suid/material'
 import colors from 'tailwindcss/colors'
 
+import { $loaderOverlay } from '~/stores'
+import handleResponse from './handleResponse'
 import type { CustomError } from '~/types'
 import { validateResponse } from '~/utils'
-import Info from './_Info'
-import Edit from './_Edit'
-import Delete from './_Delete'
 import Thank from '~/components/gratitude/Thank'
-import TableActions from '~/components/shared/TableActions'
 
-export default function OrganizationTable(props: { data: any[]; error: CustomError }) {
-  const [gratitude, setGratitude] = createSignal<any>({})
-  const [isInfoOpen, setIsInfoOpen] = createSignal(false)
-  const [isEditOpen, setIsEditOpen] = createSignal(false)
-  const [isDeleteOpen, setIsDeleteOpen] = createSignal(false)
+export default function MyGratitudeTable(props: { data: any[]; error: CustomError }) {
   const [searchText, setSearchText] = createSignal('')
   const filteredItems = createMemo(() =>
     props.data.filter((item) => {
@@ -26,7 +21,7 @@ export default function OrganizationTable(props: { data: any[]; error: CustomErr
   const rowVirtualizer = createVirtualizer({
     count: filteredItems().length,
     getScrollElement: () => elementsRef,
-    estimateSize: () => 260,
+    estimateSize: () => 160,
     overscan: 5,
   })
   /* ↓ Calculamos la altura total de la lista */
@@ -34,7 +29,7 @@ export default function OrganizationTable(props: { data: any[]; error: CustomErr
     if (filteredItems().length > 3) {
       return 800
     }
-    return 600
+    return 520
   })
 
   onMount(() => {
@@ -43,10 +38,6 @@ export default function OrganizationTable(props: { data: any[]; error: CustomErr
 
   return (
     <>
-      <Info isShow={isInfoOpen()} close={() => setIsInfoOpen(false)} data={gratitude()} />
-      <Edit isShow={isEditOpen()} close={() => setIsEditOpen(false)} data={gratitude()} />
-      <Delete isShow={isDeleteOpen()} close={() => setIsDeleteOpen(false)} data={gratitude()} />
-
       <TextField
         label="Buscar según descripción"
         variant="outlined"
@@ -82,27 +73,37 @@ export default function OrganizationTable(props: { data: any[]; error: CustomErr
             if (!item) {
               return null
             }
-            return (
-              <Thank virtualRow={virtualRow} item={item}>
-                <TableActions
-                  infoClick={() => {
-                    setGratitude(item)
-                    setIsInfoOpen(true)
-                  }}
-                  editClick={() => {
-                    setGratitude(item)
-                    setIsEditOpen(true)
-                  }}
-                  deleteClick={() => {
-                    setGratitude(item)
-                    setIsDeleteOpen(true)
-                  }}
-                />
-              </Thank>
-            )
+            return <Thank virtualRow={virtualRow} item={item} />
           })}
         </div>
       </div>
+
+      <Show when={props.data.length > 0}>
+        <div class="text-center">
+          <Button
+            variant="contained"
+            class={[
+              '!font-bold',
+              '!text-[var(--o-btn-primary-text-color)]',
+              '!bg-[var(--o-btn-primary-bg-color)]',
+              'hover:!bg-[var(--o-btn-primary-bg-hover-color)]',
+            ].join(' ')}
+            onClick={async () => {
+              $loaderOverlay.set(true)
+              const { data, error }: any = await actions.gratitudeRemind(
+                props.data.map((item: any) => item.id),
+              )
+              if (validateResponse(error || data?.error || null) === false) {
+                $loaderOverlay.set(false)
+                return
+              }
+              handleResponse()
+            }}
+          >
+            Recordé
+          </Button>
+        </div>
+      </Show>
     </>
   )
 }
