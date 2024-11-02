@@ -1,16 +1,7 @@
 import { defineMiddleware, sequence } from 'astro:middleware'
-import { asc, eq } from 'drizzle-orm'
 
 import { Error, Page } from '~/enums'
-import db from '~/db'
-import {
-  menuPageTable,
-  organizationPersonRoleTable,
-  organizationTable,
-  permissionTable,
-  personTable,
-  rolePermissionTable,
-} from './db/schema'
+import { getFirstNameFromDB, getMenuFromDB, getOrganizationsFromDB } from '~/db/queries'
 import { deleteUserTokenCookie, handleErrorFromServer } from '~/utils'
 import { verifyUserToken } from './utils/verify-user-token'
 import { verifyPermission } from './utils/verify-permission'
@@ -77,23 +68,9 @@ const auth = defineMiddleware(async (context, next) => {
 const getMenu = defineMiddleware(async (context, next) => {
   if (isPrivatePage(context.url.pathname)) {
     try {
-      context.locals.menu = await db
-        .select({
-          title: menuPageTable.title,
-          // sort: menuPageTable.sort,
-          icon: menuPageTable.icon,
-          path: permissionTable.path,
-        })
-        .from(menuPageTable)
-        .innerJoin(permissionTable, eq(menuPageTable.permissionId, permissionTable.id))
-        .innerJoin(rolePermissionTable, eq(permissionTable.id, rolePermissionTable.permissionId))
-        .where(eq(rolePermissionTable.roleId, context.locals.roleId))
-        .orderBy(asc(menuPageTable.sort))
-      if (context.locals.menu.length === 0) {
-        if (import.meta.env.DEV) {
-          console.error('El usuario no tiene páginas.')
-        }
-        context.locals.menu = []
+      context.locals.menu = await getMenuFromDB(context.locals.roleId)
+      if (context.locals.menu.length === 0 && import.meta.env.DEV) {
+        console.error('El usuario no tiene páginas de menú.')
       }
     } catch {
       if (import.meta.env.DEV) {
@@ -102,36 +79,16 @@ const getMenu = defineMiddleware(async (context, next) => {
       context.locals.menuErrorHandled = handleErrorFromServer(Error.DB)
       return next()
     }
-    /* ▼ Name de usuario */
     try {
-      const query = await db
-        .select({ name: personTable.name })
-        .from(personTable)
-        .where(eq(personTable.id, context.locals.userId))
-      // if (query.length === 0) {
-      //   return error(400, Error.USER_NOT_FOUND)
-      // }
-      context.locals.user = { name: query[0].name }
+      context.locals.user = await getFirstNameFromDB(context.locals.userId)
     } catch {
       if (import.meta.env.DEV) {
         console.error('Error en DB. Consulta de usuario. ')
       }
       context.locals.menuErrorHandled = handleErrorFromServer(Error.DB)
     }
-    /* ▲ Name de usuario */
     try {
-      context.locals.organizations = await db
-        .select({
-          id: organizationTable.id,
-          title: organizationTable.title,
-          isSelected: organizationPersonRoleTable.isSelected,
-        })
-        .from(organizationTable)
-        .innerJoin(
-          organizationPersonRoleTable,
-          eq(organizationTable.id, organizationPersonRoleTable.organizationId),
-        )
-        .where(eq(organizationPersonRoleTable.personId, context.locals.userId))
+      context.locals.organizations = await getOrganizationsFromDB(context.locals.userId)
       if (context.locals.organizations.length === 0) {
         if (import.meta.env.DEV) {
           console.error('El usuario no tiene organizaciones.')
@@ -145,7 +102,6 @@ const getMenu = defineMiddleware(async (context, next) => {
       context.locals.menuErrorHandled = handleErrorFromServer(Error.DB)
     }
   }
-  // @ts-ignore
   return next()
 })
 
