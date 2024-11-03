@@ -89,7 +89,6 @@ export const organizationChange = defineAction({
     }
     cache.delete(JSON.stringify({ data: CacheData.PERMISSIONS, roleId: context.locals.roleId }))
     cache.delete(JSON.stringify({ data: CacheData.MENU, roleId: context.locals.roleId }))
-    cache.delete(JSON.stringify({ data: CacheData.FIRST_NAME, userId: context.locals.userId }))
     cache.delete(JSON.stringify({ data: CacheData.ORGANIZATIONS, userId: context.locals.userId }))
   },
 })
