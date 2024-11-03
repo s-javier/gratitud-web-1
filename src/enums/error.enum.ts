@@ -3,6 +3,7 @@ export enum Error {
   USER_NOT_FOUND = 'user not found',
   USER_IS_DISABLED = 'user is disabled',
   USER_WITHOUT_PERMISSION = "user don't have permission",
+  USER_WITHOUT_PERMISSIONS = "user don't have permissions",
   EMAIL_WITH_CODE = 'email with code',
   CODE_NOT_FOUND = 'code not found',
   CODE_IS_DISABLED = 'code is disabled',

@@ -2,11 +2,12 @@ import { defineAction, type ActionAPIContext } from 'astro:actions'
 import { z } from 'astro:schema'
 import { and, eq } from 'drizzle-orm'
 
-import { Api, Error } from '~/enums'
+import { Api, CacheData, Error } from '~/enums'
 import db from '~/db'
 import { organizationPersonRoleTable } from '~/db/schema'
 import { handleErrorFromServer } from '~/utils'
 import { verifyPermission } from '~/utils/verify-permission'
+import { cache } from '~/utils/cache'
 
 export const organizationChange = defineAction({
   accept: 'json',
@@ -28,6 +29,7 @@ export const organizationChange = defineAction({
       }
       return { error: handleErrorFromServer(permissionVerification.error) }
     }
+    /***/
     if (context.locals.organizationId === input) {
       return
     }
@@ -85,5 +87,9 @@ export const organizationChange = defineAction({
       }
       return { error: handleErrorFromServer(Error.DB) }
     }
+    cache.delete(JSON.stringify({ data: CacheData.PERMISSIONS, roleId: context.locals.roleId }))
+    cache.delete(JSON.stringify({ data: CacheData.MENU, roleId: context.locals.roleId }))
+    cache.delete(JSON.stringify({ data: CacheData.FIRST_NAME, userId: context.locals.userId }))
+    cache.delete(JSON.stringify({ data: CacheData.ORGANIZATIONS, userId: context.locals.userId }))
   },
 })

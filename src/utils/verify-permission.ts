@@ -5,17 +5,9 @@ export const verifyPermission = async (
   roleId: string,
   path: string,
 ): Promise<{ isSuccess: boolean; error?: string }> => {
+  let query: any[] = []
   try {
-    const query = await getPermissionsFromDB(roleId, path)
-    if (query.length === 0) {
-      if (import.meta.env.DEV) {
-        console.error('El usuario no tiene permiso para realizar esta operación.')
-      }
-      return {
-        isSuccess: false,
-        error: Error.USER_WITHOUT_PERMISSION,
-      }
-    }
+    query = await getPermissionsFromDB(roleId)
   } catch {
     if (import.meta.env.DEV) {
       console.error('Error en DB. Verificación de permisos.')
@@ -23,6 +15,21 @@ export const verifyPermission = async (
     return {
       isSuccess: false,
       error: Error.DB,
+    }
+  }
+  if (query.length === 0) {
+    if (import.meta.env.DEV) {
+      console.error('El usuario no tiene permisos asignados.')
+    }
+    return {
+      isSuccess: false,
+      error: Error.USER_WITHOUT_PERMISSIONS,
+    }
+  }
+  if (!query.includes(path)) {
+    return {
+      isSuccess: false,
+      error: Error.USER_WITHOUT_PERMISSION,
     }
   }
   return {
