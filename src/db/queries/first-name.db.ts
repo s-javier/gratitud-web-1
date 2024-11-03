@@ -19,6 +19,7 @@ export const getFirstNameFromDB = async (userId: string) => {
     } else {
       user = { name: query[0].name }
     }
+    cache.set(JSON.stringify({ data: CacheData.FIRST_NAME, userId }), user)
   }
   return user
 }
