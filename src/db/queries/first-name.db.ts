@@ -11,13 +11,13 @@ export const getFirstNameFromDB = async (userId: string) => {
     user = cache.get(JSON.stringify({ data: CacheData.FIRST_NAME, userId }))
   } else {
     const query = await db
-      .select({ firstName: personTable.firstName })
+      .select({ name: personTable.name })
       .from(personTable)
       .where(eq(personTable.id, userId))
     if (query.length === 0) {
       user = null
     } else {
-      user = { firstName: query[0].firstName }
+      user = { name: query[0].name }
     }
   }
   return user
