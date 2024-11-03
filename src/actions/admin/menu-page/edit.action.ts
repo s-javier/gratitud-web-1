@@ -11,7 +11,7 @@ import { verifyPermission } from '~/utils/verify-permission'
 export const menuPageEdit = defineAction({
   accept: 'json',
   input: z.object({
-    id: z.string().regex(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/),
+    id: z.string().uuid(),
     permissionId: z
       .string()
       .regex(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/),

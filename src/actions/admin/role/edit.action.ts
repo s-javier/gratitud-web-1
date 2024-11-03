@@ -11,7 +11,7 @@ import { verifyPermission } from '~/utils/verify-permission'
 export const roleEdit = defineAction({
   accept: 'json',
   input: z.object({
-    id: z.string().regex(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/),
+    id: z.string().uuid(),
     title: z.string().min(4).max(50),
   }),
   handler: async (input: any, context: ActionAPIContext) => {
