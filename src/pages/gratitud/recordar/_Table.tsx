@@ -71,7 +71,7 @@ export default function MyGratitudeTable(props: { data: any[]; error: CustomErro
       </For>
 
       <Show when={props.data.length > 0}>
-        <div class="text-center pt-4">
+        <div class="text-center pt-6">
           <Button
             variant="contained"
             class={[
