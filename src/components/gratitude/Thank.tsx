@@ -1,18 +1,13 @@
 import { twMerge } from 'tailwind-merge'
 import dayjs from 'dayjs'
 
-export default function Thank(props: { virtualRow?: any; item: any; children?: any }) {
+export default function Thank(props: { index: number; item: any; children?: any }) {
   return (
     <div
-      style={{
-        height: `${props.virtualRow.size}px`,
-        transform: `translateY(${props.virtualRow.start}px)`,
-      }}
       class={twMerge(
-        'absolute top-0 left-0',
         'w-full p-4 border-b transition-colors hover:bg-blue-50',
-        props.virtualRow.index % 2 === 0 && 'bg-gray-50',
-        props.virtualRow.index % 2 !== 0 && 'bg-white',
+        props.index % 2 === 0 && 'bg-gray-50',
+        props.index % 2 !== 0 && 'bg-white',
       )}
     >
       <div class="h-full flex flex-row justify-between items-center gap-4">

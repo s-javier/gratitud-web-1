@@ -1,5 +1,4 @@
-import { createMemo, createSignal, onMount } from 'solid-js'
-import { createVirtualizer } from '@tanstack/solid-virtual'
+import { createMemo, createSignal, For, onMount } from 'solid-js'
 import { TextField } from '@suid/material'
 import colors from 'tailwindcss/colors'
 
@@ -22,20 +21,6 @@ export default function OrganizationTable(props: { data: any[]; error: CustomErr
       return item.description.toLowerCase().includes(searchText().toLowerCase())
     }),
   )
-  let elementsRef!: HTMLDivElement
-  const rowVirtualizer = createVirtualizer({
-    count: filteredItems().length,
-    getScrollElement: () => elementsRef,
-    estimateSize: () => 260,
-    overscan: 5,
-  })
-  /* ↓ Calculamos la altura total de la lista */
-  const totalHeight = createMemo(() => {
-    if (filteredItems().length > 3) {
-      return 800
-    }
-    return 600
-  })
 
   onMount(() => {
     validateResponse(props.error)
@@ -75,34 +60,26 @@ export default function OrganizationTable(props: { data: any[]; error: CustomErr
         Estas viendo {filteredItems().length}{' '}
         {filteredItems().length === 1 ? 'agradecimiento' : 'agradecimientos'}.
       </p>
-      <div ref={elementsRef} class="overflow-auto">
-        <div class="relative" style={{ height: `${totalHeight()}px` }}>
-          {rowVirtualizer.getVirtualItems().map((virtualRow: any) => {
-            const item = filteredItems()[virtualRow.index]
-            if (!item) {
-              return null
-            }
-            return (
-              <Thank virtualRow={virtualRow} item={item}>
-                <TableActions
-                  infoClick={() => {
-                    setGratitude(item)
-                    setIsInfoOpen(true)
-                  }}
-                  editClick={() => {
-                    setGratitude(item)
-                    setIsEditOpen(true)
-                  }}
-                  deleteClick={() => {
-                    setGratitude(item)
-                    setIsDeleteOpen(true)
-                  }}
-                />
-              </Thank>
-            )
-          })}
-        </div>
-      </div>
+      <For each={filteredItems()}>
+        {(item, index) => (
+          <Thank index={index()} item={item}>
+            <TableActions
+              infoClick={() => {
+                setGratitude(item)
+                setIsInfoOpen(true)
+              }}
+              editClick={() => {
+                setGratitude(item)
+                setIsEditOpen(true)
+              }}
+              deleteClick={() => {
+                setGratitude(item)
+                setIsDeleteOpen(true)
+              }}
+            />
+          </Thank>
+        )}
+      </For>
     </>
   )
 }

@@ -1,6 +1,5 @@
 import { actions } from 'astro:actions'
-import { createMemo, createSignal, onMount, Show } from 'solid-js'
-import { createVirtualizer } from '@tanstack/solid-virtual'
+import { createMemo, createSignal, For, onMount, Show } from 'solid-js'
 import { Button, TextField } from '@suid/material'
 import colors from 'tailwindcss/colors'
 
@@ -21,20 +20,6 @@ export default function MyGratitudeTable(props: { data: any[]; error: CustomErro
       return item.description.toLowerCase().includes(searchText().toLowerCase())
     }),
   )
-  let elementsRef!: HTMLDivElement
-  const rowVirtualizer = createVirtualizer({
-    count: filteredItems().length,
-    getScrollElement: () => elementsRef,
-    estimateSize: () => 160,
-    overscan: 5,
-  })
-  /* ↓ Calculamos la altura total de la lista */
-  const totalHeight = createMemo(() => {
-    if (filteredItems().length > 3) {
-      return 800
-    }
-    return 520
-  })
 
   onMount(() => {
     validateResponse(props.error)
@@ -72,29 +57,21 @@ export default function MyGratitudeTable(props: { data: any[]; error: CustomErro
         Estas viendo {filteredItems().length}{' '}
         {filteredItems().length === 1 ? 'agradecimiento' : 'agradecimientos'}.
       </p>
-      <div ref={elementsRef} class="overflow-auto">
-        <div class="relative" style={{ height: `${totalHeight()}px` }}>
-          {rowVirtualizer.getVirtualItems().map((virtualRow: any) => {
-            const item = filteredItems()[virtualRow.index]
-            if (!item) {
-              return null
-            }
-            return (
-              <Thank virtualRow={virtualRow} item={item}>
-                <TableActions
-                  infoClick={() => {
-                    setGratitude(item)
-                    setIsInfoOpen(true)
-                  }}
-                />
-              </Thank>
-            )
-          })}
-        </div>
-      </div>
+      <For each={filteredItems()}>
+        {(item, index) => (
+          <Thank index={index()} item={item}>
+            <TableActions
+              infoClick={() => {
+                setGratitude(item)
+                setIsInfoOpen(true)
+              }}
+            />
+          </Thank>
+        )}
+      </For>
 
       <Show when={props.data.length > 0}>
-        <div class="text-center">
+        <div class="text-center pt-4">
           <Button
             variant="contained"
             class={[
