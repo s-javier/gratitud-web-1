@@ -7,7 +7,7 @@ export default function LoaderOverlay() {
   const loaderOverlay = useStore($loaderOverlay)
 
   return (
-    <Overlay type="dialog" isActive={loaderOverlay()} zIndex="z-[1500]">
+    <Overlay type="dialog" isActive={loaderOverlay()} zIndex="z-[1600]">
       {/* ↓ pink-500 */}
       <svg viewBox="0 0 24 24" fill="#ec4899" class="max-w-36">
         <path
