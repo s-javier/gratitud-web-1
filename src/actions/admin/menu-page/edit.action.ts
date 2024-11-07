@@ -15,7 +15,7 @@ export const menuPageEdit = defineAction({
     permissionId: z
       .string()
       .regex(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/),
-    title: z.string().min(4).max(50),
+    title: z.string().min(3).max(50),
     sort: z.number(),
     icon: z.string().min(3).max(50).optional(),
   }),
