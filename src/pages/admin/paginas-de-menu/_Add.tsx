@@ -50,7 +50,7 @@ export default function MenuPageAdd() {
         v.string('El valor de este campo es inválido.'),
         v.trim(),
         v.nonEmpty('Este campo es requerido.'),
-        v.minLength(4, 'Escribe un poco más.'),
+        v.minLength(3, 'Escribe un poco más.'),
         v.maxLength(50, 'Escribe menos.'),
       ),
       sort: v.optional(
