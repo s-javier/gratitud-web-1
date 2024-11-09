@@ -25,6 +25,7 @@ export const userDelete = defineAction({
       }
       return { error: handleErrorFromServer(permissionVerification.error) }
     }
+    /******************************/
     try {
       await db.delete(personTable).where(eq(personTable.id, input))
     } catch {

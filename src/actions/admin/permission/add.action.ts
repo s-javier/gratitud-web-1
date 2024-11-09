@@ -30,6 +30,7 @@ export const permissionAdd = defineAction({
       }
       return { error: handleErrorFromServer(permissionVerification.error) }
     }
+    /******************************/
     try {
       await db.insert(permissionTable).values({
         path: input.path,

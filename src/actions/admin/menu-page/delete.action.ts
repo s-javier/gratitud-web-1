@@ -28,6 +28,7 @@ export const menuPageDelete = defineAction({
       }
       return { error: handleErrorFromServer(permissionVerification.error) }
     }
+    /******************************/
     try {
       await db.delete(menuPageTable).where(eq(menuPageTable.id, input))
     } catch {

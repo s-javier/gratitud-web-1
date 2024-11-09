@@ -28,6 +28,7 @@ export const organizationDelete = defineAction({
       }
       return { error: handleErrorFromServer(permissionVerification.error) }
     }
+    /******************************/
     try {
       await db.delete(organizationTable).where(eq(organizationTable.id, input))
     } catch (error: any) {

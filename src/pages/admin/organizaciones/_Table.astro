@@ -22,6 +22,7 @@ if (Astro.locals.userTokenError) {
     }
     error = handleErrorFromServer(permissionVerification.error)
   } else {
+    /******************************/
     try {
       data = await db
         .select({

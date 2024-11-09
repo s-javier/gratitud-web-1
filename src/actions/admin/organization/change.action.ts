@@ -29,7 +29,7 @@ export const organizationChange = defineAction({
       }
       return { error: handleErrorFromServer(permissionVerification.error) }
     }
-    /***/
+    /******************************/
     if (context.locals.organizationId === input) {
       return
     }

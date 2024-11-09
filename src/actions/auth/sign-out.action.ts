@@ -22,6 +22,7 @@ export const logout = defineAction({
       }
       return { error: handleErrorFromServer(permissionVerification.error) }
     }
+    /******************************/
     try {
       await db
         .update(sessionTable)

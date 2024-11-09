@@ -25,6 +25,7 @@ export const roleDelete = defineAction({
       }
       return { error: handleErrorFromServer(permissionVerification.error) }
     }
+    /******************************/
     try {
       await db.delete(roleTable).where(eq(roleTable.id, input))
     } catch {

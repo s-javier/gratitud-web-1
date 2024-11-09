@@ -31,6 +31,7 @@ export const gratitudeAdd = defineAction({
       }
       return { error: handleErrorFromServer(permissionVerification.error) }
     }
+    /******************************/
     try {
       await db.insert(gratitudeTable).values({
         personId: context.locals.userId,

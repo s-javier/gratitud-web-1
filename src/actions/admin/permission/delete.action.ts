@@ -28,6 +28,7 @@ export const permissionDelete = defineAction({
       }
       return { error: handleErrorFromServer(permissionVerification.error) }
     }
+    /******************************/
     try {
       await db.delete(permissionTable).where(eq(permissionTable.id, input))
     } catch {

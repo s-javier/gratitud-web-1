@@ -32,6 +32,7 @@ export const organizationEdit = defineAction({
       }
       return { error: handleErrorFromServer(permissionVerification.error) }
     }
+    /******************************/
     try {
       await db
         .update(organizationTable)

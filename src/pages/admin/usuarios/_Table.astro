@@ -28,6 +28,7 @@ if (Astro.locals.userTokenError) {
     }
     error = handleErrorFromServer(permissionVerification.error)
   } else {
+    /******************************/
     try {
       /* ↓ Users */
       data.users = await db

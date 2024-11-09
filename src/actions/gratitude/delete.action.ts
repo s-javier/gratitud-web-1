@@ -28,6 +28,7 @@ export const gratitudeDelete = defineAction({
       }
       return { error: handleErrorFromServer(permissionVerification.error) }
     }
+    /******************************/
     try {
       await db.delete(gratitudeTable).where(eq(gratitudeTable.id, input))
     } catch (error: any) {
