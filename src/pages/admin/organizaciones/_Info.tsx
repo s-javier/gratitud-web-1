@@ -17,6 +17,7 @@ export default function OrganizationInfo(props: {
           <Button
             variant="outlined"
             class={[
+              '!m-auto',
               '!text-gray-700 !border-gray-300 hover:!bg-gray-50',
               'hover:!border-[var(--o-btn-cancel-border-hover-color)]',
             ].join(' ')}
