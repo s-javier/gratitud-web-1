@@ -1,7 +1,7 @@
 import { defineMiddleware, sequence } from 'astro:middleware'
 
 import { Error, Page } from '~/enums'
-import { getFirstNameFromDB, getMenuFromDB, getOrganizationsFromDB } from '~/db/queries'
+import { getFirstNameFromDB, getMenuFromDB, getOrganizationsToChangeFromDB } from '~/db/queries'
 import { deleteUserTokenCookie, handleErrorFromServer } from '~/utils'
 import { verifyUserToken } from './utils/verify-user-token'
 import { verifyPermission } from './utils/verify-permission'
@@ -88,7 +88,7 @@ const getMenu = defineMiddleware(async (context, next) => {
       context.locals.menuErrorHandled = handleErrorFromServer(Error.DB)
     }
     try {
-      context.locals.organizations = await getOrganizationsFromDB(context.locals.userId)
+      context.locals.organizations = await getOrganizationsToChangeFromDB(context.locals.userId)
       if (context.locals.organizations.length === 0) {
         if (import.meta.env.DEV) {
           console.error('El usuario no tiene organizaciones.')

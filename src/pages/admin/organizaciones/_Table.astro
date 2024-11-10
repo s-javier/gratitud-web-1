@@ -1,8 +1,7 @@
 ---
 import { Api, Error } from '~/enums'
 import type { CustomError, Organization } from '~/types'
-import db from '~/db'
-import { organizationTable } from '~/db/schema'
+import { getOrganizationsAllFromDB } from '~/db/queries'
 import { handleErrorFromServer } from '~/utils'
 import { verifyPermission } from '~/utils/verify-permission'
 import DataTable from './_Table'
@@ -24,13 +23,7 @@ if (Astro.locals.userTokenError) {
   } else {
     /******************************/
     try {
-      data = await db
-        .select({
-          id: organizationTable.id,
-          title: organizationTable.title,
-          isActive: organizationTable.isActive,
-        })
-        .from(organizationTable)
+      data = await getOrganizationsAllFromDB()
     } catch {
       if (import.meta.env.DEV) {
         console.error('Error en DB. Obtención de organizaciones.')

@@ -2,11 +2,12 @@ import { defineAction, type ActionAPIContext } from 'astro:actions'
 import { z } from 'astro:schema'
 import { eq } from 'drizzle-orm'
 
-import { Api, Error } from '~/enums'
+import { Api, CacheData, Error } from '~/enums'
 import db from '~/db'
 import { organizationTable } from '~/db/schema'
 import { handleErrorFromServer } from '~/utils'
 import { verifyPermission } from '~/utils/verify-permission'
+import { cache } from '~/utils/cache'
 
 export const organizationDelete = defineAction({
   accept: 'json',
@@ -31,7 +32,8 @@ export const organizationDelete = defineAction({
     /******************************/
     try {
       await db.delete(organizationTable).where(eq(organizationTable.id, input))
-    } catch (error: any) {
+      cache.delete(JSON.stringify({ data: CacheData.ORGANIZATIONS_ALL }))
+    } catch {
       if (import.meta.env.DEV) {
         console.error('Error en DB. Eliminación de organización.')
       }

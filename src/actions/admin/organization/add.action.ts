@@ -1,11 +1,12 @@
 import { defineAction, type ActionAPIContext } from 'astro:actions'
 import { z } from 'astro:schema'
 
-import { Api, Error } from '~/enums'
+import { Api, CacheData, Error } from '~/enums'
 import db from '~/db'
 import { organizationTable } from '~/db/schema'
 import { handleErrorFromServer } from '~/utils'
 import { verifyPermission } from '~/utils/verify-permission'
+import { cache } from '~/utils/cache'
 
 export const organizationAdd = defineAction({
   accept: 'json',
@@ -36,6 +37,7 @@ export const organizationAdd = defineAction({
         title: input.title,
         isActive: input.isActive,
       })
+      cache.delete(JSON.stringify({ data: CacheData.ORGANIZATIONS_ALL }))
     } catch {
       if (import.meta.env.DEV) {
         console.error('Error en DB. Creación de organización.')

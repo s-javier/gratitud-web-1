@@ -1,4 +1,5 @@
 export * from './shared/menu.db'
 export * from './shared/first-name.db'
+export * from './shared/organizations.db'
+export * from './shared/permissions.db'
 export * from './admin/organizations.db'
-export * from './admin/permissions.db'
