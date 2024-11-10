@@ -2,11 +2,12 @@ import { defineAction, type ActionAPIContext } from 'astro:actions'
 import { z } from 'astro:schema'
 import { eq } from 'drizzle-orm'
 
-import { Api, Error } from '~/enums'
+import { Api, CacheData, Error } from '~/enums'
 import db from '~/db'
 import { personTable } from '~/db/schema'
 import { handleErrorFromServer } from '~/utils'
 import { verifyPermission } from '~/utils/verify-permission'
+import { cache } from '~/utils/cache'
 
 export const userDelete = defineAction({
   accept: 'json',
@@ -28,6 +29,7 @@ export const userDelete = defineAction({
     /******************************/
     try {
       await db.delete(personTable).where(eq(personTable.id, input))
+      cache.delete(JSON.stringify({ data: CacheData.USERS_ALL }))
     } catch {
       if (import.meta.env.DEV) {
         console.error('Error en DB. Eliminación de usuario.')

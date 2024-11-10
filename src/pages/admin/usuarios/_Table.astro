@@ -4,7 +4,8 @@ import { asc, eq } from 'drizzle-orm'
 import { Api, Error } from '~/enums'
 import type { CustomError, User } from '~/types'
 import db from '~/db'
-import { organizationPersonRoleTable, organizationTable, personTable, roleTable } from '~/db/schema'
+import { organizationPersonRoleTable, organizationTable, roleTable } from '~/db/schema'
+import { getOrganizationsAllFromDB, getUsersAllFromDB } from '~/db/queries'
 import { handleErrorFromServer } from '~/utils'
 import { verifyPermission } from '~/utils/verify-permission'
 import DataTable from './_Table'
@@ -30,16 +31,7 @@ if (Astro.locals.userTokenError) {
   } else {
     /******************************/
     try {
-      /* ↓ Users */
-      data.users = await db
-        .select({
-          id: personTable.id,
-          name: personTable.name,
-          email: personTable.email,
-          isActive: personTable.isActive,
-        })
-        .from(personTable)
-        .orderBy(asc(personTable.name))
+      data.users = await getUsersAllFromDB()
     } catch {
       if (import.meta.env.DEV) {
         console.error('Error en DB. Obtención de usuarios.')
@@ -47,14 +39,7 @@ if (Astro.locals.userTokenError) {
       error = handleErrorFromServer(Error.DB)
     }
     try {
-      /* ↓ Organizations */
-      data.organizations = await db
-        .select({
-          id: organizationTable.id,
-          title: organizationTable.title,
-        })
-        .from(organizationTable)
-        .orderBy(asc(organizationTable.title))
+      data.organizations = await getOrganizationsAllFromDB()
     } catch {
       if (import.meta.env.DEV) {
         console.error('Error en DB. Obtención de organizaciones.')
