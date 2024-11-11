@@ -4,7 +4,7 @@ import { eq } from 'drizzle-orm'
 
 import { Api, Error } from '~/enums'
 import db from '~/db'
-import { menuPageTable } from '~/db/schema'
+import { menupageTable } from '~/db/schema'
 import { handleErrorFromServer } from '~/utils'
 import { verifyPermission } from '~/utils/verify-permission'
 
@@ -30,7 +30,7 @@ export const menuPageDelete = defineAction({
     }
     /******************************/
     try {
-      await db.delete(menuPageTable).where(eq(menuPageTable.id, input))
+      await db.delete(menupageTable).where(eq(menupageTable.id, input))
     } catch {
       if (import.meta.env.DEV) {
         console.error('Error en DB. Eliminación de menuPage.')

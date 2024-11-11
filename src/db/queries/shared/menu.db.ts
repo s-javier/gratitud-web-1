@@ -1,7 +1,7 @@
 import { asc, eq } from 'drizzle-orm'
 
 import db from '~/db'
-import { menuPageTable, permissionTable, rolePermissionTable } from '~/db/schema'
+import { menupageTable, permissionTable, rolePermissionTable } from '~/db/schema'
 import { CacheData } from '~/enums'
 import { cache } from '~/utils/cache'
 
@@ -12,16 +12,15 @@ export const getMenuFromDB = async (roleId: string) => {
   } else {
     menu = await db
       .select({
-        title: menuPageTable.title,
-        // sort: menuPageTable.sort,
-        icon: menuPageTable.icon,
+        title: menupageTable.title,
+        icon: menupageTable.icon,
         path: permissionTable.path,
       })
-      .from(menuPageTable)
-      .innerJoin(permissionTable, eq(menuPageTable.permissionId, permissionTable.id))
+      .from(menupageTable)
+      .innerJoin(permissionTable, eq(menupageTable.permissionId, permissionTable.id))
       .innerJoin(rolePermissionTable, eq(permissionTable.id, rolePermissionTable.permissionId))
       .where(eq(rolePermissionTable.roleId, roleId))
-      .orderBy(asc(menuPageTable.sort))
+      .orderBy(asc(rolePermissionTable.sort))
     cache.set(JSON.stringify({ data: CacheData.MENU, roleId }), menu)
   }
   return menu

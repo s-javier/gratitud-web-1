@@ -1,8 +1,8 @@
-import { actions } from 'astro:actions'
 import { createEffect, createRoot, createSignal } from 'solid-js'
 import { Portal } from 'solid-js/web'
 import colors from 'tailwindcss/colors'
 import { Button, TextField } from '@suid/material'
+import { actions } from 'astro:actions'
 import * as v from 'valibot'
 import { toast } from 'solid-sonner'
 import { Combobox } from '@kobalte/core/combobox'
@@ -22,8 +22,6 @@ export default function MenuPageAdd() {
   const [permissionIdErrMsg, setPermissionIdErrMsg] = createSignal('')
   const [title, setTitle] = createSignal('')
   const [titleErrMsg, setTitleErrMsg] = createSignal('')
-  const [sort, setSort] = createSignal('')
-  const [sortErrMsg, setSortErrMsg] = createSignal('')
   const [icon, setIcon] = createSignal('')
   const [iconErrMsg, setIconErrMsg] = createSignal('')
 
@@ -53,14 +51,6 @@ export default function MenuPageAdd() {
         v.minLength(3, 'Escribe un poco más.'),
         v.maxLength(50, 'Escribe menos.'),
       ),
-      sort: v.optional(
-        v.pipe(
-          v.string('El valor de este campo es inválido.'),
-          v.trim(),
-          v.nonEmpty('Este campo es requerido.'),
-          v.digits('El valor de este campo es inválido.'),
-        ),
-      ),
       icon: v.optional(
         v.pipe(
           v.string('El valor de este campo es inválido.'),
@@ -74,14 +64,11 @@ export default function MenuPageAdd() {
     setPermissionIdErrMsg(permissionIdErr.issues ? permissionIdErr.issues[0].message : '')
     const titleErr = v.safeParse(Schema.title, title())
     setTitleErrMsg(titleErr.issues ? titleErr.issues[0].message : '')
-    const sortErr = v.safeParse(Schema.sort, sort() || undefined)
-    setSortErrMsg(sortErr.issues ? sortErr.issues[0].message : '')
     const iconErr = v.safeParse(Schema.icon, icon() || undefined)
     setIconErrMsg(iconErr.issues ? iconErr.issues[0].message : '')
     const verificationResult = v.safeParse(v.object(Schema), {
       permissionId: permissionId().id,
       title: title(),
-      sort: sort() || undefined,
       icon: icon() || undefined,
     })
     if (!verificationResult.success) {
@@ -151,7 +138,6 @@ export default function MenuPageAdd() {
                     const { data, error }: any = await actions.menuPageAdd({
                       permissionId: permissionId().id.trim(),
                       title: title().trim(),
-                      sort: parseInt(sort().trim() || '0'),
                       icon: icon().trim() || undefined,
                     })
                     if (validateResponse(error || data?.error || null) === false) {
@@ -235,11 +221,11 @@ export default function MenuPageAdd() {
                       borderColor: colors.gray[400],
                     },
                     '&.Mui-focused fieldset': {
-                      borderColor: colors.pink[300],
+                      borderColor: colors.yellow[400],
                     },
                   },
                   '& label.Mui-focused': {
-                    color: colors.pink[500],
+                    color: colors.yellow[500],
                   },
                 }}
                 value={title()}
@@ -253,34 +239,6 @@ export default function MenuPageAdd() {
                 helperText={titleErrMsg()}
               />
               <TextField
-                label="Posición en el menú"
-                type="number"
-                variant="outlined"
-                class="w-full"
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    '&:hover fieldset': {
-                      borderColor: colors.gray[400],
-                    },
-                    '&.Mui-focused fieldset': {
-                      borderColor: colors.pink[300],
-                    },
-                  },
-                  '& label.Mui-focused': {
-                    color: colors.pink[500],
-                  },
-                }}
-                value={sort()}
-                onChange={(e, value) => {
-                  setSort(value)
-                }}
-                onFocus={() => {
-                  setSortErrMsg('')
-                }}
-                error={sortErrMsg() !== ''}
-                helperText={sortErrMsg()}
-              />
-              <TextField
                 label="Ícono"
                 variant="outlined"
                 class="w-full"
@@ -290,11 +248,11 @@ export default function MenuPageAdd() {
                       borderColor: colors.gray[400],
                     },
                     '&.Mui-focused fieldset': {
-                      borderColor: colors.pink[300],
+                      borderColor: colors.yellow[400],
                     },
                   },
                   '& label.Mui-focused': {
-                    color: colors.pink[500],
+                    color: colors.yellow[500],
                   },
                 }}
                 value={icon()}

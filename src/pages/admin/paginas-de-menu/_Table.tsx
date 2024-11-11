@@ -31,8 +31,7 @@ export default function PageTable(props: {
   const [isDeleteOpen, setIsDeleteOpen] = createSignal(false)
   const columnDefs = [
     { field: 'title', headerName: 'Página', minWidth: 200, maxWidth: 200 },
-    { field: 'path', headerName: 'Ruta', minWidth: 200 },
-    { field: 'sort', headerName: 'Posición', minWidth: 100, maxWidth: 100 },
+    { field: 'path', headerName: 'Ruta', minWidth: 200, sort: 'asc' },
     {
       field: 'icon',
       headerName: 'Ícono',

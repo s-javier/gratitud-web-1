@@ -4,7 +4,7 @@ import { asc, eq } from 'drizzle-orm'
 import { Api, Error } from '~/enums'
 import type { CustomError } from '~/types'
 import db from '~/db'
-import { menuPageTable, permissionTable } from '~/db/schema'
+import { menupageTable, permissionTable } from '~/db/schema'
 import { handleErrorFromServer } from '~/utils'
 import { verifyPermission } from '~/utils/verify-permission'
 import DataTable from './_Table'
@@ -28,16 +28,14 @@ if (Astro.locals.userTokenError) {
     try {
       data.pages = await db
         .select({
-          id: menuPageTable.id,
-          title: menuPageTable.title,
-          sort: menuPageTable.sort,
-          icon: menuPageTable.icon,
-          permissionId: menuPageTable.permissionId,
+          id: menupageTable.id,
+          title: menupageTable.title,
+          icon: menupageTable.icon,
+          permissionId: menupageTable.permissionId,
           path: permissionTable.path,
         })
-        .from(menuPageTable)
-        .innerJoin(permissionTable, eq(menuPageTable.permissionId, permissionTable.id))
-        .orderBy(asc(menuPageTable.sort))
+        .from(menupageTable)
+        .innerJoin(permissionTable, eq(menupageTable.permissionId, permissionTable.id))
     } catch {
       if (import.meta.env.DEV) {
         console.error('Error en DB. Obtención de páginas de menú.')

@@ -3,7 +3,7 @@ import 'dotenv/config'
 import { drizzle } from 'drizzle-orm/node-postgres'
 
 import {
-  menuPageTable,
+  menupageTable,
   organizationPersonRoleTable,
   organizationTable,
   permissionTable,
@@ -101,7 +101,7 @@ async function main() {
   /* ▲ Inserciones en tablas: permission y role_permission */
 
   /* ↓ Inserciones en tablas: menu_page */
-  await db.insert(menuPageTable).values([
+  await db.insert(menupageTable).values([
     {
       permissionId: permissionAdminOrganizationId,
       title: 'Organizaciones',

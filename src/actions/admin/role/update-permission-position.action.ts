@@ -2,11 +2,12 @@ import { defineAction, type ActionAPIContext } from 'astro:actions'
 import { z } from 'astro:schema'
 import { and, eq } from 'drizzle-orm'
 
-import { Api, Error } from '~/enums'
+import { Api, CacheData, Error } from '~/enums'
 import db from '~/db'
 import { rolePermissionTable } from '~/db/schema'
 import { handleErrorFromServer } from '~/utils'
 import { verifyPermission } from '~/utils/verify-permission'
+import { cache } from '~/utils/cache'
 
 export const roleUpdatePermissionPosition = defineAction({
   accept: 'json',
@@ -58,6 +59,7 @@ export const roleUpdatePermissionPosition = defineAction({
             eq(rolePermissionTable.permissionId, input.affectedPermissionId),
           ),
         )
+      cache.delete(JSON.stringify({ data: CacheData.MENU, roleId: context.locals.roleId }))
     } catch {
       if (import.meta.env.DEV) {
         console.error('Error en DB. Actualización de posiciones de permisos en rol.')

@@ -29,6 +29,13 @@
       "when": 1731290424484,
       "tag": "0003_gigantic_zarda",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1731294289534,
+      "tag": "0004_colossal_kingpin",
+      "breakpoints": true
     }
   ]
 }

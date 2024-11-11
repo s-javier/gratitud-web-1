@@ -3,7 +3,7 @@ import { z } from 'astro:schema'
 
 import { Api, Error } from '~/enums'
 import db from '~/db'
-import { menuPageTable } from '~/db/schema'
+import { menupageTable } from '~/db/schema'
 import { handleErrorFromServer } from '~/utils'
 import { verifyPermission } from '~/utils/verify-permission'
 
@@ -14,7 +14,6 @@ export const menuPageAdd = defineAction({
       .string()
       .regex(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/),
     title: z.string().min(3).max(50),
-    sort: z.number(),
     icon: z.string().min(3).max(50).optional(),
   }),
   handler: async (input: any, context: ActionAPIContext) => {
@@ -36,10 +35,9 @@ export const menuPageAdd = defineAction({
     }
     /******************************/
     try {
-      await db.insert(menuPageTable).values({
+      await db.insert(menupageTable).values({
         permissionId: input.permissionId,
         title: input.title,
-        sort: input.sort,
         icon: input.icon,
       })
     } catch {

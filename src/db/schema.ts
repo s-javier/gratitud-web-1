@@ -137,7 +137,7 @@ export const permissionTable = pgTable('permission', {
 })
 
 export const permissionTableRelations = relations(permissionTable, ({ one, many }) => ({
-  menuPage: one(menuPageTable),
+  menuPage: one(menupageTable),
   rolePermission: many(rolePermissionTable),
 }))
 
@@ -170,13 +170,12 @@ export const rolePermissionTableRelations = relations(rolePermissionTable, ({ on
   }),
 }))
 
-export const menuPageTable = pgTable('menu_page', {
+export const menupageTable = pgTable('menupage', {
   id: uuid().defaultRandom().primaryKey(),
   permissionId: uuid('permission_id')
     .references(() => permissionTable.id)
     .notNull(),
   title: varchar({ length: 50 }).notNull(),
-  sort: integer().notNull().default(0),
   icon: varchar({ length: 50 }),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })
@@ -184,9 +183,9 @@ export const menuPageTable = pgTable('menu_page', {
     .$onUpdate(() => new Date()),
 })
 
-export const menuPageTableRelations = relations(menuPageTable, ({ one }) => ({
+export const menupageTableRelations = relations(menupageTable, ({ one }) => ({
   permission: one(permissionTable, {
-    fields: [menuPageTable.permissionId],
+    fields: [menupageTable.permissionId],
     references: [permissionTable.id],
   }),
 }))

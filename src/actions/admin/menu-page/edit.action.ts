@@ -4,7 +4,7 @@ import { eq } from 'drizzle-orm'
 
 import { Api, Error } from '~/enums'
 import db from '~/db'
-import { menuPageTable } from '~/db/schema'
+import { menupageTable } from '~/db/schema'
 import { handleErrorFromServer } from '~/utils'
 import { verifyPermission } from '~/utils/verify-permission'
 
@@ -16,7 +16,6 @@ export const menuPageEdit = defineAction({
       .string()
       .regex(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/),
     title: z.string().min(3).max(50),
-    sort: z.number(),
     icon: z.string().min(3).max(50).optional(),
   }),
   handler: async (input: any, context: ActionAPIContext) => {
@@ -39,14 +38,13 @@ export const menuPageEdit = defineAction({
     /******************************/
     try {
       await db
-        .update(menuPageTable)
+        .update(menupageTable)
         .set({
           permissionId: input.permissionId,
           title: input.title,
-          sort: input.sort,
           icon: input.icon,
         })
-        .where(eq(menuPageTable.id, input.id))
+        .where(eq(menupageTable.id, input.id))
     } catch {
       if (import.meta.env.DEV) {
         console.error('Error en DB. Actualización de menuPage.')
