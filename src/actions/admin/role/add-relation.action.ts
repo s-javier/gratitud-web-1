@@ -1,11 +1,13 @@
 import { defineAction, type ActionAPIContext } from 'astro:actions'
 import { z } from 'astro:schema'
+import { and, eq } from 'drizzle-orm'
 
-import { Api, Error } from '~/enums'
+import { Api, CacheData, Error } from '~/enums'
 import db from '~/db'
-import { rolePermissionTable } from '~/db/schema'
+import { permissionTable, rolePermissionTable } from '~/db/schema'
 import { handleErrorFromServer } from '~/utils'
 import { verifyPermission } from '~/utils/verify-permission'
+import { cache } from '~/utils/cache'
 
 export const roleAddRelationPermission = defineAction({
   accept: 'json',
@@ -40,9 +42,30 @@ export const roleAddRelationPermission = defineAction({
     }
     /******************************/
     try {
+      const query = await db
+        .select({ type: permissionTable.type })
+        .from(permissionTable)
+        .where(and(eq(permissionTable.id, input.permissionId), eq(permissionTable.type, 'view')))
+      let sort
+      if (query.length > 0) {
+        const query2 = await db
+          .select({ id: rolePermissionTable.permissionId })
+          .from(rolePermissionTable)
+          .innerJoin(permissionTable, eq(rolePermissionTable.permissionId, permissionTable.id))
+          .where(
+            and(eq(rolePermissionTable.roleId, input.roleId), eq(permissionTable.type, 'view')),
+          )
+        sort = query2.length + 1
+        if (cache.has(JSON.stringify({ data: CacheData.MENU, roleId: input.roleId }))) {
+          cache.delete(JSON.stringify({ data: CacheData.MENU, roleId: input.roleId }))
+        }
+      }
       await db
         .insert(rolePermissionTable)
-        .values({ roleId: input.roleId, permissionId: input.permissionId })
+        .values({ roleId: input.roleId, permissionId: input.permissionId, sort })
+      if (cache.has(JSON.stringify({ data: CacheData.PERMISSIONS, roleId: input.roleId }))) {
+        cache.delete(JSON.stringify({ data: CacheData.PERMISSIONS, roleId: input.roleId }))
+      }
     } catch (err: any) {
       if (import.meta.env.DEV) {
         console.error('Error en DB. Creación de la relación: rol - permiso.')
