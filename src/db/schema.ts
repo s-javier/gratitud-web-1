@@ -128,7 +128,7 @@ export const permissionTypeEnum = pgEnum('permission_type', ['api', 'view'])
 
 export const permissionTable = pgTable('permission', {
   id: uuid().defaultRandom().primaryKey(),
-  path: varchar({ length: 100 }).notNull(),
+  path: varchar({ length: 100 }).notNull().unique(),
   type: permissionTypeEnum(),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
   updatedAt: timestamp('updated_at', { withTimezone: true })

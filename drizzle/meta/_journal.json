@@ -36,6 +36,13 @@
       "when": 1731294289534,
       "tag": "0004_colossal_kingpin",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1731294646521,
+      "tag": "0005_lean_hulk",
+      "breakpoints": true
     }
   ]
 }
