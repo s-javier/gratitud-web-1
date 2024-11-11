@@ -105,31 +105,26 @@ async function main() {
     {
       permissionId: permissionAdminOrganizationId,
       title: 'Organizaciones',
-      sort: 1,
       icon: 'mdi:home-city-outline',
     },
     {
       permissionId: permissionAdminRolesId,
       title: 'Roles',
-      sort: 2,
       icon: 'mdi:card-account-details',
     },
     {
       permissionId: permissionAdminPermissionsId,
       title: 'Permisos',
-      sort: 3,
       icon: 'mdi:lock',
     },
     {
       permissionId: permissionAdminUsersId,
       title: 'Usuarios',
-      sort: 4,
       icon: 'mdi:account-group',
     },
     {
       permissionId: permissionAdminPagesId,
       title: 'Páginas de menú',
-      sort: 5,
       icon: 'mdi:file-document-multiple-outline',
     },
   ])
