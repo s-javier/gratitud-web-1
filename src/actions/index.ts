@@ -10,6 +10,7 @@ import { roleAddRelationPermission } from './admin/role/add-relation.action'
 import { roleDelete } from './admin/role/delete.action'
 import { roleDeleteRelationPermission } from './admin/role/delete-relation.action'
 import { roleEdit } from './admin/role/edit.action'
+import { roleUpdatePermissionPosition } from './admin/role/update-permission-position.action'
 import { userAdd } from './admin/user/add.action'
 import { userAddRelationOrganizationRole } from './admin/user/add-relation.action'
 import { userDelete } from './admin/user/delete.action'
@@ -32,24 +33,30 @@ export const server = {
   login,
   code,
   logout,
+
   organizationChange,
   organizationAdd,
   organizationDelete,
   organizationEdit,
+
   roleAdd,
   roleAddRelationPermission,
   roleDelete,
   roleDeleteRelationPermission,
   roleEdit,
+  roleUpdatePermissionPosition,
+
   userAdd,
   userAddRelationOrganizationRole,
   userDelete,
   userDeleteRelationOrganizationRole,
   userEdit,
   userEditVisibility,
+
   permissionAdd,
   permissionDelete,
   permissionEdit,
+
   menuPageAdd,
   menuPageDelete,
   menuPageEdit,

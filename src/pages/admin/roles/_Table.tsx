@@ -11,7 +11,10 @@ import Edit from './_Edit'
 import Delete from './_Delete'
 
 export default function RoleTable(props: {
-  data: { roles: Role[]; permissions: Permission[] }
+  data: {
+    roles: { id: string; title: string; permissions: { view: any[]; api: any[] } }[]
+    permissions: Permission[]
+  }
   error: CustomError
 }) {
   const [table, setTable] = createSignal<any>(null)
@@ -36,7 +39,7 @@ export default function RoleTable(props: {
       headerName: 'Permisos',
       minWidth: 130,
       maxWidth: 130,
-      valueGetter: (p: any) => p.data.permissions.length,
+      valueGetter: (p: any) => p.data.permissions.view.length + p.data.permissions.api.length,
     },
     {
       field: 'actions',

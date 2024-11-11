@@ -26,6 +26,7 @@ export enum Api {
   ROLE_DELETE = '/role/delete',
   ROLE_DELETE_RELATION_PERMISSION = '/role/delete-relation-permission',
   ROLE_UPDATE = '/role/update',
+  ROLE_UPDATE_PERMISSION_POSITION = '/role/update-permission-position',
 
   USER_ALL = '/user/all',
   USER_CREATE = '/user/create',

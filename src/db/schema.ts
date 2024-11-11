@@ -150,6 +150,7 @@ export const rolePermissionTable = pgTable(
     permissionId: uuid('permission_id')
       .references(() => permissionTable.id)
       .notNull(),
+    sort: integer(),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true })
       .defaultNow()

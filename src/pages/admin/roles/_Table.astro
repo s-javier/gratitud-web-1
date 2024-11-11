@@ -64,10 +64,10 @@ if (Astro.locals.userTokenError) {
           permissionId: permissionTable.id,
           permissionPath: permissionTable.path,
           permissionType: permissionTable.type,
+          sort: rolePermissionTable.sort,
         })
         .from(permissionTable)
         .innerJoin(rolePermissionTable, eq(permissionTable.id, rolePermissionTable.permissionId))
-        .orderBy(asc(permissionTable.type), asc(permissionTable.path))
     } catch {
       if (import.meta.env.DEV) {
         console.error('Error en DB. Obtención de rolePermission.')
@@ -75,13 +75,21 @@ if (Astro.locals.userTokenError) {
       error = handleErrorFromServer(Error.DB)
     }
     data.roles.forEach((role: any) => {
-      role.permissions = rolePermission
-        .filter((item: any) => item.roleId === role.id)
-        .map((item: any) => ({
-          permissionId: item.permissionId,
-          permissionPath: item.permissionPath,
-          permissionType: item.permissionType,
-        }))
+      role.permissions = {
+        view: rolePermission
+          .filter((item: any) => item.roleId === role.id && item.permissionType === 'view')
+          .map((item: any) => ({
+            permissionId: item.permissionId,
+            permissionPath: item.permissionPath,
+            sort: item.sort,
+          })),
+        api: rolePermission
+          .filter((item: any) => item.roleId === role.id && item.permissionType === 'api')
+          .map((item: any) => ({
+            permissionId: item.permissionId,
+            permissionPath: item.permissionPath,
+          })),
+      }
     })
   }
 }

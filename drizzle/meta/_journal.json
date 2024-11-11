@@ -22,6 +22,13 @@
       "when": 1730145816614,
       "tag": "0002_fine_black_widow",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1731290424484,
+      "tag": "0003_gigantic_zarda",
+      "breakpoints": true
     }
   ]
 }
