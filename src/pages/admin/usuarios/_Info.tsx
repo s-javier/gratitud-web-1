@@ -3,9 +3,7 @@ import { createEffect, createRoot, createSignal, Show } from 'solid-js'
 import { Button } from '@suid/material'
 import AgGridSolid from 'solid-ag-grid'
 import { IconButton } from '@suid/material'
-import DeleteIcon from '@suid/icons-material/Delete'
-import VisibilityIcon from '@suid/icons-material/Visibility'
-import VisibilityOffIcon from '@suid/icons-material/VisibilityOff'
+import { Icon } from '@iconify-icon/solid'
 import { toast } from 'solid-sonner'
 
 import { validateResponse } from '~/utils'
@@ -52,29 +50,19 @@ export default function UserInfo(props: {
           <div class="flex flex-row justify-center items-center">
             <Show when={p.data.isVisible}>
               <IconButton
+                class="!text-green-500 hover:!text-green-400"
                 aria-label="menu"
-                sx={{
-                  color: '#22c55e', // Color del texto
-                  '&:hover': {
-                    color: '#4ade80',
-                  },
-                }}
                 onClick={async () => await changeVisibility(p)}
               >
-                <VisibilityOffIcon />
+                <Icon icon="mdi:visibility-off" width="100%" class="w-6" />
               </IconButton>
             </Show>
             <Show when={!p.data.isVisible}>
               <IconButton
-                sx={{
-                  color: '#22c55e', // Color del texto
-                  '&:hover': {
-                    color: '#4ade80',
-                  },
-                }}
+                class="!text-green-500 hover:!text-green-400"
                 onClick={async () => await changeVisibility(p)}
               >
-                <VisibilityIcon />
+                <Icon icon="mdi:visibility" width="100%" class="w-6" />
               </IconButton>
             </Show>
           </div>
@@ -120,7 +108,7 @@ export default function UserInfo(props: {
                 setIsDeleteRelationOpen(true)
               }}
             >
-              <DeleteIcon />
+              <Icon icon="mdi:trash" width="100%" class="w-6" />
             </IconButton>
           </div>
         )

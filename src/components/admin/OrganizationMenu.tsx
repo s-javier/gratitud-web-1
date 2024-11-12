@@ -2,9 +2,7 @@ import { createSignal, For } from 'solid-js'
 import { actions } from 'astro:actions'
 import { navigate } from 'astro:transitions/client'
 import { Button, Menu, MenuItem, ListItemIcon } from '@suid/material'
-import BusinessIcon from '@suid/icons-material/Business'
-import CorporateFareIcon from '@suid/icons-material/CorporateFare'
-import KeyboardArrowDownIcon from '@suid/icons-material/KeyboardArrowDown'
+import { Icon } from '@iconify-icon/solid'
 
 import { Page } from '~/enums'
 import { $loaderOverlay } from '~/stores'
@@ -29,19 +27,13 @@ export default function OrganizationMenu(props: { organizations: any[] }) {
   return (
     <>
       <Button
-        class="!mr-3"
+        class="!mr-3 !text-gray-400 hover:!text-white"
         onClick={handleClick}
         aria-controls={open() ? 'account-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open() ? 'true' : undefined}
-        startIcon={<CorporateFareIcon />}
-        endIcon={<KeyboardArrowDownIcon />}
-        sx={{
-          color: '#9ca3af', // Color del texto
-          '&:hover': {
-            color: 'white',
-          },
-        }}
+        startIcon={<Icon icon="mdi:building" width="100%" class="w-5" />}
+        endIcon={<Icon icon="mdi:chevron-down" width="100%" class="w-5" />}
       >
         {props.organizations.filter((item: any) => item.isSelected)[0].title}
       </Button>
@@ -100,7 +92,7 @@ export default function OrganizationMenu(props: { organizations: any[] }) {
               }}
             >
               <ListItemIcon>
-                <BusinessIcon fontSize="small" />
+                <Icon icon="mdi:business" width="100%" class="w-5" />
               </ListItemIcon>
               {item.title}
             </MenuItem>

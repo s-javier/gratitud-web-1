@@ -2,7 +2,7 @@ import { createSignal, createEffect } from 'solid-js'
 import { Button } from '@suid/material'
 import AgGridSolid from 'solid-ag-grid'
 import { IconButton } from '@suid/material'
-import DeleteIcon from '@suid/icons-material/Delete'
+import { Icon } from '@iconify-icon/solid'
 import DeleteRelationRole from './_DeleteRelationRole'
 
 import Dialog from '~/components/shared/Dialog'
@@ -62,7 +62,7 @@ export default function RoleInfo(props: {
                 setIsDeleteRelationOpen(true)
               }}
             >
-              <DeleteIcon />
+              <Icon icon="mdi:trash" width="100%" class="w-6" />
             </IconButton>
           </div>
         )

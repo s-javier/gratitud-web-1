@@ -1,11 +1,10 @@
 import { createSignal, For, onMount, Show } from 'solid-js'
 import { IconButton } from '@suid/material'
-import MenuIcon from '@suid/icons-material/Menu'
 import { Icon } from '@iconify-icon/solid'
-import ChevronRightIcon from '@suid/icons-material/ChevronRight'
 
 import { $loaderBar } from '~/stores'
 import Overlay from '~/components/shared/Overlay'
+import { cn } from '~/utils'
 
 export default function AdminMenu(props: {
   menu: any[]
@@ -13,7 +12,7 @@ export default function AdminMenu(props: {
   organizations: any[]
 }) {
   const [isOpen, setIsOpen] = createSignal(false)
-  const [openItems, setOpenItems] = createSignal({})
+  const [openItems, setOpenItems] = createSignal<any>({})
   const [pages, setPages] = createSignal<any[]>([])
 
   const getPrefix = (path: string) => {
@@ -72,16 +71,11 @@ export default function AdminMenu(props: {
   return (
     <>
       <IconButton
+        class="!text-gray-400 hover:!text-white"
         onClick={() => setIsOpen(true)}
         aria-label="menu"
-        sx={{
-          color: '#9ca3af', // Color del texto
-          '&:hover': {
-            color: 'white',
-          },
-        }}
       >
-        <MenuIcon />
+        <Icon icon="mdi:menu" width="100%" class="w-6" />
       </IconButton>
       <Overlay
         type="sidebar"
@@ -127,13 +121,13 @@ export default function AdminMenu(props: {
                             >
                               <Icon icon={item.menuIcon} width="100%" class="w-5 text-gray-400" />
                               {item.menuTitle}
-                              <ChevronRightIcon
-                                aria-hidden="true"
-                                class={[
+                              <Icon
+                                icon="mdi:chevron-right"
+                                width="100%"
+                                class={cn(
                                   'ml-auto h-5 w-5 shrink-0 text-gray-400 transition-transform',
-                                  // @ts-ignore
-                                  openItems()[item.menuTitle] ? 'rotate-90 text-gray-500' : '',
-                                ].join(' ')}
+                                  openItems()[item.menuTitle] && 'rotate-90 text-gray-500',
+                                )}
                               />
                             </button>
                             {/* @ts-ignore */}

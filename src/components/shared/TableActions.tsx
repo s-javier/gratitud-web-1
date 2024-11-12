@@ -1,9 +1,6 @@
 import { createSignal, Show } from 'solid-js'
 import { IconButton, ListItemIcon, Menu, MenuItem } from '@suid/material'
-import MoreVertIcon from '@suid/icons-material/MoreVert'
-import InfoIcon from '@suid/icons-material/RemoveRedEye'
-import EditIcon from '@suid/icons-material/Edit'
-import DeleteIcon from '@suid/icons-material/Delete'
+import { Icon } from '@iconify-icon/solid'
 
 export default function TableActions(props: {
   infoClick?: () => void
@@ -19,7 +16,7 @@ export default function TableActions(props: {
         class="!text-gray-400 hover:!text-[var(--o-btn-filter-text-hover-color)]"
         onClick={(event) => setAnchorEl(event.currentTarget)}
       >
-        <MoreVertIcon />
+        <Icon icon="mdi:more-vert" width="100%" class="w-6" />
       </IconButton>
       <Menu
         anchorEl={anchorEl()}
@@ -70,7 +67,7 @@ export default function TableActions(props: {
             }}
           >
             <ListItemIcon>
-              <InfoIcon class="text-blue-500" />
+              <Icon icon="mdi:remove-red-eye" width="100%" class="w-6 text-blue-500" />
             </ListItemIcon>
             Ver
           </MenuItem>
@@ -83,7 +80,7 @@ export default function TableActions(props: {
             }}
           >
             <ListItemIcon>
-              <EditIcon class="text-green-500" />
+              <Icon icon="mdi:edit" width="100%" class="w-6 text-green-500" />
             </ListItemIcon>
             Editar
           </MenuItem>
@@ -96,7 +93,7 @@ export default function TableActions(props: {
             }}
           >
             <ListItemIcon>
-              <DeleteIcon class="text-red-500" />
+              <Icon icon="mdi:trash" width="100%" class="w-6 text-red-500" />
             </ListItemIcon>
             Eliminar
           </MenuItem>

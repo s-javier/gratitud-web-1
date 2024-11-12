@@ -1,7 +1,6 @@
 import { Show } from 'solid-js'
 import { IconButton } from '@suid/material'
-import FilterListIcon from '@suid/icons-material/FilterList'
-import FilterListOffIcon from '@suid/icons-material/FilterListOff'
+import { Icon } from '@iconify-icon/solid'
 
 export default function TableOptions(props: {
   positionClass?: string
@@ -16,7 +15,7 @@ export default function TableOptions(props: {
           class="!text-gray-400 hover:!text-[var(--o-btn-filter-text-hover-color)]"
           onClick={() => props.handleGlobalFilter(false)}
         >
-          <FilterListOffIcon />
+          <Icon icon="mdi:filter-variant-remove" width="100%" class="w-6" />
         </IconButton>
       </Show>
       <Show when={props.isFilter === false}>
@@ -25,7 +24,7 @@ export default function TableOptions(props: {
           class="!text-gray-400 hover:!text-[var(--o-btn-filter-text-hover-color)]"
           onClick={() => props.handleGlobalFilter(true)}
         >
-          <FilterListIcon />
+          <Icon icon="mdi:filter-variant" width="100%" class="w-6" />
         </IconButton>
       </Show>
     </div>

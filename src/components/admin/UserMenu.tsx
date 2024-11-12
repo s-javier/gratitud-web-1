@@ -2,9 +2,7 @@ import { actions } from 'astro:actions'
 import { navigate } from 'astro:transitions/client'
 import { createSignal } from 'solid-js'
 import { Button, Menu, MenuItem, ListItemIcon } from '@suid/material'
-import PersonIcon from '@suid/icons-material/Person'
-import KeyboardArrowDownIcon from '@suid/icons-material/KeyboardArrowDown'
-import LogoutIcon from '@suid/icons-material/Logout'
+import { Icon } from '@iconify-icon/solid'
 
 import { Page } from '~/enums'
 import { $loaderOverlay } from '~/stores'
@@ -29,18 +27,13 @@ export default function UserMenu(props: { name: string }) {
   return (
     <>
       <Button
+        class="!text-gray-400 hover:!text-white"
         onClick={handleClick}
         aria-controls={open() ? 'account-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open() ? 'true' : undefined}
-        startIcon={<PersonIcon />}
-        endIcon={<KeyboardArrowDownIcon />}
-        sx={{
-          color: '#9ca3af', // Color del texto
-          '&:hover': {
-            color: 'white',
-          },
-        }}
+        startIcon={<Icon icon="mdi:person" width="100%" class="w-5" />}
+        endIcon={<Icon icon="mdi:chevron-down" width="100%" class="w-5" />}
       >
         {props.name}
       </Button>
@@ -97,7 +90,7 @@ export default function UserMenu(props: { name: string }) {
           }}
         >
           <ListItemIcon>
-            <LogoutIcon fontSize="small" />
+            <Icon icon="mdi:logout" width="100%" class="w-5" />
           </ListItemIcon>
           Cerrar sesión
         </MenuItem>
