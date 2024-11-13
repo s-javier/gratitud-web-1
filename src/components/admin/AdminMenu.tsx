@@ -26,16 +26,17 @@ export default function AdminMenu(props: {
     for (const item of props.menu) {
       const prefix = getPrefix(item.path)
       if (sections[prefix]) {
-        // Si el prefijo ya existe, añadimos a los children
+        /* Si el prefijo ya existe, añadimos a los children */
         sections[prefix].children.push({
           path: item.path,
           menuTitle: item.title,
           menuIcon: item.icon,
         })
       } else {
-        // Si no existe, creamos un nuevo grupo o agregamos directamente al resultado
+        /* Si no existe, creamos un nuevo grupo o agregamos directamente al resultado */
         if (props.menu.filter((el: any) => getPrefix(el.path) === prefix).length > 1) {
           sections[prefix] = {
+            prefix,
             menuTitle: item.title,
             menuIcon: item.icon,
             children: [
@@ -56,11 +57,18 @@ export default function AdminMenu(props: {
   })
 
   // @ts-ignore
-  const toggleItem = (name) => {
+  const toggleItem = (name, isRelationWithCurrentPath) => {
     setOpenItems((prev) => ({
       ...prev,
-      // @ts-ignore
-      [name]: !prev[name],
+      /* Si isRelationWithCurrentPath === false, entonce es un toggle (ir variando) de !prev[name]
+       * Si isRelationWithCurrentPath === true y prev[name] (=== undefined) es primera vez que se presiona,
+       * entonces es false, sino es un toggle (ir variando) de !prev[name].
+       */
+      [name]: isRelationWithCurrentPath
+        ? prev[name] === undefined
+          ? false
+          : !prev[name]
+        : !prev[name],
     }))
   }
 
@@ -96,11 +104,12 @@ export default function AdminMenu(props: {
                         <Show when={!item.children}>
                           <a
                             href={item.path}
-                            class={[
-                              props.currentPath === item.path ? 'bg-yellow-50' : 'hover:bg-gray-50',
+                            class={cn(
+                              props.currentPath === item.path && 'bg-yellow-50',
+                              props.currentPath !== item.path && 'hover:bg-gray-50',
                               'group flex gap-x-3 rounded-md p-2 text-sm font-semibold',
                               'leading-6 text-gray-700',
-                            ].join(' ')}
+                            )}
                             onClick={activeLoaderBar}
                           >
                             <Icon icon={item.icon} width="100%" class="w-5 text-gray-400" />
@@ -110,14 +119,15 @@ export default function AdminMenu(props: {
                         <Show when={item.children}>
                           <div>
                             <button
-                              onClick={() => toggleItem(item.menuTitle)}
-                              class={[
-                                props.currentPath === item.path
-                                  ? 'bg-yellow-50'
-                                  : 'hover:bg-gray-50',
+                              onClick={() =>
+                                toggleItem(item.menuTitle, props.currentPath.includes(item.prefix))
+                              }
+                              class={cn(
+                                // props.currentPath.includes(item.prefix) && 'bg-yellow-50',
+                                // !props.currentPath.includes(item.prefix) && 'hover:bg-yellow-50',
                                 'group flex w-full items-center gap-x-3 rounded-md p-2',
                                 'text-left text-sm font-semibold leading-6 text-gray-700',
-                              ].join(' ')}
+                              )}
                             >
                               <Icon icon={item.menuIcon} width="100%" class="w-5 text-gray-400" />
                               {item.menuTitle}
@@ -126,25 +136,31 @@ export default function AdminMenu(props: {
                                 width="100%"
                                 class={cn(
                                   'ml-auto h-5 w-5 shrink-0 text-gray-400 transition-transform',
-                                  openItems()[item.menuTitle] && 'rotate-90 text-gray-500',
+                                  (openItems()[item.menuTitle] ||
+                                    (openItems()[item.menuTitle] === undefined &&
+                                      props.currentPath.includes(item.prefix))) &&
+                                    'rotate-90 text-gray-500',
                                 )}
                               />
                             </button>
-                            {/* @ts-ignore */}
-                            <Show when={openItems()[item.menuTitle]}>
+                            <Show
+                              when={
+                                openItems()[item.menuTitle] ||
+                                (openItems()[item.menuTitle] === undefined &&
+                                  props.currentPath.includes(item.prefix))
+                              }
+                            >
                               <ul class="mt-1 px-2">
                                 <For each={item.children}>
                                   {(subItem) => (
                                     <li>
                                       <a
                                         href={subItem.path}
-                                        class={[
-                                          // @ts-ignore
-                                          props.currentPath === subItem.path
-                                            ? 'bg-yellow-50'
-                                            : 'hover:bg-gray-50',
+                                        class={cn(
+                                          props.currentPath === subItem.path && 'bg-yellow-50',
+                                          props.currentPath !== subItem.path && 'hover:bg-gray-50',
                                           'block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700',
-                                        ].join(' ')}
+                                        )}
                                         onClick={activeLoaderBar}
                                       >
                                         {subItem.menuTitle}
