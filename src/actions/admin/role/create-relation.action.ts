@@ -9,7 +9,7 @@ import { handleErrorFromServer } from '~/utils'
 import { verifyPermission } from '~/utils/verify-permission'
 import { cache } from '~/utils/cache'
 
-export const roleAddRelationPermission = defineAction({
+export const roleCreateRelationPermission = defineAction({
   accept: 'json',
   input: z.object({
     roleId: z

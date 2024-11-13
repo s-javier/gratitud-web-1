@@ -13,7 +13,7 @@ import Overlay from '~/components/shared/Overlay'
 import Dialog from '~/components/shared/Dialog'
 import CustomToaster from '~/components/shared/CustomToaster'
 
-export default function OrganizationAdd() {
+export default function organizationCreate() {
   const [isDialogOpen, setIsDialogOpen] = createSignal(false)
   const [title, setTitle] = createSignal('')
   const [titleErrMsg, setTitleErrMsg] = createSignal('')
@@ -111,7 +111,7 @@ export default function OrganizationAdd() {
                       return
                     }
                     $loaderOverlay.set(true)
-                    const { data, error }: any = await actions.gratitudeAdd({
+                    const { data, error }: any = await actions.gratitudeCreate({
                       title: title().trim() || undefined,
                       description: description().trim(),
                       isMaterialized: false,

@@ -18,7 +18,7 @@ import PinkSwitch from '~/components/shared/Switch'
 import CustomToaster from '~/components/shared/CustomToaster'
 import colors from 'tailwindcss/colors'
 
-export default function UserAdd() {
+export default function userCreate() {
   const [anchorEl, setAnchorEl] = createSignal<null | HTMLElement>(null)
   const openMenu = () => Boolean(anchorEl())
 
@@ -291,7 +291,7 @@ export default function UserAdd() {
                       return
                     }
                     $loaderOverlay.set(true)
-                    const { data, error }: any = await actions.userAdd({
+                    const { data, error }: any = await actions.userCreate({
                       name: name().trim(),
                       email: email().trim(),
                       isActive: isActive(),
@@ -407,7 +407,7 @@ export default function UserAdd() {
                       return
                     }
                     $loaderOverlay.set(true)
-                    const { data, error }: any = await actions.userAddRelationOrganizationRole({
+                    const { data, error }: any = await actions.userCreateRelationOrganizationRole({
                       organizationId: organizationId().id.trim(),
                       userId: userId().id.trim(),
                       roleId: roleId().id.trim(),

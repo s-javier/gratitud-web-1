@@ -16,7 +16,7 @@ import Overlay from '~/components/shared/Overlay'
 import Dialog from '~/components/shared/Dialog'
 import CustomToaster from '~/components/shared/CustomToaster'
 
-export default function MenuPageAdd() {
+export default function menuPageCreate() {
   const [isOpenDialog, setIsOpenDialog] = createSignal(false)
   const [permissionId, setPermissionId] = createSignal<any>({})
   const [permissionIdErrMsg, setPermissionIdErrMsg] = createSignal('')
@@ -135,7 +135,7 @@ export default function MenuPageAdd() {
                       return
                     }
                     $loaderOverlay.set(true)
-                    const { data, error }: any = await actions.menuPageAdd({
+                    const { data, error }: any = await actions.menuPageCreate({
                       permissionId: permissionId().id.trim(),
                       title: title().trim(),
                       icon: icon().trim() || undefined,

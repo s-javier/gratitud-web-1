@@ -14,7 +14,7 @@ import Dialog from '~/components/shared/Dialog'
 import PinkSwitch from '~/components/shared/Switch'
 import CustomToaster from '~/components/shared/CustomToaster'
 
-export default function OrganizationAdd() {
+export default function organizationCreate() {
   const [isDialogOpen, setIsDialogOpen] = createSignal(false)
   const [title, setTitle] = createSignal('')
   const [titleErrMsg, setTitleErrMsg] = createSignal('')
@@ -104,7 +104,7 @@ export default function OrganizationAdd() {
                       return
                     }
                     $loaderOverlay.set(true)
-                    const { data, error }: any = await actions.organizationAdd({
+                    const { data, error }: any = await actions.organizationCreate({
                       title: title().trim(),
                       isActive: isActive(),
                     })

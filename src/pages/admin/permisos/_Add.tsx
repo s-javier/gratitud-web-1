@@ -26,7 +26,7 @@ import Overlay from '~/components/shared/Overlay'
 import Dialog from '~/components/shared/Dialog'
 import CustomToaster from '~/components/shared/CustomToaster'
 
-export default function PermissionAdd() {
+export default function permissionCreate() {
   const [anchorEl, setAnchorEl] = createSignal<null | HTMLElement>(null)
   const openMenu = () => Boolean(anchorEl())
 
@@ -240,7 +240,7 @@ export default function PermissionAdd() {
                       return
                     }
                     $loaderOverlay.set(true)
-                    const { data, error }: any = await actions.permissionAdd({
+                    const { data, error }: any = await actions.permissionCreate({
                       path: path().trim(),
                       type: type().trim(),
                     })
@@ -357,7 +357,7 @@ export default function PermissionAdd() {
                       return
                     }
                     $loaderOverlay.set(true)
-                    const { data, error }: any = await actions.roleAddRelationPermission({
+                    const { data, error }: any = await actions.roleCreateRelationPermission({
                       roleId: roleId().id.trim(),
                       permissionId: permissionId().id.trim(),
                     })

@@ -13,7 +13,7 @@ import Dialog from '~/components/shared/Dialog'
 import PinkSwitch from '~/components/shared/Switch'
 import CustomToaster from '~/components/shared/CustomToaster'
 
-export default function OrganizationEdit(props: {
+export default function organizationUpdate(props: {
   isShow: boolean
   close: () => void
   data: { id: string; title: string; isActive: boolean }
@@ -115,7 +115,7 @@ export default function OrganizationEdit(props: {
                   return
                 }
                 $loaderOverlay.set(true)
-                const { data, error }: any = await actions.organizationEdit({
+                const { data, error }: any = await actions.organizationUpdate({
                   id: props.data.id,
                   title: title().trim(),
                   isActive: isActive(),

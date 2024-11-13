@@ -16,7 +16,7 @@ import Overlay from '~/components/shared/Overlay'
 import Dialog from '~/components/shared/Dialog'
 import CustomToaster from '~/components/shared/CustomToaster'
 
-export default function RoleAdd() {
+export default function roleCreate() {
   const [anchorEl, setAnchorEl] = createSignal<null | HTMLElement>(null)
   const openMenu = () => Boolean(anchorEl())
 
@@ -220,7 +220,7 @@ export default function RoleAdd() {
                       return
                     }
                     $loaderOverlay.set(true)
-                    const { data, error }: any = await actions.roleAdd({
+                    const { data, error }: any = await actions.roleCreate({
                       title: title().trim(),
                     })
                     if (validateResponse(error || data?.error || null) === false) {
@@ -297,7 +297,7 @@ export default function RoleAdd() {
                       return
                     }
                     $loaderOverlay.set(true)
-                    const { data, error }: any = await actions.roleAddRelationPermission({
+                    const { data, error }: any = await actions.roleCreateRelationPermission({
                       roleId: roleId().id.trim(),
                       permissionId: permissionId().id.trim(),
                     })

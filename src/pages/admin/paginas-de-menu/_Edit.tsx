@@ -14,7 +14,7 @@ import Overlay from '~/components/shared/Overlay'
 import Dialog from '~/components/shared/Dialog'
 import CustomToaster from '~/components/shared/CustomToaster'
 
-export default function RoleEdit(props: {
+export default function roleUpdate(props: {
   isShow: boolean
   close: () => void
   data: {
@@ -148,7 +148,7 @@ export default function RoleEdit(props: {
                   return
                 }
                 $loaderOverlay.set(true)
-                const { data, error }: any = await actions.menuPageEdit({
+                const { data, error }: any = await actions.menuPageUpdate({
                   id: props.data.id,
                   permissionId: permissionId().id.trim(),
                   title: title().trim(),

@@ -12,7 +12,7 @@ import Overlay from '~/components/shared/Overlay'
 import Dialog from '~/components/shared/Dialog'
 import CustomToaster from '~/components/shared/CustomToaster'
 
-export default function GratitudeEdit(props: {
+export default function gratitudeUpdate(props: {
   isShow: boolean
   close: () => void
   data: { id: string; title: string; description: string }
@@ -123,7 +123,7 @@ export default function GratitudeEdit(props: {
                   return
                 }
                 $loaderOverlay.set(true)
-                const { data, error }: any = await actions.gratitudeEdit({
+                const { data, error }: any = await actions.gratitudeUpdate({
                   id: props.data.id,
                   title: title().trim() || undefined,
                   description: description().trim(),

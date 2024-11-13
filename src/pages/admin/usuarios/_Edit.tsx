@@ -13,7 +13,7 @@ import Dialog from '~/components/shared/Dialog'
 import PinkSwitch from '~/components/shared/Switch'
 import CustomToaster from '~/components/shared/CustomToaster'
 
-export default function UserEdit(props: {
+export default function userUpdate(props: {
   isShow: boolean
   close: () => void
   data: { id: string; name: string; lastName: string; email: string; isActive: boolean }
@@ -129,7 +129,7 @@ export default function UserEdit(props: {
                   return
                 }
                 $loaderOverlay.set(true)
-                const { data, error }: any = await actions.userEdit({
+                const { data, error }: any = await actions.userUpdate({
                   id: props.data.id,
                   name: name().trim(),
                   email: email().trim(),

@@ -1,45 +1,48 @@
 import { defineAction, type ActionAPIContext } from 'astro:actions'
 import { z } from 'astro:schema'
 
-import { Api, CacheData, Error } from '~/enums'
+import { Api, Error } from '~/enums'
 import db from '~/db'
-import { personTable } from '~/db/schema'
+import { menupageTable } from '~/db/schema'
 import { handleErrorFromServer } from '~/utils'
 import { verifyPermission } from '~/utils/verify-permission'
-import { cache } from '~/utils/cache'
 
-export const userAdd = defineAction({
+export const menuPageCreate = defineAction({
   accept: 'json',
   input: z.object({
-    name: z.string().min(2).max(100),
-    email: z.string().email(),
-    isActive: z.boolean(),
+    permissionId: z
+      .string()
+      .regex(/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/),
+    title: z.string().min(3).max(50),
+    icon: z.string().min(3).max(50).optional(),
   }),
   handler: async (input: any, context: ActionAPIContext) => {
     if (context.locals.userTokenError) {
       if (import.meta.env.DEV) {
-        console.error('Problema con el token de usuario en creación de usuario.')
+        console.error('Problema con el token de usuario en creación de menuPage.')
       }
       return { error: handleErrorFromServer(context.locals.userTokenError) }
     }
-    const permissionVerification = await verifyPermission(context.locals.roleId, Api.USER_CREATE)
+    const permissionVerification = await verifyPermission(
+      context.locals.roleId,
+      Api.MENU_PAGE_CREATE,
+    )
     if (!permissionVerification.isSuccess) {
       if (import.meta.env.DEV) {
-        console.error('Problema con el permiso del usuario en creación de usuario.')
+        console.error('Problema con el permiso del usuario en creación de menuPage.')
       }
       return { error: handleErrorFromServer(permissionVerification.error) }
     }
     /******************************/
     try {
-      await db.insert(personTable).values({
-        name: input.name,
-        email: input.email,
-        isActive: input.isActive,
+      await db.insert(menupageTable).values({
+        permissionId: input.permissionId,
+        title: input.title,
+        icon: input.icon,
       })
-      cache.delete(JSON.stringify({ data: CacheData.USERS_ALL }))
     } catch {
       if (import.meta.env.DEV) {
-        console.error('Error en DB. Creación de usuario.')
+        console.error('Error en DB. Creación de menuPage.')
       }
       return { error: handleErrorFromServer(Error.DB) }
     }

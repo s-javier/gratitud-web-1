@@ -1,31 +1,31 @@
 import { login } from './auth/login.action'
 import { code } from './auth/code.action'
-import { logout } from './auth/sign-out.action'
+import { logout } from './auth/logout.action'
 import { organizationChange } from './admin/organization/change.action'
-import { organizationAdd } from './admin/organization/add.action'
+import { organizationCreate } from './admin/organization/create.action'
 import { organizationDelete } from './admin/organization/delete.action'
-import { organizationEdit } from './admin/organization/edit.action'
-import { roleAdd } from './admin/role/add.action'
-import { roleAddRelationPermission } from './admin/role/add-relation.action'
+import { organizationUpdate } from './admin/organization/update.action'
+import { roleCreate } from './admin/role/create.action'
+import { roleCreateRelationPermission } from './admin/role/create-relation.action'
 import { roleDelete } from './admin/role/delete.action'
 import { roleDeleteRelationPermission } from './admin/role/delete-relation.action'
-import { roleEdit } from './admin/role/edit.action'
+import { roleUpdate } from './admin/role/update.action'
 import { roleUpdatePermissionPosition } from './admin/role/update-permission-position.action'
-import { userAdd } from './admin/user/add.action'
-import { userAddRelationOrganizationRole } from './admin/user/add-relation.action'
+import { userCreate } from './admin/user/create.action'
+import { userCreateRelationOrganizationRole } from './admin/user/create-relation.action'
 import { userDelete } from './admin/user/delete.action'
 import { userDeleteRelationOrganizationRole } from './admin/user/delete-relation.action'
-import { userEdit } from './admin/user/edit.action'
-import { userEditVisibility } from './admin/user/edit-visibility.action'
+import { userUpdate } from './admin/user/update.action'
+import { userUpdateVisibility } from './admin/user/update-visibility.action'
 import { permissionDelete } from './admin/permission/delete.action'
-import { permissionAdd } from './admin/permission/add.action'
-import { permissionEdit } from './admin/permission/edit.action'
-import { menuPageAdd } from './admin/menu-page/add.action'
+import { permissionCreate } from './admin/permission/create.action'
+import { permissionUpdate } from './admin/permission/update.action'
+import { menuPageCreate } from './admin/menu-page/create.action'
 import { menuPageDelete } from './admin/menu-page/delete.action'
-import { menuPageEdit } from './admin/menu-page/edit.action'
+import { menuPageUpdate } from './admin/menu-page/update.action'
 
-import { gratitudeAdd } from './gratitude/add.action'
-import { gratitudeEdit } from './gratitude/edit.action'
+import { gratitudeCreate } from './gratitude/create.action'
+import { gratitudeUpdate } from './gratitude/update.action'
 import { gratitudeDelete } from './gratitude/delete.action'
 import { gratitudeRemind } from './gratitude/remind.action'
 
@@ -35,34 +35,34 @@ export const server = {
   logout,
 
   organizationChange,
-  organizationAdd,
+  organizationCreate,
   organizationDelete,
-  organizationEdit,
+  organizationUpdate,
 
-  roleAdd,
-  roleAddRelationPermission,
+  roleCreate,
+  roleCreateRelationPermission,
   roleDelete,
   roleDeleteRelationPermission,
-  roleEdit,
+  roleUpdate,
   roleUpdatePermissionPosition,
 
-  userAdd,
-  userAddRelationOrganizationRole,
+  userCreate,
+  userCreateRelationOrganizationRole,
   userDelete,
   userDeleteRelationOrganizationRole,
-  userEdit,
-  userEditVisibility,
+  userUpdate,
+  userUpdateVisibility,
 
-  permissionAdd,
+  permissionCreate,
   permissionDelete,
-  permissionEdit,
+  permissionUpdate,
 
-  menuPageAdd,
+  menuPageCreate,
   menuPageDelete,
-  menuPageEdit,
+  menuPageUpdate,
 
-  gratitudeAdd,
-  gratitudeEdit,
+  gratitudeCreate,
+  gratitudeUpdate,
   gratitudeDelete,
   gratitudeRemind,
 }

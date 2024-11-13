@@ -1,5 +1,5 @@
 import { createEffect, createSignal, Show } from 'solid-js'
-import { animate, timeline } from 'motion'
+import { animate } from 'motion'
 
 export default function Overlay(props: {
   isActive: boolean
@@ -26,19 +26,19 @@ export default function Overlay(props: {
 
   const closeOverlay = async () => {
     if (props.type === 'dialog') {
-      await timeline([
+      await animate([
         [overlayBackdropRef, { opacity: 0 }, { duration: 0.2 }],
         [
           overlayDialogRef,
           { transform: 'translateY(-200px)', opacity: 0 },
           { at: '<', duration: 0.2 },
         ],
-      ]).finished
+      ])
     } else {
-      await timeline([
+      await animate([
         [overlaySidebarRef, { transform: 'translateX(100%)' }, { duration: 0.3 }],
         [overlayBackdropRef, { opacity: 0 }, { at: 0.1, duration: 0.2 }],
-      ]).finished
+      ])
     }
   }
 

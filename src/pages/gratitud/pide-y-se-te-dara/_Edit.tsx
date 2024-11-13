@@ -13,7 +13,7 @@ import Dialog from '~/components/shared/Dialog'
 import PinkSwitch from '~/components/shared/Switch'
 import CustomToaster from '~/components/shared/CustomToaster'
 
-export default function GratitudeEdit(props: {
+export default function gratitudeUpdate(props: {
   isShow: boolean
   close: () => void
   data: { id: string; title: string; description: string; isMaterialized: boolean }
@@ -128,7 +128,7 @@ export default function GratitudeEdit(props: {
                   return
                 }
                 $loaderOverlay.set(true)
-                const { data, error }: any = await actions.gratitudeEdit({
+                const { data, error }: any = await actions.gratitudeUpdate({
                   id: props.data.id,
                   title: title().trim() || undefined,
                   description: description().trim(),

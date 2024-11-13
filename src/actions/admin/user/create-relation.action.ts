@@ -7,7 +7,7 @@ import { organizationPersonRoleTable } from '~/db/schema'
 import { handleErrorFromServer } from '~/utils'
 import { verifyPermission } from '~/utils/verify-permission'
 
-export const userAddRelationOrganizationRole = defineAction({
+export const userCreateRelationOrganizationRole = defineAction({
   accept: 'json',
   input: z.object({
     organizationId: z

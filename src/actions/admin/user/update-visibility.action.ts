@@ -8,7 +8,7 @@ import { organizationPersonRoleTable } from '~/db/schema'
 import { handleErrorFromServer } from '~/utils'
 import { verifyPermission } from '~/utils/verify-permission'
 
-export const userEditVisibility = defineAction({
+export const userUpdateVisibility = defineAction({
   accept: 'json',
   input: z.object({
     organizationId: z

@@ -18,17 +18,14 @@ export default function Login() {
         loginFormRef,
         { opacity: 0, transform: 'translateX(-200px)' },
         { duration: 0.5 },
-      ).finished
+      )
       setIsLoginForm(false)
       await animate(codeFormRef, { opacity: 1, transform: 'translateX(0px)' }, { duration: 0.5 })
-        .finished
     } else {
       toast.dismiss(toastId())
       await animate(codeFormRef, { opacity: 0, transform: 'translateX(200px)' }, { duration: 0.5 })
-        .finished
       setIsLoginForm(true)
       await animate(loginFormRef, { opacity: 1, transform: 'translateX(0px)' }, { duration: 0.5 })
-        .finished
     }
   })
 

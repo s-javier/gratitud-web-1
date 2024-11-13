@@ -129,7 +129,7 @@ export default function UserInfo(props: {
       return
     }
     $loaderOverlay.set(true)
-    const { data, error }: any = await actions.userEditVisibility({
+    const { data, error }: any = await actions.userUpdateVisibility({
       organizationId: p.data.organizationId,
       userId: props.data.id,
       roleId: p.data.roleId,

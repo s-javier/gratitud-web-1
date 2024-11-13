@@ -4,48 +4,43 @@ import { eq } from 'drizzle-orm'
 
 import { Api, Error } from '~/enums'
 import db from '~/db'
-import { gratitudeTable } from '~/db/schema'
+import { permissionTable } from '~/db/schema'
 import { handleErrorFromServer } from '~/utils'
 import { verifyPermission } from '~/utils/verify-permission'
 
-export const gratitudeEdit = defineAction({
+export const permissionUpdate = defineAction({
   accept: 'json',
   input: z.object({
     id: z.string().uuid(),
-    title: z.string().min(4).max(100).optional(),
-    description: z.string().min(4).max(400),
-    isMaterialized: z.boolean(),
+    path: z.string().min(4).max(100),
+    type: z.string().regex(/^(api|view)$/),
   }),
   handler: async (input: any, context: ActionAPIContext) => {
     if (context.locals.userTokenError) {
       if (import.meta.env.DEV) {
-        console.error('Problema con el token de usuario en actualización de agradecimiento.')
+        console.error('Problema con el token de usuario en actualización de permiso.')
       }
       return { error: handleErrorFromServer(context.locals.userTokenError) }
     }
     const permissionVerification = await verifyPermission(
       context.locals.roleId,
-      Api.GRATITUDE_UPDATE,
+      Api.PERMISSION_UPDATE,
     )
     if (!permissionVerification.isSuccess) {
       if (import.meta.env.DEV) {
-        console.error('Problema con el permiso del usuario en actualización de agradecimiento.')
+        console.error('Problema con el permiso del usuario en actualización de permiso.')
       }
       return { error: handleErrorFromServer(permissionVerification.error) }
     }
     /******************************/
     try {
       await db
-        .update(gratitudeTable)
-        .set({
-          title: input.title,
-          description: input.description,
-          isMaterialized: input.isMaterialized,
-        })
-        .where(eq(gratitudeTable.id, input.id))
+        .update(permissionTable)
+        .set({ path: input.path, type: input.type })
+        .where(eq(permissionTable.id, input.id))
     } catch {
       if (import.meta.env.DEV) {
-        console.error('Error en DB. Actualización de agradecimiento.')
+        console.error('Error en DB. Actualización de permiso.')
       }
       return { error: handleErrorFromServer(Error.DB) }
     }
