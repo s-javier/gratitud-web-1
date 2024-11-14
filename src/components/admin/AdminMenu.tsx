@@ -105,7 +105,8 @@ export default function AdminMenu(props: {
                           <a
                             href={item.path}
                             class={cn(
-                              props.currentPath === item.path && 'bg-yellow-50',
+                              props.currentPath === item.path &&
+                                'bg-[--o-admin-menu-item-bg-color]',
                               props.currentPath !== item.path && 'hover:bg-gray-50',
                               'group flex gap-x-3 rounded-md p-2 text-sm font-semibold',
                               'leading-6 text-gray-700',
@@ -157,7 +158,8 @@ export default function AdminMenu(props: {
                                       <a
                                         href={subItem.path}
                                         class={cn(
-                                          props.currentPath === subItem.path && 'bg-yellow-50',
+                                          props.currentPath === subItem.path &&
+                                            'bg-[--o-admin-menu-item-bg-color]',
                                           props.currentPath !== subItem.path && 'hover:bg-gray-50',
                                           'block rounded-md py-2 pl-9 pr-2 text-sm leading-6 text-gray-700',
                                         )}
