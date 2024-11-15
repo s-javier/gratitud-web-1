@@ -5,7 +5,7 @@ import AgGridSolid from 'solid-ag-grid'
 import { Icon } from '@iconify-icon/solid'
 
 import TableOptions from '~/components/shared/TableOptions'
-import DeleteRelationPermission from './_DeleteRelationPermission'
+import DeletePermission from './_DeletePermission'
 
 export default function RoleInfoApi(props: { id: string; title: string; permissions: any[] }) {
   const [table, setTable] = createSignal<any>(null)
@@ -75,7 +75,7 @@ export default function RoleInfoApi(props: { id: string; title: string; permissi
   return (
     <>
       <Portal>
-        <DeleteRelationPermission
+        <DeletePermission
           isShow={isDeleteRelationOpen()}
           close={() => setIsDeleteRelationOpen(false)}
           data={permissionRole()}

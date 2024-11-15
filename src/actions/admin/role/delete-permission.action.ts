@@ -1,6 +1,6 @@
 import { defineAction, type ActionAPIContext } from 'astro:actions'
 import { z } from 'astro:schema'
-import { and, eq } from 'drizzle-orm'
+import { and, asc, eq } from 'drizzle-orm'
 
 import { Api, Error } from '~/enums'
 import db from '~/db'
@@ -8,7 +8,7 @@ import { rolePermissionTable } from '~/db/schema'
 import { handleErrorFromServer } from '~/utils'
 import { verifyPermission } from '~/utils/verify-permission'
 
-export const roleDeleteRelationPermission = defineAction({
+export const roleDeletePermission = defineAction({
   accept: 'json',
   input: z.object({
     roleId: z
@@ -41,6 +41,12 @@ export const roleDeleteRelationPermission = defineAction({
     }
     /******************************/
     try {
+      const query = await db
+        .select({ permissionId: rolePermissionTable.permissionId })
+        .from(rolePermissionTable)
+        .where(eq(rolePermissionTable.roleId, input.roleId))
+        .orderBy(asc(rolePermissionTable.sort))
+      const index = query.findIndex((item: any) => item.permissionId === input.permissionId)
       await db
         .delete(rolePermissionTable)
         .where(
@@ -49,6 +55,17 @@ export const roleDeleteRelationPermission = defineAction({
             eq(rolePermissionTable.permissionId, input.permissionId),
           ),
         )
+      for (let i = index + 1; i < query.length; i += 1) {
+        await db
+          .update(rolePermissionTable)
+          .set({ sort: i })
+          .where(
+            and(
+              eq(rolePermissionTable.roleId, input.roleId),
+              eq(rolePermissionTable.permissionId, query[i].permissionId),
+            ),
+          )
+      }
     } catch {
       if (import.meta.env.DEV) {
         console.error('Error en DB. Eliminación de la relación: rol - permiso.')

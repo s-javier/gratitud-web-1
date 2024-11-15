@@ -10,7 +10,7 @@ import Dialog from '~/components/shared/Dialog'
 import CustomToaster from '~/components/shared/CustomToaster'
 import { $loaderOverlay } from '~/stores'
 
-export default function RoleDeleteRelationPermission(props: {
+export default function roleDeletePermission(props: {
   isShow: boolean
   close: () => void
   data: {
@@ -67,7 +67,7 @@ export default function RoleDeleteRelationPermission(props: {
                   return
                 }
                 $loaderOverlay.set(true)
-                const { data, error }: any = await actions.roleDeleteRelationPermission({
+                const { data, error }: any = await actions.roleDeletePermission({
                   roleId: props.data.roleId ?? '',
                   permissionId: props.data.permissionId ?? '',
                 })

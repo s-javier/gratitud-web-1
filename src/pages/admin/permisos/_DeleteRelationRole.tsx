@@ -67,7 +67,7 @@ export default function PermissionDeleteRelationRole(props: {
                   return
                 }
                 $loaderOverlay.set(true)
-                const { data, error }: any = await actions.roleDeleteRelationPermission({
+                const { data, error }: any = await actions.roleDeletePermission({
                   roleId: props.data.roleId ?? '',
                   permissionId: props.data.permissionId ?? '',
                 })

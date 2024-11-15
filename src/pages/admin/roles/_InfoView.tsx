@@ -9,7 +9,7 @@ import { validateResponse } from '~/utils'
 import handleResponse from './handleResponse'
 import { $loaderOverlay } from '~/stores'
 import TableOptions from '~/components/shared/TableOptions'
-import DeleteRelationPermission from './_DeleteRelationPermission'
+import DeletePermission from './_DeletePermission'
 
 export default function RoleInfoView(props: { id: string; title: string; permissions: any[] }) {
   const [table, setTable] = createSignal<any>(null)
@@ -162,7 +162,7 @@ export default function RoleInfoView(props: { id: string; title: string; permiss
   return (
     <>
       <Portal>
-        <DeleteRelationPermission
+        <DeletePermission
           isShow={isDeleteRelationOpen()}
           close={() => setIsDeleteRelationOpen(false)}
           data={permissionRole()}

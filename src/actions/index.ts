@@ -8,7 +8,7 @@ import { organizationUpdate } from './admin/organization/update.action'
 import { roleCreate } from './admin/role/create.action'
 import { roleCreateRelationPermission } from './admin/role/create-relation.action'
 import { roleDelete } from './admin/role/delete.action'
-import { roleDeleteRelationPermission } from './admin/role/delete-relation.action'
+import { roleDeletePermission } from './admin/role/delete-permission.action'
 import { roleUpdate } from './admin/role/update.action'
 import { roleUpdatePermissionPosition } from './admin/role/update-permission-position.action'
 import { userCreate } from './admin/user/create.action'
@@ -42,7 +42,7 @@ export const server = {
   roleCreate,
   roleCreateRelationPermission,
   roleDelete,
-  roleDeleteRelationPermission,
+  roleDeletePermission,
   roleUpdate,
   roleUpdatePermissionPosition,
 
