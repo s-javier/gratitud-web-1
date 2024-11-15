@@ -35,9 +35,14 @@ export default function RoleInfoView(props: { id: string; title: string; permiss
               <IconButton
                 class="!text-gray-400 hover:!text-[var(--o-btn-primary-bg-hover-color)]"
                 onClick={async () => {
-                  await editPermissionPosition(
-                    p.data,
-                    p.api.getDisplayedRowAtIndex(p.rowIndex - 1).data,
+                  const target = p.data
+                  const affected = p.api.getDisplayedRowAtIndex(p.rowIndex - 1).data
+                  await editPosition(
+                    props.id,
+                    target.premissionId,
+                    target.sort,
+                    affected.premissionId,
+                    affected.sort,
                   )
                 }}
               >
@@ -60,9 +65,14 @@ export default function RoleInfoView(props: { id: string; title: string; permiss
               <IconButton
                 class="!text-gray-400 hover:!text-[var(--o-btn-primary-bg-hover-color)]"
                 onClick={async () => {
-                  await editPermissionPosition(
-                    p.data,
-                    p.api.getDisplayedRowAtIndex(p.rowIndex + 1).data,
+                  const target = p.data
+                  const affected = p.api.getDisplayedRowAtIndex(p.rowIndex + 1).data
+                  await editPosition(
+                    props.id,
+                    target.premissionId,
+                    target.sort,
+                    affected.premissionId,
+                    affected.sort,
                   )
                 }}
               >
@@ -127,14 +137,20 @@ export default function RoleInfoView(props: { id: string; title: string; permiss
     setRowCount(props.permissions?.length ?? 0)
   })
 
-  const editPermissionPosition = async (targetData: any, affectedData: any) => {
+  const editPosition = async (
+    id: string,
+    targetId: string,
+    targetSort: number,
+    affectedId: string,
+    affectedSort: number,
+  ) => {
     $loaderOverlay.set(true)
     const { data, error }: any = await actions.roleUpdatePermissionPosition({
-      roleId: props.id,
-      targetPermissionId: targetData.permissionId,
-      targetSort: targetData.sort,
-      affectedPermissionId: affectedData.permissionId,
-      affectedSort: affectedData.sort,
+      id,
+      targetId,
+      targetSort,
+      affectedId,
+      affectedSort,
     })
     if (validateResponse(error || data?.error || null) === false) {
       $loaderOverlay.set(false)
@@ -152,7 +168,7 @@ export default function RoleInfoView(props: { id: string; title: string; permiss
           data={permissionRole()}
         />
       </Portal>
-      <p class="mb-2 text-sm text-gray-500">Estas viendo {rowCount()} permisos.</p>
+      <p class="mb-2 text-sm text-gray-500">Estás viendo {rowCount()} permisos.</p>
       <div class="ag-theme-alpine">
         <AgGridSolid
           onGridReady={(params) => {

@@ -12,10 +12,10 @@ import { cache } from '~/utils/cache'
 export const roleUpdatePermissionPosition = defineAction({
   accept: 'json',
   input: z.object({
-    roleId: z.string().uuid(),
-    targetPermissionId: z.string().uuid(),
+    id: z.string().uuid(),
+    targetId: z.string().uuid(),
     targetSort: z.number(),
-    affectedPermissionId: z.string().uuid(),
+    affectedId: z.string().uuid(),
     affectedSort: z.number(),
   }),
   handler: async (input: any, context: ActionAPIContext) => {
@@ -46,8 +46,8 @@ export const roleUpdatePermissionPosition = defineAction({
         .set({ sort: input.affectedSort })
         .where(
           and(
-            eq(rolePermissionTable.roleId, input.roleId),
-            eq(rolePermissionTable.permissionId, input.targetPermissionId),
+            eq(rolePermissionTable.roleId, input.id),
+            eq(rolePermissionTable.permissionId, input.targetId),
           ),
         )
       await db
@@ -55,8 +55,8 @@ export const roleUpdatePermissionPosition = defineAction({
         .set({ sort: input.targetSort })
         .where(
           and(
-            eq(rolePermissionTable.roleId, input.roleId),
-            eq(rolePermissionTable.permissionId, input.affectedPermissionId),
+            eq(rolePermissionTable.roleId, input.id),
+            eq(rolePermissionTable.permissionId, input.affectedId),
           ),
         )
       cache.delete(JSON.stringify({ data: CacheData.MENU, roleId: context.locals.roleId }))
