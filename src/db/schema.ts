@@ -145,10 +145,10 @@ export const rolePermissionTable = pgTable(
   'role_permission',
   {
     roleId: uuid('role_id')
-      .references(() => roleTable.id)
+      .references(() => roleTable.id, { onDelete: 'cascade' })
       .notNull(),
     permissionId: uuid('permission_id')
-      .references(() => permissionTable.id)
+      .references(() => permissionTable.id, { onDelete: 'cascade' })
       .notNull(),
     sort: integer(),
     createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
