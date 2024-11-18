@@ -1,7 +1,7 @@
 import { createSignal, onMount } from 'solid-js'
 import AgGridSolid from 'solid-ag-grid'
 
-import type { CustomError, Permission, Role } from '~/types'
+import type { CustomError, Permission } from '~/types'
 import { $permissions, $roles } from '~/stores'
 import { validateResponse } from '~/utils'
 import TableOptions from '~/components/shared/TableOptions'

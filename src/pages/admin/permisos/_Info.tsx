@@ -3,7 +3,7 @@ import { Button } from '@suid/material'
 import AgGridSolid from 'solid-ag-grid'
 import { IconButton } from '@suid/material'
 import { Icon } from '@iconify-icon/solid'
-import DeleteRelationRole from './_DeleteRelationRole'
+import DeleteRole from './_DeleteRole'
 
 import Dialog from '~/components/shared/Dialog'
 import Overlay from '~/components/shared/Overlay'
@@ -80,7 +80,7 @@ export default function RoleInfo(props: {
 
   return (
     <>
-      <DeleteRelationRole
+      <DeleteRole
         isShow={isDeleteRelationOpen()}
         close={() => setIsDeleteRelationOpen(false)}
         data={rolePermission()}

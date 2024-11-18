@@ -4,25 +4,29 @@ import { Button } from '@suid/material'
 import { toast } from 'solid-sonner'
 
 import { validateResponse } from '~/utils'
+import { $loaderOverlay } from '~/stores'
 import handleResponse from './handleResponse'
 import Overlay from '~/components/shared/Overlay'
 import Dialog from '~/components/shared/Dialog'
 import CustomToaster from '~/components/shared/CustomToaster'
-import { $loaderOverlay } from '~/stores'
 
 export default function PermissionDeleteRelationRole(props: {
   isShow: boolean
   close: () => void
   data: {
-    roleId: string
-    roleTitle: string
-    permissionId: string
-    permissionType: string
-    permissionPath: string
+    permission: {
+      id: string
+      type: string
+      path: string
+    }
+    role: {
+      id: string
+      title: string
+    }
   }
 }) {
   const validateRequest = () => {
-    if (!props.data?.roleId || !props.data?.permissionId) {
+    if (!props.data?.role?.id || !props.data?.permission?.id) {
       toast.custom(
         (t) =>
           createRoot(() => (
@@ -68,8 +72,8 @@ export default function PermissionDeleteRelationRole(props: {
                 }
                 $loaderOverlay.set(true)
                 const { data, error }: any = await actions.roleDeletePermission({
-                  roleId: props.data.roleId ?? '',
-                  permissionId: props.data.permissionId ?? '',
+                  roleId: props.data.role.id ?? '',
+                  permissionId: props.data.permission.id ?? '',
                 })
                 if (validateResponse(error || data?.error || null) === false) {
                   $loaderOverlay.set(false)
@@ -86,9 +90,9 @@ export default function PermissionDeleteRelationRole(props: {
         <p class="text-center mb-4">
           El permiso{' '}
           <strong>
-            {props.data.permissionPath} ({props.data.permissionType})
+            {props.data.permission?.path} ({props.data.permission?.type})
           </strong>{' '}
-          está relacionado con el rol <strong>{props.data.roleTitle}</strong>.
+          está relacionado con el rol <strong>{props.data.role?.title}</strong>.
         </p>
         <p class="text-center">¿Estás seguro que deseas eliminar la relación?</p>
       </Dialog>

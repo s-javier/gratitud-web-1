@@ -2,8 +2,8 @@ import { Button } from '@suid/material'
 
 import Overlay from '~/components/shared/Overlay'
 import Dialog from '~/components/shared/Dialog'
-import InfoView from './_InfoView'
-import InfoApi from './_InfoApi'
+import InfoPermissionView from './_InfoPermissionView'
+import InfoPermissionApi from './_InfoPermissionApi'
 
 export default function RoleInfo(props: {
   isShow: boolean
@@ -49,7 +49,7 @@ export default function RoleInfo(props: {
           </div>
           <div class="mb-8">
             <h2 class="mb-3 text-lg font-bold">Vistas</h2>
-            <InfoView
+            <InfoPermissionView
               id={props.data.id}
               title={props.data.title}
               permissions={props.data.permissions?.view}
@@ -57,7 +57,7 @@ export default function RoleInfo(props: {
           </div>
           <div>
             <h2 class="mb-3 text-lg font-bold">API</h2>
-            <InfoApi
+            <InfoPermissionApi
               id={props.data.id}
               title={props.data.title}
               permissions={props.data.permissions?.api}

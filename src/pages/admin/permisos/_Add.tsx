@@ -205,9 +205,9 @@ export default function permissionCreate() {
         </MenuItem>
         <MenuItem onClick={() => setIsDialogRelationOpen(true)}>
           <ListItemIcon>
-            <Icon icon="mdi:relation-many-to-many" width="100%" class="w-5" />
+            <Icon icon="mdi:card-account-details" width="100%" class="w-5" />
           </ListItemIcon>
-          Relación
+          Asociación con rol
         </MenuItem>
       </Menu>
       <Portal>
@@ -267,11 +267,11 @@ export default function permissionCreate() {
                       borderColor: colors.gray[400],
                     },
                     '&.Mui-focused fieldset': {
-                      borderColor: colors.pink[300],
+                      borderColor: colors.yellow[400],
                     },
                   },
                   '& label.Mui-focused': {
-                    color: colors.pink[500],
+                    color: colors.yellow[500],
                   },
                 }}
                 value={path()}
@@ -293,11 +293,11 @@ export default function permissionCreate() {
                       borderColor: colors.gray[400],
                     },
                     '&.Mui-focused fieldset': {
-                      borderColor: colors.pink[300],
+                      borderColor: colors.yellow[400],
                     },
                   },
                   '& label.Mui-focused': {
-                    color: colors.pink[500],
+                    color: colors.yellow[500],
                   },
                 }}
               >
@@ -340,17 +340,17 @@ export default function permissionCreate() {
                     '!text-gray-700 !border-gray-300 hover:!bg-gray-50',
                     'hover:!border-[var(--o-btn-cancel-border-hover-color)]',
                   ].join(' ')}
-                  onClick={() => setIsDialogRelationOpen(false)}
+                  onClick={() => setIsDialogOpen(false)}
                 >
                   Cerrar
                 </Button>
                 <Button
                   variant="contained"
                   class={[
+                    '!font-bold',
                     '!text-[var(--o-btn-primary-text-color)]',
                     '!bg-[var(--o-btn-primary-bg-color)]',
                     'hover:!bg-[var(--o-btn-primary-bg-hover-color)]',
-                    '!font-bold',
                   ].join(' ')}
                   onClick={async () => {
                     if (validateRequestOfRelation() === false) {
