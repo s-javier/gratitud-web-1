@@ -1,13 +1,14 @@
-import { createEffect, createRoot, createSignal } from 'solid-js'
+import { createEffect, createRoot, createSignal, Show } from 'solid-js'
 import { Button } from '@suid/material'
 import { actions } from 'astro:actions'
 import * as v from 'valibot'
 import { toast } from 'solid-sonner'
 import { Icon } from '@iconify-icon/solid'
 import { useStore } from '@nanostores/solid'
+import { differenceBy } from 'es-toolkit'
 import { Combobox } from '@kobalte/core/combobox'
 
-import { $loaderOverlay, $permissions, $roles } from '~/stores'
+import { $loaderOverlay, $permissions, $rolePermission, $roles } from '~/stores'
 import { validateResponse } from '~/utils'
 import handleResponse from './handleResponse'
 import Overlay from '~/components/shared/Overlay'
@@ -17,18 +18,35 @@ import CustomToaster from '~/components/shared/CustomToaster'
 export default function RoleAddPermission(props: { isShow: boolean; close: () => void }) {
   const [roleId, setRoleId] = createSignal<any>({})
   const [roleIdErrMsg, setRoleIdErrMsg] = createSignal('')
+  const [permissions, setPermissions] = createSignal<any>([])
   const [permissionId, setPermissionId] = createSignal<any>({})
   const [permissionIdErrMsg, setPermissionIdErrMsg] = createSignal('')
 
   const roles = useStore($roles)
-  const permissions = useStore($permissions)
+  const rolePermission = useStore($rolePermission)
+  const originPermissions = useStore($permissions)
 
   createEffect(() => {
-    if (roleId().id) {
+    if (roleId()?.id) {
       setRoleIdErrMsg('')
     }
-    if (permissionId().id) {
+    if (permissionId()?.id) {
       setPermissionIdErrMsg('')
+    }
+  })
+
+  createEffect(() => {
+    if (Object.keys(roleId() ?? {}).length > 0) {
+      /* ↓ Permisos que ya están relacionados con el rol seleccionado */
+      const permissionIds = rolePermission()
+        .filter((item: any) => item.roleId === roleId().id)
+        .map((item: any) => ({
+          id: item.permissionId,
+        }))
+      /* ↓ Permisos que no están relacionados con el rol seleccionado */
+      setPermissions(differenceBy(originPermissions(), permissionIds, (item) => item.id))
+    } else {
+      setPermissions([])
     }
   })
 
@@ -53,13 +71,13 @@ export default function RoleAddPermission(props: { isShow: boolean; close: () =>
         ),
       ),
     }
-    const roleIdErr = v.safeParse(Schema.roleId, roleId().id ?? '')
+    const roleIdErr = v.safeParse(Schema.roleId, roleId()?.id ?? '')
     setRoleIdErrMsg(roleIdErr.issues ? roleIdErr.issues[0].message : '')
-    const permissionIdErr = v.safeParse(Schema.permissionId, permissionId().id ?? '')
+    const permissionIdErr = v.safeParse(Schema.permissionId, permissionId()?.id ?? '')
     setPermissionIdErrMsg(permissionIdErr.issues ? permissionIdErr.issues[0].message : '')
     const verificationResult = v.safeParse(v.object(Schema), {
-      roleId: roleId().id,
-      permissionId: permissionId().id,
+      roleId: roleId()?.id ?? '',
+      permissionId: permissionId()?.id ?? '',
     })
     if (!verificationResult.success) {
       toast.custom(
@@ -186,6 +204,7 @@ export default function RoleAddPermission(props: { isShow: boolean; close: () =>
               Permiso
             </div>
             <Combobox
+              disabled={permissions().length === 0}
               options={permissions()}
               // @ts-ignore
               optionValue="id"
@@ -219,6 +238,13 @@ export default function RoleAddPermission(props: { isShow: boolean; close: () =>
                   </Combobox.Icon>
                 </Combobox.Trigger>
               </Combobox.Control>
+              <Show when={permissions().length === 0}>
+                <Combobox.Description>
+                  <span class="text-xs text-gray-500 px-[14px] pt-[3px]">
+                    Debes eligir un rol antes de eligir un permiso.
+                  </span>
+                </Combobox.Description>
+              </Show>
               <Combobox.ErrorMessage
                 class="text-xs text-[#d32f2f] px-[14px] pt-[3px]"
                 style="font-family: Roboto, Helvetica, Arial, sans-serif"

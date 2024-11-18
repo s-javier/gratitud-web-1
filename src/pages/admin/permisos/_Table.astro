@@ -11,6 +11,7 @@ import DataTable from './_Table'
 
 let data: any = {
   permissions: [],
+  rolePermission: [],
   roles: [],
 }
 let error: CustomError = null
@@ -23,7 +24,7 @@ if (Astro.locals.userTokenError) {
   const permissionVerification = await verifyPermission(Astro.locals.roleId, Api.PERMISSION_ALL)
   if (!permissionVerification.isSuccess) {
     if (import.meta.env.DEV) {
-      console.error('Problema con el permiso del usuario en la obtención de permisos.')
+      console.error('Problema con el token de usuario en la obtención de permisos.')
     }
     error = handleErrorFromServer(permissionVerification.error)
   } else {
@@ -37,6 +38,20 @@ if (Astro.locals.userTokenError) {
     } catch {
       if (import.meta.env.DEV) {
         console.error('Error en DB. Obtención de permisos.')
+      }
+      error = handleErrorFromServer(Error.DB)
+    }
+    try {
+      data.rolePermission = await db
+        .select({
+          roleId: rolePermissionTable.roleId,
+          permissionId: rolePermissionTable.permissionId,
+        })
+        .from(rolePermissionTable)
+    } catch (err: any) {
+      if (import.meta.env.DEV) {
+        console.error('Error en DB. Obtención de rolePermission.')
+        console.info(err)
       }
       error = handleErrorFromServer(Error.DB)
     }

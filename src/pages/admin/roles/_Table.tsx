@@ -2,7 +2,7 @@ import { createSignal, onMount } from 'solid-js'
 import AgGridSolid from 'solid-ag-grid'
 
 import type { CustomError, Permission } from '~/types'
-import { $permissions, $roles } from '~/stores'
+import { $permissions, $rolePermission, $roles } from '~/stores'
 import { validateResponse } from '~/utils'
 import TableOptions from '~/components/shared/TableOptions'
 import TableActions from '~/components/shared/TableActions'
@@ -13,6 +13,7 @@ import Delete from './_Delete'
 export default function RoleTable(props: {
   data: {
     roles: { id: string; title: string; permissions: { view: any[]; api: any[] } }[]
+    rolePermission: { roleId: string; permissionId: string }[]
     permissions: Permission[]
   }
   error: CustomError
@@ -86,6 +87,7 @@ export default function RoleTable(props: {
   onMount(() => {
     if (validateResponse(props.error)) {
       $roles.set(props.data.roles)
+      $rolePermission.set(props.data.rolePermission)
       $permissions.set(props.data.permissions)
     }
   })
@@ -96,7 +98,7 @@ export default function RoleTable(props: {
       <Edit isShow={isEditOpen()} close={() => setIsEditOpen(false)} data={role()} />
       <Delete isShow={isDeleteOpen()} close={() => setIsDeleteOpen(false)} data={role()} />
       <p class="mb-2 text-sm text-gray-500">
-        Estas viendo {rowCount()} {rowCount() === 1 ? 'rol' : 'roles'}.
+        Estás viendo {rowCount()} {rowCount() === 1 ? 'rol' : 'roles'}.
       </p>
       <div class="ag-theme-alpine">
         <AgGridSolid

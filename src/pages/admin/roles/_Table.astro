@@ -11,6 +11,7 @@ import DataTable from './_Table'
 
 let data: any = {
   roles: [],
+  rolePermission: [],
   permissions: [],
 }
 let error: CustomError = null
@@ -37,6 +38,20 @@ if (Astro.locals.userTokenError) {
     } catch {
       if (import.meta.env.DEV) {
         console.error('Error en DB. Obtención de roles.')
+      }
+      error = handleErrorFromServer(Error.DB)
+    }
+    try {
+      data.rolePermission = await db
+        .select({
+          roleId: rolePermissionTable.roleId,
+          permissionId: rolePermissionTable.permissionId,
+        })
+        .from(rolePermissionTable)
+    } catch (err: any) {
+      if (import.meta.env.DEV) {
+        console.error('Error en DB. Obtención de rolePermission.')
+        console.info(err)
       }
       error = handleErrorFromServer(Error.DB)
     }

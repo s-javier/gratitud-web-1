@@ -2,7 +2,7 @@ import { createSignal, onMount } from 'solid-js'
 import AgGridSolid from 'solid-ag-grid'
 
 import type { CustomError, Permission, Role } from '~/types'
-import { $permissions, $roles } from '~/stores'
+import { $permissions, $rolePermission, $roles } from '~/stores'
 import { validateResponse } from '~/utils'
 import TableOptions from '~/components/shared/TableOptions'
 import TableActions from '~/components/shared/TableActions'
@@ -11,7 +11,11 @@ import Edit from './_Edit'
 import Delete from './_Delete'
 
 export default function PermissionTable(props: {
-  data: { roles: Role[]; permissions: Permission[] }
+  data: {
+    roles: Role[]
+    rolePermission: { roleId: string; permissionId: string }[]
+    permissions: Permission[]
+  }
   error: CustomError
 }) {
   const [table, setTable] = createSignal<any>(null)
@@ -84,6 +88,7 @@ export default function PermissionTable(props: {
   onMount(() => {
     if (validateResponse(props.error)) {
       $permissions.set(props.data.permissions)
+      $rolePermission.set(props.data.rolePermission)
       $roles.set(props.data.roles)
     }
   })
@@ -94,7 +99,7 @@ export default function PermissionTable(props: {
       <Edit isShow={isEditOpen()} close={() => setIsEditOpen(false)} data={permission()} />
       <Delete isShow={isDeleteOpen()} close={() => setIsDeleteOpen(false)} data={permission()} />
       <p class="mb-2 text-sm text-gray-500">
-        Estas viendo {rowCount()} {rowCount() === 1 ? 'permiso' : 'permisos'}.
+        Estás viendo {rowCount()} {rowCount() === 1 ? 'permiso' : 'permisos'}.
       </p>
       <div class="ag-theme-alpine">
         <AgGridSolid
