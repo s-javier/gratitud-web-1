@@ -88,13 +88,13 @@ export const organizationPersonRoleTable = pgTable(
   'organization_person_role',
   {
     organizationId: uuid('organization_id')
-      .references(() => organizationTable.id)
+      .references(() => organizationTable.id, { onDelete: 'cascade' })
       .notNull(),
     personId: uuid('person_id')
-      .references(() => personTable.id)
+      .references(() => personTable.id, { onDelete: 'cascade' })
       .notNull(),
     roleId: uuid('role_id')
-      .references(() => roleTable.id)
+      .references(() => roleTable.id, { onDelete: 'cascade' })
       .notNull(),
     isSelected: boolean('is_selected').notNull().default(false),
     isVisible: boolean('is_visible').notNull().default(false),
@@ -173,7 +173,7 @@ export const rolePermissionTableRelations = relations(rolePermissionTable, ({ on
 export const menupageTable = pgTable('menupage', {
   id: uuid().defaultRandom().primaryKey(),
   permissionId: uuid('permission_id')
-    .references(() => permissionTable.id)
+    .references(() => permissionTable.id, { onDelete: 'set null' })
     .notNull(),
   title: varchar({ length: 50 }).notNull(),
   icon: varchar({ length: 50 }),
