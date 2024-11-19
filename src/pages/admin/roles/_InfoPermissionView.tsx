@@ -39,9 +39,9 @@ export default function RoleInfoView(props: { id: string; title: string; permiss
                   const affected = p.api.getDisplayedRowAtIndex(p.rowIndex - 1).data
                   await editPosition(
                     props.id,
-                    target.premissionId,
+                    target.permissionId,
                     target.sort,
-                    affected.premissionId,
+                    affected.permissionId,
                     affected.sort,
                   )
                 }}
@@ -69,9 +69,9 @@ export default function RoleInfoView(props: { id: string; title: string; permiss
                   const affected = p.api.getDisplayedRowAtIndex(p.rowIndex + 1).data
                   await editPosition(
                     props.id,
-                    target.premissionId,
+                    target.permissionId,
                     target.sort,
-                    affected.premissionId,
+                    affected.permissionId,
                     affected.sort,
                   )
                 }}
